@@ -1,0 +1,225 @@
+# 🌍 Personal Environmental Health Analyzer
+
+> **Day 8 — AI Challenge** | Built with Claude AI 
+
+![AQI Dashboard](https://img.shields.io/badge/AQI-Live%20Data-00d4aa?style=for-the-badge&logo=leaflet)
+![Data Source](https://img.shields.io/badge/Data-IQAir%202025-0ea5e9?style=for-the-badge)
+![Built With](https://img.shields.io/badge/Built%20With-Claude%20AI-a855f7?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-22c55e?style=for-the-badge)
+
+---
+
+## 📌 Overview
+
+A **fully interactive Environmental Health Dashboard** that analyzes air and water quality data across 15 major global cities using the **IQAir 2025 World Air Quality Report** — covering 9,446 cities across 143 countries.
+
+The tool goes beyond just showing AQI numbers — it translates pollution data into **personal health impact**: how the air affects your lungs, sleep, energy, skin, and hair.
+
+---
+
+## ✨ Features
+
+### 📊 Key Metrics
+- Average AQI across analyzed cities
+- Highest & Lowest AQI city
+- Number of cities analyzed
+- Environmental Health Score (0–100)
+- Average Water Quality Index
+
+### 📈 Interactive Visualizations
+- AQI Comparison Bar Chart (15 cities)
+- PM2.5 Levels Chart (µg/m³)
+- PM10 Levels Chart (µg/m³)
+- City Environmental Score Ranking (horizontal bar)
+- AQI Category Distribution (Doughnut chart)
+
+### 🎛 Interactive Filters
+| Filter | Description |
+|--------|-------------|
+| City Selector | Choose any of 15 global cities |
+| AQI Range Slider | Filter cities by AQI range (0–300) |
+| Pollutant Focus | Toggle between AQI / PM2.5 / PM10 |
+| Health Risk Filter | Show Good / Moderate / Poor cities only |
+| Compare Mode | Side-by-side city comparison |
+
+### 🏙 City Detail Cards
+Each city card shows:
+- AQI value with color-coded category
+- PM2.5 & PM10 readings
+- Air Quality Score, Water Quality Score, Overall Score
+- Health bar with environmental grade
+
+### 🚦 AQI Categories
+| Category | AQI Range | Color |
+|----------|-----------|-------|
+| Good | 0 – 50 | 🟢 Green |
+| Satisfactory | 51 – 100 | 🟡 Light Green |
+| Moderate | 101 – 150 | 🟠 Yellow |
+| Poor | 151 – 200 | 🔴 Orange |
+| Very Poor | 201 – 300 | ❗ Red |
+| Severe | 300+ | ☠️ Dark Red |
+
+### 🫁 Health Impact Analysis
+For any selected city, the dashboard explains the impact on:
+
+**Air Quality → Body:**
+- Lung & Respiratory Health
+- Sleep Quality
+- Energy Levels
+- Exercise Performance
+- Long-term Health Risk
+
+**Water Quality → Appearance:**
+- Hair Fall Risk
+- Hair Dryness
+- Scalp Health
+- Skin Dryness
+- Acne Tendency
+- Sensitive Skin Impact
+
+Each metric uses risk indicators: 🟢 Low · 🟡 Moderate · 🔴 High
+
+### 📋 Personal Report Card
+- Environmental Health Score (0–100)
+- Air Quality Score with Grade (A–F)
+- Water Quality Score with Grade (A–F)
+- Hair Risk Grade
+- Skin Risk Grade
+- Animated score rings (SVG)
+
+### 💡 Insights Panel
+- Top 3 Cleanest Cities
+- Top 3 Most Polluted Cities
+- Biggest Anomaly (Delhi PM2.5 spike: 460 µg/m³)
+- Most Surprising Global Observation
+- Executive Summary
+
+### 🛡 Personalised Recommendations
+- Daily Actions
+- Indoor Air Improvements
+- Outdoor Activity Guidance
+- Hair Care Recommendations
+- Skin Care Recommendations
+- Water Quality Improvements
+
+> Recommendations dynamically change based on the selected city's AQI and water quality scores.
+
+---
+
+## 🗂 Cities Covered
+
+| City | Country | AQI | Category |
+|------|---------|-----|----------|
+| Delhi | India 🇮🇳 | 186 | Very Poor |
+| Lahore | Pakistan 🇵🇰 | 176 | Very Poor |
+| Dhaka | Bangladesh 🇧🇩 | 157 | Poor |
+| Beijing | China 🇨🇳 | 152 | Poor |
+| Mumbai | India 🇮🇳 | 138 | Moderate |
+| Cairo | Egypt 🇪🇬 | 130 | Moderate |
+| Bangkok | Thailand 🇹🇭 | 112 | Moderate |
+| Istanbul | Turkey 🇹🇷 | 98 | Satisfactory |
+| Mexico City | Mexico 🇲🇽 | 88 | Satisfactory |
+| London | UK 🇬🇧 | 52 | Satisfactory |
+| New York | USA 🇺🇸 | 48 | Good |
+| Tokyo | Japan 🇯🇵 | 42 | Good |
+| Sydney | Australia 🇦🇺 | 22 | Good |
+| Vancouver | Canada 🇨🇦 | 18 | Good |
+| Reykjavik | Iceland 🇮🇸 | 8 | Good |
+
+---
+
+## 📡 Data Sources
+
+| Source | Description |
+|--------|-------------|
+| [IQAir 2025 World Air Quality Report](https://www.iqair.com/world-air-quality-report) | PM2.5 data from 9,446 cities · 143 countries |
+| WHO/UNICEF JMP 2025 | Water quality scores |
+| WHO PM2.5 Guideline | Annual average: 5 µg/m³ |
+
+**Data Quality:**
+- Missing values imputed using regional averages
+- PM2.5 validated against WHO annual guidelines
+- Water quality scores cross-referenced with WHO/UNICEF JMP dataset
+
+---
+
+## 🛠 Tech Stack
+
+```
+HTML5        → Structure & layout
+CSS3         → Dark theme, animations, responsive design
+JavaScript   → Interactivity, filters, dynamic rendering
+Chart.js 4.4 → All data visualizations
+Google Fonts → Syne (headings) + DM Sans (body)
+IQAir 2025   → Air quality dataset
+```
+
+**No frameworks. No build tools. Pure HTML/CSS/JS — open and run.**
+
+---
+
+## 🚀 Getting Started
+
+```bash
+# Clone the repository
+git clone https://github.com/YOUR-USERNAME/environmental-health-analyzer.git
+
+# Navigate to folder
+cd environmental-health-analyzer
+
+# Open in browser
+open index.html
+# OR just double-click index.html
+```
+
+No installations. No dependencies to install. Works offline once opened.
+
+---
+
+## 📁 Project Structure
+
+```
+environmental-health-analyzer/
+│
+├── index.html          # Complete app (single file)
+└── README.md           # This file
+```
+
+---
+
+## 🔑 Key Insights from Data
+
+> 🔴 **Only 14% of global cities** met the WHO PM2.5 annual guideline in 2025 — down from 17% in 2024.
+
+> 🌍 Delhi AQI **186** vs Reykjavik AQI **8** — a **23× difference** in the air people breathe daily.
+
+> ⚡ New Delhi PM2.5 spiked to **460 µg/m³** during November 2025 — **92× the WHO guideline**.
+
+> 🏆 Only **13 countries** worldwide met WHO clean air standards — all are island nations or Nordic countries.
+
+---
+
+## 🙏 Credits & Acknowledgements
+
+Special thanks to:
+
+- **[@abtalksonai](https://www.linkedin.com/in/abtalksonai)** — For the AI challenge structure and daily task inspiration
+- **[@anilbajpai](https://www.linkedin.com/in/anilbajpai)** — For guidance and mentorship throughout the challenge
+- **[@anthropic](https://www.anthropic.com)** — For Claude AI, the tool that made building this possible in hours
+
+---
+
+## 📄 License
+
+MIT License — free to use, modify, and share with attribution.
+
+---
+
+## 🌐 Connect
+
+Built as part of an **8-Day AI Challenge** — learning by building real, useful tools with AI.
+
+*"The air you breathe isn't just an environmental issue — it directly impacts your lungs, sleep, skin, hair, and long-term health. Data makes it visible. Action makes it better."*
+
+---
+
