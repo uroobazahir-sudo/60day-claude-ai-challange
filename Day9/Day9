@@ -1,0 +1,84 @@
+NutriScope
+
+A modern nutrition tracking and dietary analysis web application built as a single-file HTML project. NutriScope helps users monitor their daily nutritional intake, identify deficiencies, and receive personalized recommendations based on their dietary preferences.
+
+Features
+
+User Profile
+
+- Age, Gender, Height, Weight
+- Activity Level Selection
+- Dietary Preference Support
+  - Vegetarian
+  - Non-Vegetarian
+  - Eggetarian
+
+Food Logging
+
+- Add Food Items
+- Quantity & Unit Tracking
+- Editable Food Table
+- Remove Entries
+- Instant Nutrient Calculations
+
+Nutrition Analysis
+
+- Calories Tracking
+- Protein Monitoring
+- Carbohydrate Analysis
+- Fat Tracking
+- Fiber Analysis
+- Iron Monitoring
+- Calcium Tracking
+- Vitamin C Analysis
+- Vitamin D Monitoring
+- Vitamin B12 Tracking
+
+Dashboard
+
+- Energy Progress Indicators
+- Macro Nutrient Charts
+- Nutrient Completion Tracking
+- Deficiency Detection
+- Excess Intake Detection
+- Interactive Data Visualization
+
+Advanced Features
+
+- CSV Upload Support
+- Expanded Food Database
+- Additional Micronutrients
+- 2-Day Meal Planner
+- Risk Analysis
+- Advanced Recommendations
+- Educational Nutrition Guidance
+
+Tech Stack
+
+- HTML5
+- CSS3
+- JavaScript
+- Chart.js
+
+Learning Outcomes
+
+- Prompt Engineering
+- Frontend Development
+- Data Visualization
+- UI/UX Design
+- Nutrition Analytics
+- Single-Page Application Development
+
+Acknowledgements
+
+Special thanks to:
+
+- abtalks
+- anilbajpai
+- Anthropic
+
+for sharing valuable educational content and inspiration throughout this learning journey.
+
+Day 9/60 Challenge
+
+Part of my continuous learning and project-building journey focused on AI-assisted development, web applications, and practical problem-solving.
