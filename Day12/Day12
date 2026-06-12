@@ -1,0 +1,36 @@
+🗂️ Job Search Dossier — AI-Powered Career Toolkit
+An interactive, terminal/VS Code-inspired single-page web app that packages a complete personal job search and branding toolkit — built as part of my Claude AI Challenge.
+🔗 Live Demo / File: Urooba_Job_Dossier.html
+👩‍💻 Built by: Urooba Zahir
+💡 What It Does
+This dossier is a personal career command center — a scrollable, dark-themed "developer file" containing 12 ready-to-use sections for job hunting, generated entirely from my resume, portfolio, and LinkedIn profile:
+ATS-Friendly Cover Letter
+Recruiter Outreach Email
+Hiring Manager Email
+LinkedIn Connection Requests
+Referral Request Message
+Follow-Up Email
+30-Second Professional Introduction
+Top 10 Job Titles Matched to My Profile
+Key Strengths Recruiters Will Notice
+Skill Gap Analysis + Learning Roadmap
+Personal Brand Summary & Recruiter Headline
+Interview Talking Points (STAR-format ready)
+Every section comes with a one-tap copy button — so the content can be used immediately for real applications, no editing required.
+✨ Features
+🖥️ Terminal-style header with macOS traffic-light dots and a typed command-line animation
+📌 Sticky, auto-highlighting navigation bar — tracks scroll position and highlights the active section in real time
+📋 Copy-to-clipboard on every section card
+🎨 Custom dark theme using JetBrains Mono + Inter typography
+📱 Fully responsive — built mobile-first
+🛠️ Built With
+HTML5
+CSS3 (custom properties, responsive design, IntersectionObserver-driven UI)
+Vanilla JavaScript (no frameworks/dependencies)
+🎯 Why I Built This
+Job hunting as a student juggling two internships meant I needed every outreach message, cover letter, and talking point ready before I needed it — not written from scratch under pressure. This project turns that prep work into a single, shareable, visually engaging artifact.
+🙌 Part of the Claude AI Challenge
+Built as part of a structured daily AI-build challenge — turning real personal/professional needs into polished, deployable single-file web apps.
+📫 Connect with me:
+LinkedIn: linkedin.com/in/urooba-zahir-7698a5377
+Email: uroobazahir@gmail.com
