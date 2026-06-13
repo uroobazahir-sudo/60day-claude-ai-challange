@@ -1,0 +1,37 @@
+# SIGNAL — Career Match Scanner
+
+> Day 13/60DaysOfAI · Build-in-Public Challenge
+
+A single-file, AI-assisted web console that maps a professional profile and job search criteria onto a live radar of ranked opportunities.
+
+## Overview
+
+SIGNAL turns the "profile → criteria → job matches" workflow into an interactive dashboard:
+
+- **Profile** — current standing, key skills & technologies, domain expertise, notable builds
+- **Criteria** — target roles, work setup (remote/hybrid/onsite), compensation expectations, filters
+- **Radar** — an animated scanner visualization where each blip represents a job opportunity, positioned and colored by match score; tapping a blip jumps to the full listing details
+- **Insights** — most commonly required skills, skill-gap analysis, market read, and actionable next steps
+
+## Tech Stack
+
+- HTML5 / CSS3 (custom properties, conic-gradient animations)
+- Vanilla JavaScript (tab navigation, radar-to-listing interactions)
+- Typography: Space Mono (display) + Inter (body)
+- No backend, no dependencies — fully client-side
+
+## Design Notes
+
+Built around a "scanner/terminal" visual identity — dark charcoal base with amber and teal accents — to reflect the act of *scanning* the job market for signal amid noise. The radar sweep is the signature interaction: match strength is represented spatially (closer to center = stronger fit) rather than just numerically.
+
+## How to Use
+
+1. Open `career-match-scanner.html` in any browser
+2. Navigate tabs: Profile → Criteria → Radar → Insights
+3. Tap any radar blip to jump to that opportunity's details and application link
+
+## Part of/60DaysOfAI
+
+Built with AI-assisted development (Claude) as part of a structured daily challenge focused on shipping polished, functional, single-file web applications.
+
+ @abtalksonai @anilbajpai @Anthropic
