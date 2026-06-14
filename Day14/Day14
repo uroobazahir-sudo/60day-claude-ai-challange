@@ -1,0 +1,30 @@
+# 🚩 RedFlag.AI — Job Posting Analyzer
+
+> **Day 14 of 60-Day Cloud AI Challenge**
+
+An AI-powered tool that analyzes job descriptions and company info to detect red flags before you apply.
+
+## ✨ Features
+
+- 🎯 **Risk Score 0–100** — color-coded (green / amber / red)
+- 🚩 **Top Red Flags** — each with severity rating (1–10)
+- ✅ **Positive Signals** detection
+- 📊 **Risk Breakdown** — animated bars across 5 categories
+- 💬 **5 Smart Interview Questions** auto-generated
+- ✅ / ⚠️ / ❌ **Final Verdict** — Apply / Caution / Avoid
+
+## 🛠️ Built With
+
+- Claude AI API (claude-sonnet-4-6)
+- Vanilla JavaScript
+- HTML5 + CSS3
+- Single file — zero backend, zero dependencies
+
+## 🚀 How to Use
+
+1. Open `ai-red-flag-detector.html` in any browser
+2. Paste job description + company info
+3. Click **Analyze for Red Flags**
+4. Get instant AI-powered risk analysis
+
+## 📁 Project Structure
