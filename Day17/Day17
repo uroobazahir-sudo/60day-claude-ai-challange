@@ -1,0 +1,27 @@
+🚗 Day 17/60 — Vehicle Cost Analysis Dashboard
+A single-file, dark-themed dashboard that reads real trip data and computes the true running cost of five fuel types — Petrol, Diesel, CNG, EV, and E85 — for a Honda Civic (CNG, mixed driving, 1,000 km/month).
+Built as part of my 60-Day Claude AI Challenge.
+🔍 What it does
+Parses a CSV of 95 logged trips and groups them by fuel type to compute cost/km, CO₂/km, maintenance/km, and average refuel time
+Buckets the data by car age (New 0–2y, Mid-life 3–5y, Aged 6–9y, Old 10+y) to show how running cost changes over time
+Fits a linear regression per fuel type to project cost/km across 0–12 years and plots it as an SVG line chart
+Solves the "E85 Paradox": E85 is cheaper per litre at the pump, but its poor mileage means it actually costs more per km to run than petrol — quantified with pump-saving %, running-penalty %, and a break-even price
+Scores E85 out of 10 (cost = 4pt, CO₂ = 3pt, refuel time = 2pt, maintenance = 1pt) using min–max normalization against the other four fuels, shown on an animated tachometer-style gauge
+🛠️ Built with
+Plain HTML, CSS, and JavaScript — no frameworks, no chart libraries, no CDN
+All charts (bar, doughnut, line, gauge) are hand-built pure SVG, generated dynamically from the parsed CSV
+Glassmorphism UI on a dark navy base, with hover tooltips on every chart segment
+Fully responsive, 375px (mobile) to 1440px (desktop)
+FILE
+File
+Description
+honda-civic-cng-dashboard.html
+The dashboard — open directly in any browser
+vehicle_fuel_data.csv
+The 95-row sample trip log the dashboard reads and computes from
+📊 How the numbers work
+Code
+▶️ Run it
+No build step — just open honda-civic-cng-dashboard.html in a browser.
+Built with Claude by Anthropic.
+#BuildInPublic #ClaudeAI #DataAnalytics #VehicleCostAnalysis #60DayChallenge
