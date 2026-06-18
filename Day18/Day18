@@ -1,0 +1,25 @@
+📚 Student Study Planner Dashboard
+Day 18 — 60-Day Claude AI Challenge
+A single-file, interactive study planner dashboard built for students juggling coursework, internships, and side projects. No build step, no dependencies — just open the HTML file and go.
+✨ Features
+Task Manager — add, complete, and delete tasks with priority levels (High / Medium / Low) and due dates
+Live Stats — tasks completed today, upcoming deadlines, focus sessions, and high-priority items at a glance
+Focus Timer — built-in Pomodoro-style timer (25 min focus / 5 min break) with an animated progress ring
+Subject Progress Tracker — visual progress bars for each subject/course
+Weekly Timetable — color-coded schedule view (lectures, internships, free time) with mobile-friendly horizontal scroll
+🎨 Design
+Dark theme with a violet accent palette
+Typography: Space Grotesk (headings) + JetBrains Mono (data, labels, timestamps)
+Fully responsive — works on mobile, tablet, and desktop
+Zero external JS frameworks — pure HTML, CSS, and vanilla JavaScript
+🛠️ Tech Stack
+HTML5 / CSS3 (custom properties, grid, flexbox)
+Vanilla JavaScript (no frameworks, no build tools)
+Google Fonts (Space Grotesk, JetBrains Mono)
+🚀 Usage
+Clone or download this repo
+Open student_study_planner.html in any browser
+Start adding tasks and tracking your study sessions — all data is in-memory for this version (resets on refresh)
+📌 Part of the 60-Day Claude AI Challenge
+Building one polished, single-file web app every day using Claude AI — documenting the process on LinkedIn and GitHub.
+Built with Claude AI · Day 18/60
