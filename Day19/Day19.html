@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Football Intelligence Hub</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0B1F14;
+    --panel: #122A1F;
+    --panel-2: #1A3D2E;
+    --line: #2A4D3A;
+    --gold: #D4AF37;
+    --gold-dim: #8a7128;
+    --chalk: #E8E4D9;
+    --chalk-dim: #9FB0A6;
+    --live: #4ADE80;
+    --risk: #C0392B;
+    --risk-bg: rgba(192,57,43,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: radial-gradient(ellipse at top, #102818 0%, #0B1F14 55%, #07140D 100%);
+    color: var(--chalk);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    line-height: 1.5;
+  }
+
+  /* faint pitch-line texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(212,175,55,0.025) 0px, rgba(212,175,55,0.025) 1px, transparent 1px, transparent 120px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .display { font-family: 'Bebas Neue', sans-serif; letter-spacing: 0.04em; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  .wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 28px 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ===== Scoreboard header ===== */
+  .scoreboard {
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--panel-2), var(--panel));
+    border-radius: 4px;
+    padding: 18px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    box-shadow: 0 0 0 1px rgba(212,175,55,0.06), 0 8px 30px rgba(0,0,0,0.4);
+  }
+  .scoreboard h1 {
+    font-size: 1.9rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .scoreboard .sub {
+    font-size: 0.7rem;
+    color: var(--chalk-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-top: 2px;
+  }
+  .clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--live);
+    border: 1px solid rgba(74,222,128,0.35);
+    background: rgba(74,222,128,0.07);
+    padding: 5px 12px;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    white-space: nowrap;
+  }
+  .clock .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--live);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+  /* ===== Period rail ===== */
+  .period-rail {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 26px;
+    flex-wrap: wrap;
+  }
+  .period {
+    flex: 1;
+    min-width: 110px;
+    text-align: center;
+    padding: 9px 6px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+    background: var(--panel);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--chalk-dim);
+    transition: all 0.4s ease;
+  }
+  .period.active {
+    border-color: var(--gold);
+    color: var(--gold);
+    background: rgba(212,175,55,0.08);
+  }
+  .period.done {
+    border-color: var(--live);
+    color: var(--live);
+  }
+
+  /* ===== Panels ===== */
+  .panel {
+    border: 1px solid var(--line);
+    background: var(--panel);
+    border-radius: 4px;
+    padding: 26px;
+    margin-bottom: 20px;
+    animation: fadeUp 0.5s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .panel h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: 0.03em;
+    color: var(--chalk);
+    margin-bottom: 6px;
+  }
+  .panel .eyebrow {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .panel p { color: var(--chalk-dim); font-size: 0.92rem; margin-bottom: 14px; }
+
+  /* ===== Buttons / choices ===== */
+  .choices { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .choice-btn {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--chalk);
+    padding: 14px 16px;
+    border-radius: 3px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.92rem;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  }
+  .choice-btn:hover { border-color: var(--gold); background: rgba(212,175,55,0.06); }
+  .choice-btn:active { transform: scale(0.99); }
+  .choice-btn.selected { border-color: var(--gold); background: rgba(212,175,55,0.12); color: var(--gold); }
+  .choice-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+  .btn-primary {
+    background: var(--gold);
+    color: #1a1404;
+    border: none;
+    padding: 13px 26px;
+    border-radius: 3px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    margin-top: 18px;
+    transition: transform 0.1s ease, box-shadow 0.15s ease;
+  }
+  .btn-primary:hover { box-shadow: 0 4px 18px rgba(212,175,55,0.3); }
+  .btn-primary:active { transform: scale(0.98); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  .btn-primary:focus-visible { outline: 2px solid var(--chalk); outline-offset: 2px; }
+
+  /* rating scale */
+  .rating-row { display: flex; gap: 8px; margin-top: 10px; }
+  .rating-pip {
+    flex: 1;
+    aspect-ratio: 1;
+    border: 1px solid var(--line);
+    background: var(--panel-2);
+    border-radius: 3px;
+    cursor: pointer;
+    color: var(--chalk-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .rating-pip:hover { border-color: var(--gold); }
+  .rating-pip.selected { background: var(--gold); color: #1a1404; border-color: var(--gold); font-weight: 700; }
+  .rating-labels { display: flex; justify-content: space-between; font-size: 0.68rem; color: var(--chalk-dim); margin-top: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  .q-block { border-top: 1px solid var(--line); padding-top: 18px; margin-top: 18px; }
+  .q-block:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+  .q-num { font-family: 'JetBrains Mono', monospace; color: var(--gold); font-size: 0.78rem; margin-bottom: 6px; }
+  .q-text { font-size: 0.98rem; color: var(--chalk); margin-bottom: 4px; font-weight: 500; }
+
+  /* ===== Live commentary feed (signature element) ===== */
+  .commentary {
+    border: 1px solid var(--line);
+    background: #081710;
+    border-radius: 4px;
+    padding: 16px 18px;
+    margin-bottom: 20px;
+    max-height: 220px;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+  }
+  .commentary-header {
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 10px;
+    color: var(--live);
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .commentary-header .dot {
+    width: 6px; height: 6px; border-radius: 50%; background: var(--live);
+    animation: pulse 1.4s ease-in-out infinite;
+  }
+  .commentary-line {
+    color: var(--chalk-dim);
+    margin-bottom: 6px;
+    opacity: 0;
+    animation: lineIn 0.4s ease forwards;
+  }
+  @keyframes lineIn { from { opacity: 0; transform: translateX(-4px); } to { opacity: 1; transform: translateX(0); } }
+  .commentary-line .min { color: var(--gold); margin-right: 8px; }
+
+  /* ===== Prediction cards ===== */
+  .pred-card {
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--gold);
+    background: var(--panel-2);
+    border-radius: 3px;
+    padding: 18px 20px;
+    margin-bottom: 14px;
+  }
+  .pred-card .role {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+    margin-bottom: 4px;
+  }
+  .pred-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 0.02em; margin-bottom: 8px; }
+  .conf-bar-wrap { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+  .conf-bar-track { flex: 1; height: 6px; background: var(--bg); border-radius: 3px; overflow: hidden; }
+  .conf-bar-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dim), var(--gold)); border-radius: 3px; transition: width 1s ease; }
+  .conf-num { font-family: 'JetBrains Mono', monospace; color: var(--gold); font-size: 0.85rem; min-width: 42px; text-align: right; }
+  .pred-card .label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--chalk-dim); margin-top: 12px; margin-bottom: 4px; }
+  .pred-card .body-text { font-size: 0.88rem; color: var(--chalk-dim); }
+  .risk-tag { display: inline-block; background: var(--risk-bg); color: #e07a6f; border: 1px solid rgba(192,57,43,0.3); border-radius: 3px; padding: 6px 10px; font-size: 0.82rem; margin-top: 4px; }
+
+  /* ===== Score dial ===== */
+  .score-display {
+    text-align: center;
+    padding: 30px 0 10px;
+  }
+  .score-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 5rem;
+    color: var(--gold);
+    line-height: 1;
+  }
+  .score-classification {
+    font-size: 1.1rem;
+    color: var(--chalk);
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .score-bar-track { height: 8px; background: var(--bg); border-radius: 4px; overflow: hidden; margin: 18px 0; }
+  .score-bar-fill { height: 100%; background: linear-gradient(90deg, #2d5a3e, var(--live)); border-radius: 4px; transition: width 1.2s ease; }
+
+  .gap-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 18px; }
+  @media (max-width: 520px) { .gap-grid { grid-template-columns: 1fr; } }
+  .gap-box { background: var(--panel-2); border: 1px solid var(--line); border-radius: 3px; padding: 14px; }
+  .gap-box .gl { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--chalk-dim); margin-bottom: 4px; }
+  .gap-box.strong { border-left: 3px solid var(--live); }
+  .gap-box.weak { border-left: 3px solid var(--risk); }
+
+  /* ===== Compatibility (Stage 3 result) ===== */
+  .compat-row { display: flex; gap: 16px; margin: 20px 0; }
+  @media (max-width: 520px) { .compat-row { flex-direction: column; } }
+  .compat-card {
+    flex: 1;
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 20px;
+    text-align: center;
+  }
+  .compat-card.winner { border-color: var(--gold); box-shadow: 0 0 0 1px rgba(212,175,55,0.2) inset; }
+  .compat-card .name { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 0.03em; }
+  .compat-card .pct { font-family: 'JetBrains Mono', monospace; font-size: 2.2rem; color: var(--gold); margin: 8px 0; }
+
+  .archetype-banner {
+    background: linear-gradient(135deg, rgba(212,175,55,0.1), rgba(212,175,55,0.02));
+    border: 1px solid var(--gold-dim);
+    border-radius: 4px;
+    padding: 22px;
+    text-align: center;
+    margin: 18px 0;
+  }
+  .archetype-banner .at-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); }
+  .archetype-banner h3 { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; margin: 6px 0; }
+
+  .reco-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+  @media (max-width: 520px) { .reco-grid { grid-template-columns: 1fr; } }
+  .reco-box { background: var(--panel-2); border: 1px solid var(--line); border-radius: 3px; padding: 12px 14px; }
+  .reco-box .rl { font-size: 0.64rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 3px; }
+  .reco-box .rv { font-size: 0.88rem; }
+
+  /* loading state */
+  .loading-wrap { display: flex; align-items: center; gap: 12px; padding: 8px 0; }
+  .spinner {
+    width: 16px; height: 16px;
+    border: 2px solid var(--line);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .loading-text { font-size: 0.82rem; color: var(--chalk-dim); }
+
+  .error-box {
+    border: 1px solid rgba(192,57,43,0.4);
+    background: var(--risk-bg);
+    border-radius: 3px;
+    padding: 14px 16px;
+    color: #e07a6f;
+    font-size: 0.85rem;
+    margin-top: 14px;
+  }
+
+  .footer-note {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--chalk-dim);
+    opacity: 0.6;
+    margin-top: 30px;
+  }
+
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 4px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <div class="scoreboard">
+    <div>
+      <h1 class="display">FOOTBALL INTELLIGENCE HUB</h1>
+      <div class="sub">World Cup 2026 &middot; Football IQ &middot; Legend Match</div>
+    </div>
+    <div class="clock"><span class="dot"></span><span id="clockText">PRE-MATCH</span></div>
+  </div>
+
+  <div class="period-rail" id="periodRail">
+    <div class="period active" data-period="0">Pre-Match</div>
+    <div class="period" data-period="1">1st Half</div>
+    <div class="period" data-period="2">Half-Time</div>
+    <div class="period" data-period="3">2nd Half</div>
+    <div class="period" data-period="4">Full-Time</div>
+  </div>
+
+  <div id="app"></div>
+
+  <div class="footer-note">Predictions and personality scoring are AI-generated for entertainment &amp; self-reflection purposes.</div>
+</div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const state = {
+  knowledgeLevel: null,        // string
+  prediction: null,            // parsed JSON from API
+  quiz: { questions: null, answers: {} },
+  quizResult: null,
+  personality: { questions: null, answers: {} },
+  personalityResult: null
+};
+
+const PERIOD_LABELS = ["PRE-MATCH","1ST HALF","HALF-TIME","2ND HALF","FULL-TIME"];
+
+function setPeriod(n){
+  document.getElementById('clockText').textContent = PERIOD_LABELS[n];
+  document.querySelectorAll('.period').forEach(el=>{
+    const p = parseInt(el.dataset.period);
+    el.classList.remove('active','done');
+    if(p < n) el.classList.add('done');
+    else if(p === n) el.classList.add('active');
+  });
+}
+
+const app = document.getElementById('app');
+
+function panel(html, extraClass=''){
+  const div = document.createElement('div');
+  div.className = 'panel ' + extraClass;
+  div.innerHTML = html;
+  return div;
+}
+
+function clearApp(){ app.innerHTML = ''; }
+
+// ============================================================
+// CLAUDE API CALL HELPER
+// ============================================================
+async function callClaude(systemPrompt, userPrompt, maxTokens=1500){
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: maxTokens,
+      system: systemPrompt,
+      messages: [{ role: "user", content: userPrompt }]
+    })
+  });
+  if(!response.ok){
+    throw new Error("API request failed: " + response.status);
+  }
+  const data = await response.json();
+  const textBlock = data.content.find(b => b.type === "text");
+  if(!textBlock) throw new Error("No text content returned");
+  return textBlock.text;
+}
+
+function parseJSON(raw){
+  let cleaned = raw.trim().replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'');
+  return JSON.parse(cleaned);
+}
+
+// ============================================================
+// COMMENTARY FEED (signature loading element)
+// ============================================================
+function commentaryFeed(lines){
+  const wrap = document.createElement('div');
+  wrap.className = 'commentary';
+  wrap.innerHTML = `<div class="commentary-header"><span class="dot"></span>LIVE ANALYSIS</div><div id="commLines"></div>`;
+  const linesEl = wrap.querySelector('#commLines');
+  let i = 0;
+  function pushLine(){
+    if(i >= lines.length){ i = 0; }
+    const min = String(Math.floor(Math.random()*89)+1) + "'";
+    const el = document.createElement('div');
+    el.className = 'commentary-line';
+    el.innerHTML = `<span class="min">${min}</span>${lines[i]}`;
+    linesEl.appendChild(el);
+    if(linesEl.children.length > 5) linesEl.removeChild(linesEl.firstChild);
+    linesEl.scrollTop = linesEl.scrollHeight;
+    i++;
+  }
+  pushLine();
+  const interval = setInterval(pushLine, 900);
+  wrap._stop = () => clearInterval(interval);
+  return wrap;
+}
+
+// ============================================================
+// STAGE 0 — KNOWLEDGE LEVEL CHECK
+// ============================================================
+function renderStage0(){
+  setPeriod(0);
+  clearApp();
+  const levels = [
+    "I know almost nothing",
+    "I know the basics",
+    "I follow it casually",
+    "I actively follow football and major tournaments"
+  ];
+  const p = panel(`
+    <div class="eyebrow">Kickoff</div>
+    <h2>How familiar are you with football?</h2>
+    <p>This sets the depth and language for everything that follows — predictions, quiz, and personality match.</p>
+    <div class="choices" id="lvlChoices"></div>
+  `);
+  app.appendChild(p);
+  const choicesEl = p.querySelector('#lvlChoices');
+  levels.forEach(lvl => {
+    const btn = document.createElement('button');
+    btn.className = 'choice-btn';
+    btn.textContent = lvl;
+    btn.onclick = () => {
+      state.knowledgeLevel = lvl;
+      [...choicesEl.children].forEach(c=>c.classList.remove('selected'));
+      btn.classList.add('selected');
+      setTimeout(()=> runStage1(), 350);
+    };
+    choicesEl.appendChild(btn);
+  });
+}
+
+// ============================================================
+// STAGE 1 — WORLD CUP 2026 PREDICTION
+// ============================================================
+async function runStage1(){
+  setPeriod(1);
+  clearApp();
+  const feed = commentaryFeed([
+    "Cross-referencing squad depth and recent form…",
+    "Weighing historical knockout-stage performance…",
+    "Modeling contender strength across confederations…",
+    "Flagging key injuries and suspension risks…",
+    "Identifying dark-horse candidates from underdog patterns…"
+  ]);
+  app.appendChild(feed);
+
+  const loadEl = document.createElement('div');
+  loadEl.className = 'loading-wrap';
+  loadEl.innerHTML = `<div class="spinner"></div><div class="loading-text">Building your World Cup 2026 prediction report…</div>`;
+  app.appendChild(loadEl);
+
+  const system = `You are a Football Intelligence Analyst producing a FIFA World Cup 2026 prediction report.
+The user's football knowledge level is: "${state.knowledgeLevel}".
+Adapt vocabulary and depth of explanation to that level — for low knowledge, explain football terms briefly in context; for high knowledge, use proper tactical/statistical language without hand-holding.
+Base your reasoning on realistic, plausible football knowledge (national team strength, historical World Cup patterns, well-known current players as of your knowledge) — this is a speculative entertainment forecast, not a verified live data feed, so do not claim certainty.
+Respond with ONLY valid JSON, no markdown fences, no preamble, in exactly this shape:
+{
+  "winner": {"team": "", "confidence": 0, "evidence": "", "risks": "", "against": ""},
+  "runnerUp": {"team": "", "confidence": 0, "evidence": "", "risks": "", "against": ""},
+  "darkHorse": {"team": "", "confidence": 0, "evidence": "", "risks": "", "against": ""},
+  "playersToWatch": [{"name": "", "team": "", "why": ""}, {"name": "", "team": "", "why": ""}],
+  "summary": "2-3 sentence overview in the user's calibrated depth level"
+}`;
+
+  try {
+    const raw = await callClaude(system, "Generate the World Cup 2026 prediction report now.", 1800);
+    const data = parseJSON(raw);
+    state.prediction = data;
+    feed._stop();
+    renderStage1Result(data);
+  } catch(err){
+    feed._stop();
+    clearApp();
+    renderError("Couldn't generate the prediction report.", err, runStage1);
+  }
+}
+
+function confBar(label, pct){
+  return `<div class="conf-bar-wrap"><span class="mono" style="font-size:0.7rem;color:var(--chalk-dim);min-width:70px;">${label}</span>
+    <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${pct}%"></div></div>
+    <span class="conf-num">${pct}%</span></div>`;
+}
+
+function predCard(role, d){
+  return `<div class="pred-card">
+    <div class="role">${role}</div>
+    <h3>${d.team}</h3>
+    ${confBar('Confidence', d.confidence)}
+    <div class="label">Supporting Evidence</div>
+    <div class="body-text">${d.evidence}</div>
+    <div class="label">Working Against It</div>
+    <span class="risk-tag">${d.against}</span>
+  </div>`;
+}
+
+function renderStage1Result(data){
+  clearApp();
+  const p = panel(`
+    <div class="eyebrow">1st Half &middot; Stage 1</div>
+    <h2>World Cup 2026 Prediction Report</h2>
+    <p>${data.summary}</p>
+    ${predCard('Predicted Winner', data.winner)}
+    ${predCard('Runner-Up', data.runnerUp)}
+    ${predCard('Dark Horse', data.darkHorse)}
+    <div class="label" style="margin-top:18px;">Players to Watch</div>
+    <div class="reco-grid">
+      ${data.playersToWatch.map(pl => `<div class="reco-box"><div class="rl">${pl.team}</div><div class="rv"><strong>${pl.name}</strong><br><span style="color:var(--chalk-dim);font-size:0.82rem;">${pl.why}</span></div></div>`).join('')}
+    </div>
+    <button class="btn-primary" id="toStage2">Continue to Half-Time Quiz →</button>
+  `);
+  app.appendChild(p);
+  p.querySelector('#toStage2').onclick = runStage2Setup;
+}
+
+// ============================================================
+// STAGE 2 — FOOTBALL IQ QUIZ
+// ============================================================
+async function runStage2Setup(){
+  setPeriod(2);
+  clearApp();
+  const feed = commentaryFeed([
+    "Calibrating question difficulty to your level…",
+    "Mixing in tactical, historical, and trivia angles…",
+    "Finalizing the half-time quiz…"
+  ]);
+  app.appendChild(feed);
+
+  const system = `You are a Football Sports Educator creating a Football IQ quiz.
+User knowledge level: "${state.knowledgeLevel}".
+Create exactly 5 multiple-choice questions mixing beginner, intermediate, and advanced difficulty, weighted toward the user's stated level but including at least one stretch question.
+Respond with ONLY valid JSON, no markdown fences:
+{
+  "questions": [
+    {"id": "q1", "difficulty": "beginner|intermediate|advanced", "question": "", "options": ["", "", "", ""], "correctIndex": 0, "topic": ""}
+  ]
+}
+Each question must have exactly 4 options. correctIndex is 0-based.`;
+
+  try {
+    const raw = await callClaude(system, "Generate the 5-question Football IQ quiz now.", 1800);
+    const data = parseJSON(raw);
+    state.quiz.questions = data.questions;
+    feed._stop();
+    renderStage2Quiz();
+  } catch(err){
+    feed._stop();
+    clearApp();
+    renderError("Couldn't generate the quiz.", err, runStage2Setup);
+  }
+}
+
+function renderStage2Quiz(){
+  clearApp();
+  const qs = state.quiz.questions;
+  let qHtml = '';
+  qs.forEach((q, idx) => {
+    qHtml += `<div class="q-block">
+      <div class="q-num">Q${idx+1} &middot; ${q.difficulty.toUpperCase()}</div>
+      <div class="q-text">${q.question}</div>
+      <div class="choices" data-qid="${q.id}">
+        ${q.options.map((opt,oi)=>`<button class="choice-btn" data-oi="${oi}">${opt}</button>`).join('')}
+      </div>
+    </div>`;
+  });
+
+  const p = panel(`
+    <div class="eyebrow">Half-Time &middot; Stage 2</div>
+    <h2>Football IQ Quiz</h2>
+    <p>Answer all ${qs.length} questions, then submit for your Football Awareness Score.</p>
+    ${qHtml}
+    <button class="btn-primary" id="submitQuiz" disabled>Submit Answers</button>
+  `);
+  app.appendChild(p);
+
+  qs.forEach(q => {
+    const group = p.querySelector(`.choices[data-qid="${q.id}"]`);
+    group.querySelectorAll('.choice-btn').forEach(btn => {
+      btn.onclick = () => {
+        [...group.children].forEach(c=>c.classList.remove('selected'));
+        btn.classList.add('selected');
+        state.quiz.answers[q.id] = parseInt(btn.dataset.oi);
+        checkQuizComplete(p, qs);
+      };
+    });
+  });
+
+  p.querySelector('#submitQuiz').onclick = () => scoreQuiz();
+}
+
+function checkQuizComplete(p, qs){
+  const submitBtn = p.querySelector('#submitQuiz');
+  const allAnswered = qs.every(q => state.quiz.answers[q.id] !== undefined);
+  submitBtn.disabled = !allAnswered;
+}
+
+async function scoreQuiz(){
+  clearApp();
+  const feed = commentaryFeed(["Marking your answers…", "Calculating Football Awareness Score…"]);
+  app.appendChild(feed);
+
+  const qs = state.quiz.questions;
+  let correct = 0;
+  const breakdown = qs.map(q => {
+    const userIdx = state.quiz.answers[q.id];
+    const isCorrect = userIdx === q.correctIndex;
+    if(isCorrect) correct++;
+    return { topic: q.topic, difficulty: q.difficulty, correct: isCorrect };
+  });
+
+  const baseScore = Math.round((correct / qs.length) * 100);
+
+  const system = `You are scoring a Football IQ quiz. The user got ${correct} out of ${qs.length} correct.
+Base score (correct/total * 100) is ${baseScore}.
+Breakdown by question: ${JSON.stringify(breakdown)}
+User's stated knowledge level: "${state.knowledgeLevel}"
+Adjust the base score by at most ±10 points based on the difficulty mix of what they got right/wrong (getting advanced questions right should nudge score up; missing beginner questions should nudge down). Keep final score within 0-100.
+Classify into exactly one of: "Beginner Fan" (0-20), "Casual Viewer" (21-40), "Football Follower" (41-60), "Football Enthusiast" (61-80), "Football Expert" (81-100).
+Respond with ONLY valid JSON, no markdown fences:
+{
+  "finalScore": 0,
+  "classification": "",
+  "strongestArea": "",
+  "weakestArea": "",
+  "keyGap": "",
+  "encouragement": "one short sentence, matched to the user's knowledge level"
+}`;
+
+  try {
+    const raw = await callClaude(system, "Score the quiz now.", 800);
+    const data = parseJSON(raw);
+    state.quizResult = data;
+    feed._stop();
+    renderStage2Result(data, correct, qs.length);
+  } catch(err){
+    feed._stop();
+    clearApp();
+    renderError("Couldn't score the quiz.", err, scoreQuiz);
+  }
+}
+
+function renderStage2Result(data, correct, total){
+  clearApp();
+  const p = panel(`
+    <div class="eyebrow">Half-Time &middot; Result</div>
+    <h2>Football Awareness Score</h2>
+    <div class="score-display">
+      <div class="score-num">${data.finalScore}</div>
+      <div class="score-classification">${data.classification}</div>
+      <div class="mono" style="color:var(--chalk-dim);font-size:0.78rem;margin-top:6px;">${correct} / ${total} correct</div>
+    </div>
+    <div class="score-bar-track"><div class="score-bar-fill" style="width:${data.finalScore}%"></div></div>
+    <p>${data.encouragement}</p>
+    <div class="gap-grid">
+      <div class="gap-box strong"><div class="gl">Strongest Area</div>${data.strongestArea}</div>
+      <div class="gap-box weak"><div class="gl">Weakest Area</div>${data.weakestArea}</div>
+    </div>
+    <div class="gap-box" style="margin-top:12px;"><div class="gl">Key Gap</div>${data.keyGap}</div>
+    <button class="btn-primary" id="toStage3">Continue to 2nd Half — Legend Match →</button>
+  `);
+  app.appendChild(p);
+  p.querySelector('#toStage3').onclick = runStage3Setup;
+}
+
+// ============================================================
+// STAGE 3 — MESSI VS RONALDO PERSONALITY MATCH
+// ============================================================
+async function runStage3Setup(){
+  setPeriod(3);
+  clearApp();
+  const feed = commentaryFeed([
+    "Designing personality probes across 10 traits…",
+    "Mixing multiple-choice and rating-scale formats…",
+    "Keeping it indirect — no Messi-or-Ronaldo giveaways…"
+  ]);
+  app.appendChild(feed);
+
+  const system = `You are a Football Personality Assessor. Build a personality quiz of exactly 12 questions to later compute Messi vs Ronaldo compatibility.
+Cover these 10 traits across the questions (some questions can map to multiple traits): ambition, discipline, leadership, teamwork, creativity, competitiveness, confidence, work ethic, learning style, decision-making style.
+Use a mix of "multiple_choice" (4 options) and "rating_scale" (1-5, with short anchor labels for 1 and 5) question types.
+CRITICAL: Never mention Messi or Ronaldo or reference them indirectly (no "left-footed genius" vs "physical powerhouse" framing). Keep questions about the USER's own behavior/preferences in football or general life contexts (e.g. training habits, how they handle pressure, how they make decisions).
+Respond with ONLY valid JSON, no markdown fences:
+{
+  "questions": [
+    {"id": "p1", "type": "multiple_choice", "trait": "ambition", "question": "", "options": ["", "", "", ""]},
+    {"id": "p2", "type": "rating_scale", "trait": "discipline", "question": "", "lowLabel": "", "highLabel": ""}
+  ]
+}`;
+
+  try {
+    const raw = await callClaude(system, "Generate the 12-question personality quiz now.", 2200);
+    const data = parseJSON(raw);
+    state.personality.questions = data.questions;
+    feed._stop();
+    renderStage3Quiz();
+  } catch(err){
+    feed._stop();
+    clearApp();
+    renderError("Couldn't generate the personality quiz.", err, runStage3Setup);
+  }
+}
+
+function renderStage3Quiz(){
+  clearApp();
+  const qs = state.personality.questions;
+  let qHtml = '';
+  qs.forEach((q, idx) => {
+    if(q.type === 'multiple_choice'){
+      qHtml += `<div class="q-block">
+        <div class="q-num">Q${idx+1}</div>
+        <div class="q-text">${q.question}</div>
+        <div class="choices" data-qid="${q.id}">
+          ${q.options.map((opt,oi)=>`<button class="choice-btn" data-oi="${oi}">${opt}</button>`).join('')}
+        </div>
+      </div>`;
+    } else {
+      qHtml += `<div class="q-block">
+        <div class="q-num">Q${idx+1}</div>
+        <div class="q-text">${q.question}</div>
+        <div class="rating-row" data-qid="${q.id}">
+          ${[1,2,3,4,5].map(v=>`<div class="rating-pip" data-val="${v}">${v}</div>`).join('')}
+        </div>
+        <div class="rating-labels"><span>${q.lowLabel}</span><span>${q.highLabel}</span></div>
+      </div>`;
+    }
+  });
+
+  const p = panel(`
+    <div class="eyebrow">2nd Half &middot; Stage 3</div>
+    <h2>Messi vs Ronaldo Personality Match</h2>
+    <p>Answer honestly based on how you actually behave — not how you think you "should" answer.</p>
+    ${qHtml}
+    <button class="btn-primary" id="submitPersonality" disabled>See My Legend Match</button>
+  `);
+  app.appendChild(p);
+
+  qs.forEach(q => {
+    if(q.type === 'multiple_choice'){
+      const group = p.querySelector(`.choices[data-qid="${q.id}"]`);
+      group.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.onclick = () => {
+          [...group.children].forEach(c=>c.classList.remove('selected'));
+          btn.classList.add('selected');
+          state.personality.answers[q.id] = btn.textContent;
+          checkPersonalityComplete(p, qs);
+        };
+      });
+    } else {
+      const group = p.querySelector(`.rating-row[data-qid="${q.id}"]`);
+      group.querySelectorAll('.rating-pip').forEach(pip => {
+        pip.onclick = () => {
+          [...group.children].forEach(c=>c.classList.remove('selected'));
+          pip.classList.add('selected');
+          state.personality.answers[q.id] = pip.dataset.val;
+          checkPersonalityComplete(p, qs);
+        };
+      });
+    }
+  });
+
+  p.querySelector('#submitPersonality').onclick = () => scorePersonality();
+}
+
+function checkPersonalityComplete(p, qs){
+  const submitBtn = p.querySelector('#submitPersonality');
+  const allAnswered = qs.every(q => state.personality.answers[q.id] !== undefined);
+  submitBtn.disabled = !allAnswered;
+}
+
+async function scorePersonality(){
+  clearApp();
+  const feed = commentaryFeed([
+    "Cross-referencing your answers against legend trait profiles…",
+    "Calculating Messi compatibility…",
+    "Calculating Ronaldo compatibility…",
+    "Determining your football personality archetype…"
+  ]);
+  app.appendChild(feed);
+
+  const answerPairs = state.personality.questions.map(q => ({
+    trait: q.trait,
+    question: q.question,
+    answer: state.personality.answers[q.id]
+  }));
+
+  const system = `You are a Football Personality Assessor computing a Messi vs Ronaldo compatibility match.
+The user answered these personality questions (trait, question, and their answer):
+${JSON.stringify(answerPairs, null, 2)}
+
+Use these widely-recognized public personality contrasts as your trait reference model (these are archetypal patterns for the exercise, not literal claims about the real individuals):
+- Messi-leaning traits: understated confidence, intuitive/improvisational creativity, quiet leadership by example, collaborative team-first instinct, flow-state decision-making, humble work ethic.
+- Ronaldo-leaning traits: outward confidence, relentless competitiveness, vocal/demonstrative leadership, individual drive paired with team discipline, highly structured work ethic, deliberate goal-driven decision-making.
+
+Score Messi% and Ronaldo% such that they sum to 100. Pick ONE archetype from exactly this list based on the dominant 2-3 traits: "Creative Playmaker", "Relentless Competitor", "Tactical Visionary", "Quiet Leader", "Fearless Attacker", "Strategic Commander", "Consistent Performer", "Big-Match Specialist".
+
+Respond with ONLY valid JSON, no markdown fences:
+{
+  "messiPct": 0,
+  "ronaldoPct": 0,
+  "moreLike": "Messi or Ronaldo",
+  "whyMessi": "2-3 sentences on personality similarities even if percentage is lower",
+  "whyRonaldo": "2-3 sentences on personality similarities even if percentage is lower",
+  "verdict": "2-3 sentences on why they resemble moreLike specifically, citing decision-making tendencies",
+  "archetype": "",
+  "archetypeDescription": "2-3 sentences",
+  "keyTraits": ["", "", ""],
+  "recommendedPlayer": "",
+  "recommendedClub": "",
+  "recommendedNationalTeam": "",
+  "recommendedRivalry": ""
+}`;
+
+  try {
+    const raw = await callClaude(system, "Generate the personality match result now.", 1500);
+    const data = parseJSON(raw);
+    state.personalityResult = data;
+    feed._stop();
+    renderStage3Result(data);
+  } catch(err){
+    feed._stop();
+    clearApp();
+    renderError("Couldn't generate the personality match.", err, scorePersonality);
+  }
+}
+
+function renderStage3Result(data){
+  clearApp();
+  const messiWin = data.messiPct >= data.ronaldoPct;
+  const p = panel(`
+    <div class="eyebrow">2nd Half &middot; Result</div>
+    <h2>Your Legend Match</h2>
+    <div class="compat-row">
+      <div class="compat-card ${messiWin ? 'winner':''}">
+        <div class="name">MESSI</div>
+        <div class="pct">${data.messiPct}%</div>
+        <div class="body-text" style="font-size:0.82rem;">${data.whyMessi}</div>
+      </div>
+      <div class="compat-card ${!messiWin ? 'winner':''}">
+        <div class="name">RONALDO</div>
+        <div class="pct">${data.ronaldoPct}%</div>
+        <div class="body-text" style="font-size:0.82rem;">${data.whyRonaldo}</div>
+      </div>
+    </div>
+    <div class="gap-box"><div class="gl">You resemble ${data.moreLike} more</div>${data.verdict}</div>
+    <div class="archetype-banner">
+      <div class="at-label">Your Archetype</div>
+      <h3>${data.archetype}</h3>
+      <div class="body-text">${data.archetypeDescription}</div>
+      <div style="margin-top:10px;font-size:0.8rem;color:var(--gold);">${data.keyTraits.join(' &middot; ')}</div>
+    </div>
+    <div class="label">Explore Next</div>
+    <div class="reco-grid">
+      <div class="reco-box"><div class="rl">Player</div><div class="rv">${data.recommendedPlayer}</div></div>
+      <div class="reco-box"><div class="rl">Club</div><div class="rv">${data.recommendedClub}</div></div>
+      <div class="reco-box"><div class="rl">National Team</div><div class="rv">${data.recommendedNationalTeam}</div></div>
+      <div class="reco-box"><div class="rl">Rivalry</div><div class="rv">${data.recommendedRivalry}</div></div>
+    </div>
+    <button class="btn-primary" id="toFinal">See Full-Time Profile →</button>
+  `);
+  app.appendChild(p);
+  p.querySelector('#toFinal').onclick = renderFinal;
+}
+
+// ============================================================
+// FINAL — FOOTBALL INTELLIGENCE PROFILE
+// ============================================================
+function renderFinal(){
+  setPeriod(4);
+  clearApp();
+  const pred = state.prediction;
+  const qr = state.quizResult;
+  const pr = state.personalityResult;
+
+  const p = panel(`
+    <div class="eyebrow">Full-Time</div>
+    <h2>Your Football Intelligence Profile</h2>
+    <p>A complete readout from kickoff to final whistle.</p>
+
+    <div class="label">World Cup 2026 Prediction</div>
+    <div class="body-text" style="margin-bottom:8px;">
+      Winner: <strong style="color:var(--gold)">${pred.winner.team}</strong> (${pred.winner.confidence}%) &middot;
+      Runner-up: <strong>${pred.runnerUp.team}</strong> &middot;
+      Dark horse: <strong>${pred.darkHorse.team}</strong>
+    </div>
+
+    <div class="label" style="margin-top:18px;">Football Awareness</div>
+    <div class="body-text">Score <strong style="color:var(--gold)">${qr.finalScore}/100</strong> — ${qr.classification}</div>
+
+    <div class="label" style="margin-top:18px;">Legend Match</div>
+    <div class="body-text">Messi ${pr.messiPct}% &middot; Ronaldo ${pr.ronaldoPct}% — more like <strong style="color:var(--gold)">${pr.moreLike}</strong></div>
+
+    <div class="archetype-banner" style="margin-top:18px;">
+      <div class="at-label">Archetype</div>
+      <h3>${pr.archetype}</h3>
+    </div>
+
+    <div class="label" style="margin-top:18px;">Explore Next</div>
+    <div class="reco-grid">
+      <div class="reco-box"><div class="rl">Player</div><div class="rv">${pr.recommendedPlayer}</div></div>
+      <div class="reco-box"><div class="rl">Club</div><div class="rv">${pr.recommendedClub}</div></div>
+      <div class="reco-box"><div class="rl">National Team</div><div class="rv">${pr.recommendedNationalTeam}</div></div>
+      <div class="reco-box"><div class="rl">Rivalry</div><div class="rv">${pr.recommendedRivalry}</div></div>
+    </div>
+
+    <div class="label" style="margin-top:18px;">Key Insights</div>
+    <div class="gap-box">${pr.verdict} ${qr.encouragement}</div>
+
+    <button class="btn-primary" id="restart">Replay From Kickoff</button>
+  `);
+  app.appendChild(p);
+  p.querySelector('#restart').onclick = () => {
+    state.knowledgeLevel = null;
+    state.prediction = null;
+    state.quiz = { questions: null, answers: {} };
+    state.quizResult = null;
+    state.personality = { questions: null, answers: {} };
+    state.personalityResult = null;
+    renderStage0();
+  };
+}
+
+// ============================================================
+// ERROR HANDLING
+// ============================================================
+function renderError(message, err, retryFn){
+  const p = panel(`
+    <div class="eyebrow">Stoppage Time</div>
+    <h2>Something Went Off Target</h2>
+    <p>${message}</p>
+    <div class="error-box">${err && err.message ? err.message : 'Unknown error'}</div>
+    <button class="btn-primary" id="retryBtn">Retry</button>
+  `);
+  app.appendChild(p);
+  p.querySelector('#retryBtn').onclick = retryFn;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+renderStage0();
+</script>
+
+</body>
+</html>
