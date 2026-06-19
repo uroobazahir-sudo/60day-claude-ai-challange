@@ -1,0 +1,33 @@
+⚽ Football Intelligence Hub
+Day 19/60 — 60 Day Claude AI Challenge
+An AI-powered football analysis app that runs Claude live, inside the app itself, to generate World Cup predictions, score your football IQ, and match your personality to Messi or Ronaldo.
+What it does
+A single-file HTML app, no backend, no build step — but powered entirely by real-time calls to the Claude API. Every prediction, every quiz question, and every personality result is generated live by Claude, not hardcoded.
+The experience runs like a matchday broadcast, in four stages:
+Stage
+What happens
+🏟️ Pre-Match
+You select your football knowledge level — this calibrates the depth and language for everything that follows
+⚽ 1st Half
+Claude generates a FIFA World Cup 2026 prediction report: winner, runner-up, dark horse, and players to watch — each with a confidence score, supporting evidence, and risks
+🟡 Half-Time
+A 5-question Football IQ quiz, mixing beginner-to-advanced difficulty based on your level. Claude scores your answers and assigns a Football Awareness Score (0–100) with a fan classification
+🔵 2nd Half
+A 12-question personality assessment (multiple-choice + rating scale) covering ambition, leadership, creativity, decision-making, and more — without ever directly asking "Messi or Ronaldo?"
+🏁 Full-Time
+Everything compiles into one Football Intelligence Profile: your World Cup picks, IQ score, Messi/Ronaldo compatibility %, personality archetype, and recommended player/club/team/rivalry to explore
+Why it's interesting
+This isn't a static quiz with pre-written outcomes. The app calls api.anthropic.com/v1/messages directly from the browser at each stage, sends Claude structured prompts, and parses JSON responses back into the UI live. Ask it again, get a different (but reasoned) answer — same way Claude reasons in a normal conversation, just wrapped in a custom interface.
+Design
+Built around a "live matchday" visual language:
+Palette: pitch-night green background, gold accents for prediction/prestige moments, live-green for active states
+Type: Bebas Neue (scoreboard energy) for headers, Inter for body text, JetBrains Mono for scores and confidence data
+Signature element: a scrolling "live commentary" feed replaces the typical loading spinner — text streams in like a football live-text feed while Claude is generating each stage's analysis
+Tech
+Single HTML file — vanilla JS, no framework, no build step
+Claude API (claude-sonnet-4-6) called directly from the client for all analysis, scoring, and personality matching
+Fully responsive, keyboard-accessible, respects prefers-reduced-motion
+Try it
+Open the file, publish it as a Claude artifact, and play through all four stages — predictions, quiz, and your personality match against two of football's greatest.
+🔗 Part of the 60 Day Claude AI Challenge — building one polished AI-powered app a day.
+Built with Claude by Anthropic.
