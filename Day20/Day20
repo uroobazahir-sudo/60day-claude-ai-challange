@@ -1,0 +1,33 @@
+FaceShatter 🧩 — AI-Powered Face Puzzle Game
+Day 20 of my 60-Day Claude AI Challenge 🚀
+A single-file, dark-themed photo puzzle game built entirely with HTML, CSS, and vanilla JavaScript — no frameworks, no build step. Snap a photo (or load a demo image), choose your difficulty, and solve your own face as a sliding puzzle — right in the browser.
+✨ Features
+📸 Camera capture — live webcam preview with getUserMedia(), square-cropped snapshot onto canvas
+🧩 3 difficulty levels — 3×3, 4×4, or 5×5 grids, sliced dynamically from the captured image
+🎲 Guaranteed-solvable shuffle — randomized piece placement, never starts pre-solved
+🖱️ Full drag & drop — mouse support for desktop and native touch support for mobile/tablet
+🎯 Smart swapping — drag a piece onto another to swap instantly, with snap-to-grid placement
+🟢 Live correctness feedback — pieces glow green the moment they land in the right spot
+⏱️ Live timer + move counter — mm:ss.t precision timing, move count, and correct-piece tracker
+🏆 Win detection + leaderboard — auto-detects completion, stores your top 5 best times in localStorage with date, moves, and difficulty
+📱 Fully responsive — clean glassmorphism UI that adapts from desktop to mobile
+🔁 Retake / Reshuffle / New Photo / Play Again controls built in
+🎨 Design
+Theme: Dark violet/indigo SaaS aesthetic with glassmorphism panels
+Typography: Space Grotesk (display) + JetBrains Mono (data/labels)
+Signature touch: animated "scan line" flash on photo capture, soft glow on correctly placed pieces
+🛠️ Tech Stack
+100% vanilla HTML / CSS / JavaScript — zero dependencies, zero build tools
+getUserMedia() for camera access
+HTML5 <canvas> for image capture and slicing
+localStorage for persistent leaderboard
+Mouse + Touch event handling for cross-device drag and drop
+🚀 Run It
+Download face-puzzle.html
+Open it in any modern browser (Chrome, Firefox, Safari)
+Camera requires HTTPS or localhost — works out of the box if opened locally or hosted
+Allow camera access → take a photo → pick difficulty → solve!
+No installs. No servers. No nonsense.
+📚 Part of the 60-Day Claude AI Challenge
+Building one AI-assisted, single-file web app every day for 60 days — exploring what's possible with Claude as a development partner. Follow the journey on LinkedIn and GitHub.
+Built with Claude AI 🤖
