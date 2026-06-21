@@ -1,0 +1,60 @@
+🛡️ Digital Footprint Intelligence Dashboard
+Day 20 / 60 — Claude AI Mastery Challenge
+Built with Claude (Anthropic) | Single-file HTML | No backend required
+A premium, cybersecurity-style dashboard that analyzes a user's app ecosystem and generates a full Digital Footprint & Privacy Intelligence Report — complete with exposure scoring, company risk ranking, a live-animated Risk Radar, a Digital Twin profile, and an interactive Privacy Improvement Simulator.
+🎯 What It Does
+Given a list of apps a person uses (Instagram, WhatsApp, Google Pay, TikTok, etc.), the dashboard:
+Calculates a Digital Footprint Score (0–100) — how much of a footprint you leave
+Calculates a Privacy Score (0–100) — how protected that footprint is
+Maps exposure intensity per app via a visual heatmap
+Ranks parent companies (Google, Meta, ByteDance...) by combined data exposure
+Builds a Data Collection Matrix — what category of data each app likely touches
+Renders a Risk Radar across 6 dimensions (Social, Financial, Location, Behavioral, Communication, Identity)
+Generates a Digital Twin Profile — a probabilistic sketch of the likely user behind the app stack
+Surfaces the Most Valuable Data Assets an advertiser would want
+Runs a live Privacy Improvement Simulator — tick real actions, watch your score move in real time
+Closes with a Final Verdict card, graded like a credit report
+🧠 Why This Matters
+Most people have no idea how their everyday app choices compound into a tracking profile. This tool makes that visible — instantly, visually, and without ever touching a real account or private database.
+⚠️ Full transparency built into the design itself:
+Every insight is labeled FACT (directly from the app list) or ESTIMATE (a reasoned, non-certain inference). No claims of certainty. No access to real user data. Ever.
+✨ Design
+Element
+Choice
+Aesthetic
+Dark cybersecurity / signal-intelligence dashboard
+Typography
+Space Grotesk (headings) + JetBrains Mono (data)
+Signature element
+Rotating radar sweep + scanline-textured heatmap cells
+Inspiration
+Stripe Dashboard, Linear, Apple Privacy Report, Google Privacy Checkup
+Interactivity
+Live-updating Privacy Score simulator (pure JS, no backend)
+🛠️ Tech Stack
+HTML5 + CSS3 — single self-contained file
+Vanilla JavaScript — for the live score simulator
+SVG — gauges, radar chart, animated scan sweep
+No frameworks, no dependencies, no API calls — runs entirely client-side
+🚀 How to Use
+Download digital-footprint-dashboard.html
+Open directly in any browser — no setup needed
+Swap in your own app list to regenerate the analysis
+Use the Privacy Improvement Simulator to see how specific actions move your score
+📋 Sections Breakdown
+Digital Footprint Score + Privacy Score (dual gauge header)
+Exposure Heatmap
+Company Exposure Ranking
+Data Collection Matrix
+Risk Radar (animated)
+Digital Twin Profile
+Most Valuable Data Assets
+Privacy Improvement Simulator
+Wow Insights
+Final Verdict
+⚠️ Disclaimer
+This tool does not access any real account, device, browser, or third-party database. All scores, rankings, and personality inferences are statistical estimates based on publicly known patterns, not verified facts about any individual.
+🔗 Part of the 60-Day Claude AI Mastery Challenge
+Building one AI-powered app a day for 60 days using Claude.
+Follow the journey: github.com/uroobazahir-sudo
+#BuildWithClaude #60DaysOfClaude #ClaudeAI
