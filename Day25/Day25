@@ -1,0 +1,47 @@
+
+🦈 Day 25 — AI Shark Tank Simulator
+Pitch your startup to 4 ruthless AI judges. Survive the questions. Seal the deal.
+�
+�
+�
+🚀 What It Does
+Enter your startup idea and get grilled by 4 distinct AI shark judges in a real Shark Tank-style simulation — powered by Claude AI.
+🦈 Meet the Sharks
+Judge
+Role
+Focus
+💼 Victoria Chen
+Venture Capitalist
+Market Size & Scalability
+🚀 Marcus Reid
+Serial Founder
+Execution & Team
+🛒 Priya Sharma
+Consumer Advocate
+Usefulness & UX
+😇 David Okonkwo
+Angel Investor
+Profitability & ROI
+✨ Features
+Live Q&A Round — 8 sharp questions, each shark reacts to your answers instantly
+Scoring System — Market Potential, Innovation, Business Model, Execution, Investment Worthiness
+4 Possible Verdicts — Invest, Reject, Acquire, Come Back Later
+Valuation + Deal Terms — suggested funding amount and company valuation
+Confetti — because you deserve it when you get funded 🎉
+Download Pitch Report — full HTML report of your entire session
+Leaderboard — tracks your top 10 pitches locally
+Share Result — one click share
+🛠️ Tech Stack
+Single file HTML + CSS + Vanilla JS
+Claude Sonnet 4.6 API
+Google Fonts — Space Grotesk + JetBrains Mono
+Zero dependencies, zero backend
+▶️ How to Run
+Download shark-tank-simulator.html
+Open in any browser
+Fill in your startup details
+Click Enter the Tank 🦈
+📁 Part of 60 Days of Claude AI Challenge
+This is Day 25 of my #60DaysOfClaudeAI challenge — building and shipping one polished AI-powered app every single day.
+GitHub: github.com/uroobazahir-sudo
+Built with Claude AI · @AnthropicAI
