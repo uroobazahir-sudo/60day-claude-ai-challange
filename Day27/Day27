@@ -1,0 +1,34 @@
+# Day 27 — Prior Authorization Story Simulator 🏥
+> Part of my #60DaysOfClaudeAI challenge — building one AI-powered web app every day.
+## What is this?
+An interactive 8-scene story that walks you through the US healthcare Prior Authorization (PA) process — from patient diagnosis to insurance denial to final approval.
+Follow **Rahul** (patient) and **Priya** (healthcare ops specialist) as they navigate one of the most confusing parts of the healthcare system — explained in beginner-friendly language.
+## Scenes
+| # | Scene | What Happens |
+|---|-------|-------------|
+| 1 | Doctor Visit | Rahul is diagnosed with RA. Dr. Patel prescribes Humira. |
+| 2 | Insurance Roadblock | PA request submitted: Provider → Payer. No pharmacy involved. |
+| 3 | What is PA? | Priya explains step therapy, treatment delays, AMA 2023 data. |
+| 4 | Insurance Review | Eligibility, clinical docs, ICD-10 match, step therapy history. |
+| 5 | Denial | PA denied — missing step therapy documentation. |
+| 6 | Appeal | Letter of Medical Necessity + formal appeal filing. |
+| 7 | Approval | PA approved, reference number issued, saved on file permanently. |
+| 8 | Takeaways | Patient perspective + system metrics (denial rate, appeal rate, resolution time). |
+## Tech Stack
+- Single-file HTML
+- Tailwind CSS (CDN)
+- Vanilla JavaScript
+- `createElement` + `appendChild` only — no `innerHTML` on chat container
+## Key Concepts Covered
+- Prior Authorization (PA) flow
+- Step Therapy
+- ICD-10 diagnosis codes
+- Letter of Medical Necessity
+- PA denial vs permanent denial
+- Appeal process (standard 30 days / urgent 72 hours)
+- System metrics: denial rate, appeal rate, resolution time
+> StarCare Health is used as an illustrative payer example throughout — for educational purposes only.
+## Run It
+Just open `index.html` in any browser. No installs, no dependencies.
+---
+Built with Claude AI · Urooba Zahir ·
