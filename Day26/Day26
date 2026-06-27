@@ -1,0 +1,99 @@
+🏥 Prior Authorization Workflow Simulator
+Day 26/60 — #60DaysOfClaudeAI Challenge
+A gamified, interactive simulation of the US Healthcare Prior Authorization (PA) process — built as a single self-contained HTML file.
+🎯 What Is Prior Authorization?
+Before a doctor can perform surgery, prescribe a specialty drug, or admit a patient to a hospital — the insurance company must pre-approve it. This is called Prior Authorization (PA). It's one of the most common sources of treatment delays in the US healthcare system:
+94% of physicians say PA causes treatment delays
+Providers spend 16+ hours per week on PA paperwork
+Many patients abandon treatment after a denial
+This simulator lets you experience the full PA workflow interactively.
+✨ Features
+4 Patient Scenarios
+#
+Patient
+Case Type
+Urgency
+1
+Maria Gonzalez, 54
+Elective Lumbar Surgery
+Routine
+2
+James Carter, 38
+Urgent Brain MRI
+Urgent
+3
+Dorothy Pham, 67
+Biologic Medication (Humira)
+Standard
+4
+Andre Williams, 72
+Inpatient Cardiac Admission
+Emergent
+7-Step Workflow Across 3 Lanes
+Code
+Gameplay Mechanics
+✅ Step-by-step actions — click buttons in sequence to advance the workflow
+📄 Document collection — gather all required clinical docs before submitting
+⏱ Days elapsed counter — every action adds realistic processing time
+⭐ Efficiency score — lose points for denials, pends, and delays
+❌ Denial handling — choose to file an Appeal or request Peer-to-Peer Review
+🎉 Confetti celebration on approval
+📊 Full summary screen with timeline log and key takeaway
+Education Built In
+Every step shows a real explanation of what's happening in US healthcare — medical necessity criteria, step therapy requirements, ACA timelines, P2P review statistics, and more.
+🚀 How to Run
+No installation. No server. No build step.
+Bash
+Or double-click the file. That's it.
+🛠 Tech Stack
+Layer
+Choice
+Markup
+HTML5
+Styling
+CSS3 (custom properties, grid, flexbox)
+Logic
+Vanilla JavaScript (ES6+)
+Animation
+Canvas API (confetti)
+Dependencies
+Zero
+Frameworks
+None
+Build step
+None
+📁 File Structure
+Code
+All CSS, JavaScript, and content is embedded. The SCENARIOS array near the top of the script is clearly marked as editable — add your own patient cases there.
+🎮 How to Play
+Open the file in your browser
+Read the patient info on the right panel
+Click the Current Actions buttons in sequence
+Collect all documents before you can submit
+Advance through Review → Decision
+Approve, Pend, or Deny — then handle the outcome
+Click New Patient to try the next scenario
+Scoring tip: Avoid denials and pends. Complete document collection efficiently. Faster = higher efficiency score.
+📚 Key Healthcare Concepts Covered
+Concept
+Explained In Simulator
+Medical Necessity
+Step 2 — Necessity Evaluation
+Step Therapy
+Scenario 3 — Dorothy's biologic medication
+Concurrent Review
+Scenario 4 — Andre's inpatient admission
+Expedited/Urgent PA
+Scenario 2 — James's urgent MRI
+Pend & Additional Info
+Review stage action
+First-Level Appeal
+Post-denial option
+Peer-to-Peer Review
+Post-denial option (overturns 50–80% of denials)
+ACA PA Timelines
+Displayed in education boxes
+🤖 Built with: Claude AI by Anthropic
+📌 Challenge Context
+This is Day 26 of my #60DaysOfClaudeAI challenge — building and shipping one polished AI-powered single-file web app every day, documented publicly on LinkedIn and GitHub.
+Built with Claude AI · Single HTML file · Zero dependencies
