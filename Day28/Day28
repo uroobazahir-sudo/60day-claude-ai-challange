@@ -1,0 +1,97 @@
+🏥 LinkedIn Caption — Day 28
+Day 28 of #60DaysOfClaudeAI — and today I simulated something that happens in real hospitals every single day 👇
+🏥 Hospital Admission Readiness Simulator
+You are a Hospital Admission Coordinator.
+There's a patient. There's insurance. There's a PA. There's a physician. And the clock is running. ⏱️
+Can the patient be admitted — or not?
+This isn't just a form. It's a weighted decision engine.
+🔴 Prior Authorization — 25% weight
+Approved? Pending? Denied? Every branch has its own path — follow up, upload docs, file an appeal, and if the appeal gets denied too? Escalate to Medical Director or IRO.
+🟡 ICU + Denied PA = hard cap at 65%
+You cannot reach 90% through admin tasks alone. That's the reality of healthcare operations.
+📋 CMS 2-Midnight Rule — fires automatically when Observation is selected
+MOON notification, SNF eligibility, cost-sharing differences — all documented inline.
+🔬 InterQual / Milliman criteria — auto-triggers for Acute MI and CHF
+Documentation must meet medical necessity thresholds before UR review. No shortcuts.
+Score Weighting:
+PA 25% · Clinical Docs 20% · Physician Orders 20% · Insurance 15% · Consent 10% · Bed 10%
+≥ 90% → ✅ ADMIT — full summary + post-admission checklist
+< 90% → ⚠️ NOT READY — exact missing items + required actions listed
+≥ 75% → Governance Snapshot unlocks:
+PA turnaround avg: 3–5 days · Inpatient denial rate: ~8–10% (CMS) · PA rework cost: ~$11/transaction (CAQH)
+Care Coordination Cards include:
+👨‍⚕️ Attending · 📋 Case Manager · 🏥 Nursing · 🔍 Utilization Review (InterQual, Milliman, concurrent review) · 🚪 Discharge Planner
+Risk tracking across: Documentation · Insurance · Bed · Clinical
+Clinical Risk is weighted highest for Acute MI, CHF, and ICU admissions.
+9-milestone timeline that updates in real time as you complete each workflow action.
+Single-file HTML. Zero backend. Zero database.
+Pure logic, weighted scoring, and real healthcare workflow — in one simulator.
+Because hospital admissions aren't bureaucracy for the sake of it — every checkbox protects a patient. 🩺
+🔗 GitHub: github.com/uroobazahir-sudo
+🛠️ Built with: HTML · Tailwind CSS · Vanilla JS · Claude AI
+@abtalksonai @anilbajpai @AnthropicAI
+#60DaysOfClaudeAI #Day28 #HealthcareAI #HospitalAdmissions #PriorAuthorization #HealthTech #BuildInPublic #WomenInTech #PakistaniDevs #ClaudeAI #AISimulator #HealthcareWorkflow
+📖 README — Day 28
+🏥 Day 28 — Hospital Admission Readiness Simulator
+#60DaysOfClaudeAI Challenge
+A single-file interactive simulator for hospital admission coordinator training. Models real-world PA workflows, CMS compliance rules, and weighted readiness scoring.
+🎯 What It Does
+You play the role of a Hospital Admission Coordinator. Given a patient scenario — diagnosis, admission type, PA status, insurance, and attending physician — you navigate the full admission workflow to reach ≥90% readiness before the patient can be admitted.
+⚙️ Scenario Setup
+Field
+Options
+Provider
+5 illustrative hospitals
+Physician
+5 illustrative attending physicians
+Diagnosis
+Acute MI / CHF / Pneumonia / Elective Surgery / Hip Fracture
+Admission Type
+Inpatient / Observation / Emergency / ICU / Same-Day Surgery
+PA Status
+Approved / Pending / Denied / Not Required
+Insurance
+5 illustrative payer plans
+⚠️ All provider and payer names are illustrative training data only.
+📊 Score Weighting
+Category
+Weight
+Prior Authorization
+25%
+Clinical Documentation
+20%
+Physician Orders
+20%
+Insurance Verification
+15%
+Patient Consent
+10%
+Bed Assignment
+10%
+Hard rule: Denied PA + ICU cannot reach 70% through admin actions alone.
+🔀 PA Branching Logic
+Approved → Proceed with workflow
+Pending → Follow Up / Upload Docs / Contact Physician
+Denied → Review Reason → Contact Insurance → Submit Appeal → Simulate result
+Successful Appeal → PA converts to Approved, score recalculates
+🏥 Compliance Alerts
+Observation triggers CMS 2-Midnight Rule banner + MOON notification requirement
+Acute MI / CHF triggers InterQual/Milliman medical necessity notice
+📈 Governance Snapshot (unlocks at ≥75%)
+Industry benchmarks (estimates only):
+PA turnaround: 3–5 days · Inpatient denial rate: ~8–10% (CMS) · PA rework cost: ~$11/transaction (CAQH)
+✅ Final Decision Logic
+Score
+Outcome
+≥ 90%
+✅ ADMIT — full summary + post-admission checklist
+< 90%
+⚠️ NOT READY — missing items + required actions
+🛠️ Tech Stack
+HTML · Tailwind CSS CDN · Vanilla JavaScript · Single file · No backend
+🎨 Design
+Fonts: Space Grotesk + JetBrains Mono
+Palette: Dark base (#0A0A0F) · Teal · Amber · Violet
+UX: Task-first — no dashboard on load
+Part of the #60DaysOfClaudeAI challenge by @uroobazahir-sudo
+Built with Claude AI · Educational simulation only
