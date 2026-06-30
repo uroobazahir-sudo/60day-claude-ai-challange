@@ -1,0 +1,31 @@
+🌐 Supply Chain Builder — Day 30 of #60DaysOfClaudeAI
+An interactive, single-file web app that teaches supply chain fundamentals through hands-on decision-making — built for complete beginners.
+🎯 What It Does
+Welcome Screen — introduces what a supply chain is in plain English.
+Random Company Generator — creates a new company each playthrough with a random industry, products, countries served, and demand level.
+5 Guided Decisions — for each one, the app explains the concept, why it matters, and the trade-offs before you choose:
+Number of suppliers (single vs. multiple)
+Factory location (local / offshore / hybrid)
+Warehouse strategy (central / regional / none)
+Transportation method (road / rail / sea / air)
+Inventory strategy (low / balanced / high)
+Live Metrics Dashboard — Cost, Delivery Speed, Risk, Customer Satisfaction, and Sustainability update with animated progress bars after every choice.
+Final Report — an Overall Supply Chain Score (0–100), strengths, weaknesses, biggest risk, and three practical improvement recommendations.
+Replay — generate a brand-new random company and start over.
+🛠️ Tech Stack
+React 18 (via CDN)
+Babel Standalone (JSX in-browser, no build step)
+Plain HTML/CSS/JavaScript
+Single .html file — no npm, no backend, no external assets
+100% offline — just open the file in any browser
+🎨 Design
+Dark, premium enterprise dashboard aesthetic
+Rounded cards with hover effects and smooth transitions
+Animated progress bars for all metrics
+Fully responsive layout
+▶️ How to Run
+Download supply-chain-builder.html and open it directly in any modern browser. No installation required.
+📚 Why This Project
+Part of my #60DaysOfClaudeAI challenge — building one polished, single-file web app every day. Day 30 focuses on making an abstract business concept (supply chain management) tangible and understandable through interactive simulation.
+Day 30/60 | Built with Claude AI
+#60DaysOfClaudeAI #BuildInPublic #WomenInTech #PakistanStartups #PakistaniDevs
