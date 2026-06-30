@@ -1,0 +1,51 @@
+Operation Lifeline: Supply Chain Crisis Lab
+Overview
+Operation Lifeline: Supply Chain Crisis Lab is a single-page React application that simulates real-world supply chain crisis management. Players take the role of a business executive responsible for making strategic decisions during major disruptions while balancing cost, customer satisfaction, inventory, and profitability.
+Features
+Welcome screen
+Random fictional company generator
+Random crisis generator
+War Room strategy simulation
+Animated KPI progress bars
+Four-round supplier negotiation
+CEO leadership assessment
+AI investment planning
+Executive performance dashboard
+Personalized feedback and recommendations
+Fully responsive dark-themed interface
+Replay with randomized scenarios
+Technologies Used
+HTML5
+CSS3
+JavaScript (ES6)
+React (CDN)
+Babel JSX
+Learning Outcomes
+This project demonstrates:
+React functional components
+State management using React Hooks
+Conditional rendering
+Interactive UI design
+Business simulation logic
+Responsive dashboard development
+User experience design
+Decision-based game mechanics
+how to Run
+Download the HTML file.
+Open it in any modern web browser.
+Click Start Simulation.
+Complete every stage:
+Company Generation
+Crisis Management
+War Room
+Supplier Negotiation
+CEO Boardroom
+AI Strategy
+Final Dashboard
+Press Replay to generate a completely new simulation.
+Project Goal
+The objective is to help users understand how supply chain decisions affect business performance while learning executive decision-making in an engaging and interactive environment.
+
+
+
+Day 29 ProjectOperation Lifeline: Supply Chain Crisis Lab
