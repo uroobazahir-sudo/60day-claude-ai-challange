@@ -1,0 +1,47 @@
+AI Supply Chain Control Tower
+Day 31 – 60 Days Claude AI Challenge
+Overview
+AI Supply Chain Control Tower is an interactive browser-based simulation where players take on the role of a Head of Operations responsible for managing a global supply chain. The objective is to respond to operational disruptions, protect business performance, and maximize KPIs before time runs out.
+Features
+- Live Operations Dashboard
+- Real-Time KPI Tracking
+- Random Supply Chain Alerts
+- Decision-Based Gameplay
+- Dynamic Scoring System
+- Countdown Timer
+- Event Log
+- Performance Grade (A+ to D)
+- Pause Function
+- Help & Instructions Modal
+- Sound Toggle (Visual)
+- Responsive Design
+- Fully Offline Single HTML File
+
+Technologies Used
+
+- HTML5
+- CSS3
+- Vanilla JavaScript
+
+Gameplay
+
+Players receive continuous operational alerts such as supplier delays, port congestion, warehouse shortages, truck breakdowns, and weather disruptions. Every decision affects business KPIs including service level, customer satisfaction, inventory health, transportation efficiency, operating cost, revenue protected, and overall score.
+
+As the game progresses, alert frequency increases, creating a more challenging operational environment.
+
+Learning Outcomes
+
+- Supply Chain Operations
+- Operations Management
+- Decision Making Under Pressure
+- KPI Monitoring
+- Risk Management
+- UX Design
+- Frontend Development
+- Game Logic with JavaScript
+
+Challenge
+
+This project was created as Day 31 of the 60 Days Claude AI Challenge.
+
+Credits: ABTalks • Anil Bajpai • Anthropic
