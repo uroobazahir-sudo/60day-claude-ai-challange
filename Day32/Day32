@@ -1,0 +1,29 @@
+# 🎯 Think Like a Marketing Strategist: Grow This Brand
+**Day 32/60 — #60DaysOfClaudeAI Challenge**
+A single-file, offline-capable web app that teaches beginners how marketing *strategists think* — not just how to generate content.
+## 🧠 Why This Exists
+Marketing content generators are everywhere. Marketing *thinking* is rare — and it's the part that actually determines whether content works. Every section explains **What is this?** and **Why does it matter?** in plain language.
+## ✨ Features
+- **3 ways to start:**
+  - 🏢 Use My Own Business
+  - 🙋 Build My Personal Brand (your name, expertise & story as the "brand")
+  - 🎲 A New Client Has Arrived (randomly generated business)
+- **Audience deep-dive** with a strategist-style dossier card
+- **Platform selection** with fit ratings (Great / Good / Situational / Weak) and reasoning for each
+- **Content pillars** — choose exactly 3 from a curated set, each tied to a strategic goal
+- **30-day roadmap** — weekly strategic focus, not a random post calendar
+- **Unexpected plot twist event** (viral post, copycat, crisis) with branching consequences
+- **Growth Report** — Audience Understanding, Platform Strategy, Content Strategy, Growth Potential, Best Decision, Biggest Mistake, 3 Marketing Lessons
+- **"How to ask Claude" prompt cards** after every section — learn prompt engineering alongside marketing
+- **Fully replayable** with new randomized businesses/personas every time
+## 🛠️ Tech Stack
+- Pure vanilla HTML, CSS, JavaScript
+- Zero frameworks, zero build tools, zero backend
+- Single self-contained file — runs 100% offline
+- Responsive, dark modern UI
+## 🚀 How to Use
+1. Download `marketing-strategist.html`
+2. Open it in any browser
+3. Pick a path and go through the full strategy simulation
+Built as part of the **ABTalks #60DaysOfClaudeAI Challenge** 🚀
+#60DaysOfClaudeAI #BuildInPublic #WomenInTech #PakistaniDevs
