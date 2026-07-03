@@ -1,0 +1,42 @@
+Media Integrity Analyzer
+
+Day 33 – 60 Days AI Challenge
+
+Media Integrity Analyzer is a premium single-file HTML application that teaches media literacy through interactive discovery instead of traditional quizzes.
+
+Features
+
+- 🎯 Guided learning before every challenge
+- 📰 Headline Detective
+- ❤️ Emotion Detector
+- 📊 Live Media Integrity Metrics
+- 📈 Overall Media Integrity Dashboard
+- 🔄 Replay with completely new scenarios
+- 🌙 Premium editorial-style dark interface
+- 🎨 Theme selection (including Claude Orange)
+- 📱 Fully responsive design
+- ⚡ Built with pure HTML, CSS, and Vanilla JavaScript
+- 🌐 Works completely offline
+- 📄 No external libraries, frameworks, APIs, or assets
+
+Learning Outcomes
+
+Users learn how to:
+
+- Identify misleading headlines
+- Detect emotional manipulation
+- Evaluate source reliability
+- Understand audience targeting
+- Build practical media literacy habits
+
+Tech Stack
+
+- HTML5
+- CSS3
+- Vanilla JavaScript
+
+Acknowledgements
+
+Created as Day 33 of the 60 Days AI Challenge.
+
+Special thanks to ABTalks, Anil Bajpai, and Anthropic for inspiring continuous learning and innovation.
