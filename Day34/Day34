@@ -1,0 +1,32 @@
+🕵️‍♀️ Marketing Detective
+A polished, single-file detective game that teaches marketing analysis through investigation. Open a case file, gather evidence, and solve the real marketing mistake behind a failed campaign — built for Day 34 of the #60DaysOfClaudeAI challenge.
+Overview
+Marketing Detective turns marketing case studies into an interactive detective experience. Instead of reading a dry case study, you investigate one: flip evidence cards to reveal campaign metrics, customer comments, and social performance, then identify the primary marketing mistake before the case is closed.
+Features
+10 unique fictional cases — each with a different industry, objective, audience, channels, budget, metrics, and a distinct primary marketing mistake
+Investigation Board — case overview presented as pinned index cards on a corkboard
+Interactive Evidence Room — draggable, flip-to-reveal evidence cards (metrics, comments, social performance, clues)
+Animated data bars for campaign metrics (reach, CTR, engagement, conversions, sales)
+Solve the Case — multiple-choice diagnosis with distractor options pulled from other cases
+Case Closed stamp animation with a correct/incorrect verdict
+Learning Report — full explanation of the real mistake plus 3 suggested improvements
+4 selectable color themes, including Claude Orange
+Fully responsive, works on desktop and mobile
+Tech Stack
+Pure HTML, CSS, and Vanilla JavaScript
+Zero external dependencies, zero build tools, zero backend
+Single self-contained .html file — works fully offline, just open it in a browser
+How to Use
+Download marketing-detective.html
+Open it directly in any modern browser (no server required)
+Pick a color theme, open a case file, and start investigating
+Case Flow
+Case Assignment → Investigation Board → Evidence Room (drag + flip) → Solve the Case → Case Closed → Learning Report
+Why This Project
+Built as part of the #60DaysOfClaudeAI challenge — one polished, single-file web app per day, designed with Claude to sharpen both frontend craft and marketing/business thinking.
+Author
+Urooba Zahir
+GitHub: @uroobazahir-sudo
+LinkedIn: Urooba Zahir
+Tags
+#60DaysOfClaudeAI #BuildInPublic #WomenInTech #PakistaniDevs
