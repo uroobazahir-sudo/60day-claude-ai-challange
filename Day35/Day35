@@ -1,0 +1,28 @@
+🧩 Prompt Puzzle — Master AI Prompting Through Play
+Day 35/60 — #60DaysOfClaudeAI
+An interactive, single-file web app that teaches prompt engineering through gameplay instead of theory. Built entirely offline with zero dependencies — just open the HTML file.
+🎯 What It Does
+Prompt Puzzle turns the skill of writing good AI prompts into a hands-on game. Instead of reading tips about prompt engineering, you practice it — assembling, cleaning, and judging real prompts across coding-focused scenarios, then seeing exactly how a weak prompt vs. an optimized prompt vs. an over-engineered prompt would each perform.
+🕹️ Three Challenge Types
+Build the Prompt — drag or tap the right instruction blocks into place while avoiding distractor blocks that would weaken the output.
+Clean the Prompt — a messy, noise-filled prompt is broken into lines; keep the useful ones and discard filler, flattery, and vagueness.
+Choose the Best Prompt — pick which of three prompts (weak / optimized / over-engineered) will most reliably produce the desired output.
+Every round ends with a full reveal: the weak prompt and its output, the optimized prompt and its output, the over-engineered version, and the underlying Prompt Principle behind the round.
+📊 Live Scoring & Report
+Tracks Accuracy, Time, Moves, Wrong Placements, Hints Used, and an Optimization Bonus in real time. At the end, a full Prompt Performance Report is generated:
+Prompt Score (0–1000) and Rating (Novice → Prompt Architect)
+A radar-style Prompt DNA visualization (Clarity, Context, Constraints, Format, Examples, Conciseness)
+Personalized feedback on strengths and weak spots
+A next milestone to chase
+A reusable "ideal prompt template" built from your own session
+🛠️ Tech Stack
+Pure HTML, CSS, and vanilla JavaScript — no frameworks, no CDNs, no build step. Fully self-contained in one file so it runs offline in any browser.
+🚀 Run It
+Download prompt-puzzle.html
+Open it in any browser
+Play through 6 randomized coding-focused scenarios
+Replay anytime for a freshly shuffled set
+📚 Domain & Difficulty
+Currently configured for Coding & Tech at Intermediate difficulty. Scenario data is stored in a single reusable JavaScript array, so new domains or difficulty levels can be dropped in easily.
+Part of the #60DaysOfClaudeAI challenge — one polished, single-file web app every day.
+#BuildInPublic #WomenInTech #PakistaniDevs
