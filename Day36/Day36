@@ -1,0 +1,41 @@
+🧠 Cognitive Pattern Explorer
+Day 36/60 — #60DaysOfClaudeAI
+A calm, game-like self-reflection experience that helps you notice how you tend to think — without labeling, scoring, or diagnosing you. Built as a single offline HTML file with zero frameworks.
+✨ What it does
+Instead of a quiz that hands you a verdict, Cognitive Pattern Explorer walks you through three short chapters and lets your choices reveal patterns:
+Discover Your Thinking Style — six everyday scenarios, each with five response options mapped to a different thinking tendency.
+Choose Your Priorities — drag-and-drop cards to rank what matters most to you when deciding something.
+Map Your Thinking — arrange thought-fragments on a timeline in the order they naturally show up in your head.
+At the end, a Reflection Journal shows a percentage breakdown across five tendencies, written in reflective language ("you often...", "this suggests...") rather than clinical labels.
+The five thinking tendencies
+🔵 Analytical Thinker
+🌸 Emotional Intuitive
+💜 Overthinking Loop Style
+🟡 Action-First Decision Maker
+🟢 Balanced Reflective Thinker
+🎮 Features
+Calm / Stress mode at the start — changes the pace and ambient animation intensity
+Reusable drag-and-drop component — powers both the priority cards and the timeline, with:
+Native HTML5 drag-and-drop (desktop)
+Touch-based reordering (mobile)
+Up/down buttons for full keyboard accessibility
+Ambient orb — a soft background gradient that shifts color live toward whichever thinking style is currently leading, as a quiet visual signature
+Progress tracker across all four stages (Discover → Priorities → Timeline → Reflection)
+prefers-reduced-motion support — all animations and transitions are disabled automatically for users who need that
+Fully responsive, down to small mobile screens
+100% offline — no external fonts, CDNs, or dependencies
+🛠️ Tech Stack
+Vanilla HTML5
+Vanilla CSS3 (custom properties, backdrop-filter, keyframe animations)
+Vanilla JavaScript (ES5-friendly, no build step, no frameworks)
+Single file: cognitive-pattern-explorer.html — just open it in any browser.
+🚀 Usage
+Bash
+⚠️ A note on purpose
+This app is built purely for self-exploration and curiosity. It is not a psychological assessment, diagnostic tool, or substitute for professional guidance. Think of it as a mirror, not a mark sheet.
+📅 Part of #60DaysOfClaudeAI
+Building one polished, single-file web app every day for 60 days — exploring different domains, interaction patterns, and design directions, all built and refined with Claude.
+Connect with me:
+GitHub: github.com/uroobazahir-sudo
+LinkedIn: linkedin.com/in/urooba-zahir-7698a5377
+#60DaysOfClaudeAI #BuildInPublic #WomenInTech #PakistaniDevs
