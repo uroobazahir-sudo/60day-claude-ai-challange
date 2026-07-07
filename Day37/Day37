@@ -1,0 +1,31 @@
+🎫 Task Compass: The Line
+#60DaysOfClaudeAI — Day 36/60
+A single-file, offline-first management simulation that teaches how work actually flows through a real organization — using a café/restaurant as the setting.
+The goal isn't to test job titles. It's to teach ownership, delegation, collaboration, and escalation.
+🎮 How It Works
+Task Compass runs you through three stages, styled like tickets moving down a kitchen order rail:
+Stage 1 — Who Owns This?
+A real floor problem appears ("A guest says their soup arrived lukewarm"). Drag one role card into the ownership slot. Every submission reveals the primary owner, the reasoning behind it, and which roles typically assist — never just "correct" or "wrong."
+Stage 2 — Task Routing
+A task needs to move through the organization. Drag role cards into the correct sequence (3–4 steps depending on complexity), then watch the ticket animate through the workflow you built.
+Stage 3 — Collaboration Challenge
+Bigger, messier situations — a satisfaction drop, a viral post, a surprise inspection. Instead of one owner, assign up to 4 roles who should be involved, then see the primary owner, supporting teams, and a possible communication flow.
+📊 Scoring
+Instead of points, you get understanding scores across four dimensions, shown on an animated bar chart:
+Ownership — how precisely you identified the right primary owner
+Delegation — whether you avoided looping in more people than a situation needed
+Collaboration — whether you recognized when a problem needed a wider team
+Workflow Thinking — how accurately you sequenced multi-step processes
+A closing reflection highlights what you understood well, where you over-assigned responsibility, where you underestimated collaboration, and one insight about how organizations really work.
+🧑‍🍳 The Roles
+Head Chef · Line Cook · Dishwasher · Server · Host · Cashier · Barista · General Manager — each color-coded by department (Kitchen, Front of House, Bar, Management).
+🛠️ Tech Stack
+Pure HTML, CSS, and vanilla JavaScript — no frameworks, no libraries, no build step
+Native HTML5 drag-and-drop and tap-to-place, so it works on both desktop and mobile
+Custom animated ticket-rail progress tracker + stamp animations (Fired, Sent, All Hands)
+Lightweight Web Audio blips on submission — no audio files
+Fully self-contained in a single .html file — works completely offline
+🚀 Run It
+Just open task-compass.html in any modern browser. No installation, no server, no dependencies.
+Built as part of the #60DaysOfClaudeAI challenge organized by @abtalksonai.
+#BuildInPublic #WomenInTech #PakistaniDevs
