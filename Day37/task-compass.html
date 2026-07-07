@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Task Compass — The Line</title>
+<style>
+  :root{
+    --bg:#171210;
+    --bg-2:#1d1712;
+    --paper:#f3e8d3;
+    --paper-2:#ece0c8;
+    --ink:#2a2013;
+    --ink-soft:#5a4c38;
+    --copper:#c07d3f;
+    --copper-light:#e0a768;
+    --kitchen:#c1443a;
+    --kitchen-soft:#3a2220;
+    --foh:#dc9a2e;
+    --foh-soft:#3a3018;
+    --bar:#2f8f7c;
+    --bar-soft:#173430;
+    --mgmt:#4d7fa3;
+    --mgmt-soft:#1a2c38;
+    --good:#5fae6e;
+    --bad:#c1443a;
+    --font-display: Iowan Old Style, Palatino Linotype, Palatino, Georgia, serif;
+    --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, "IBM Plex Mono", monospace;
+  }
+
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    color: var(--paper);
+    font-family: var(--font-body);
+    min-height:100vh;
+    overflow-x:hidden;
+    position:relative;
+  }
+  body::before, body::after{
+    content:"";
+    position:fixed;
+    border-radius:50%;
+    filter: blur(90px);
+    opacity:0.35;
+    z-index:0;
+    pointer-events:none;
+  }
+  body::before{
+    width:520px; height:520px;
+    background: radial-gradient(circle, var(--copper) 0%, transparent 70%);
+    top:-160px; left:-120px;
+    animation: driftA 22s ease-in-out infinite;
+  }
+  body::after{
+    width:480px; height:480px;
+    background: radial-gradient(circle, var(--kitchen) 0%, transparent 70%);
+    bottom:-160px; right:-100px;
+    animation: driftB 26s ease-in-out infinite;
+  }
+  @keyframes driftA{
+    0%,100%{ transform:translate(0,0); }
+    50%{ transform:translate(60px,40px); }
+  }
+  @keyframes driftB{
+    0%,100%{ transform:translate(0,0); }
+    50%{ transform:translate(-50px,-30px); }
+  }
+
+  #app{ position:relative; z-index:1; max-width:920px; margin:0 auto; padding:28px 18px 60px; }
+
+  .brand{ text-align:center; margin-bottom:22px; }
+  .brand .kicker{
+    font-family: var(--font-mono);
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    font-size:11px;
+    color: var(--copper-light);
+    opacity:.85;
+  }
+  .brand h1{
+    font-family: var(--font-display);
+    font-size:clamp(32px,6vw,50px);
+    margin:6px 0 4px;
+    font-weight:600;
+    letter-spacing:.01em;
+  }
+  .brand p{
+    margin:0; color:#d8c6a8; font-size:14px; font-style:italic;
+  }
+
+  /* --- Ticket rail (signature progress element) --- */
+  .rail{
+    display:flex; gap:10px; justify-content:center; margin:22px 0 30px;
+    flex-wrap:wrap;
+  }
+  .rail-ticket{
+    position:relative;
+    background: var(--paper);
+    color:var(--ink);
+    border-radius:8px;
+    padding:10px 16px 10px 14px;
+    font-family:var(--font-mono);
+    font-size:12px;
+    min-width:118px;
+    box-shadow:0 6px 14px rgba(0,0,0,.35);
+    opacity:.45;
+    transform:scale(.95);
+    transition:all .35s ease;
+  }
+  .rail-ticket::before{
+    content:"";
+    position:absolute; left:-5px; top:50%; transform:translateY(-50%);
+    width:10px; height:10px; border-radius:50%;
+    background: var(--bg);
+  }
+  .rail-ticket .stage-label{ font-weight:700; text-transform:uppercase; letter-spacing:.06em; display:block; }
+  .rail-ticket .dots{ margin-top:6px; display:flex; gap:5px; }
+  .rail-ticket .dot{ width:6px; height:6px; border-radius:50%; background:var(--ink-soft); opacity:.4; }
+  .rail-ticket .dot.filled{ background:var(--copper); opacity:1; }
+  .rail-ticket.active{ opacity:1; transform:scale(1.05); box-shadow:0 10px 22px rgba(192,125,63,.4); }
+  .rail-ticket.done{ opacity:.85; }
+  .rail-ticket.done .stage-label::after{ content:" ✓"; color:var(--good); }
+
+  /* --- Screens --- */
+  .screen{ display:none; animation: fadeUp .45s ease both; }
+  .screen.visible{ display:block; }
+  @keyframes fadeUp{ from{ opacity:0; transform:translateY(14px);} to{opacity:1; transform:translateY(0);} }
+
+  .card-panel{
+    background: rgba(255,255,255,.045);
+    border:1px solid rgba(255,255,255,.09);
+    backdrop-filter: blur(14px);
+    border-radius:22px;
+    padding:28px;
+  }
+
+  .btn{
+    font-family: var(--font-body);
+    font-weight:600; font-size:14px;
+    padding:12px 22px;
+    border-radius:12px;
+    border:none; cursor:pointer;
+    background: var(--copper);
+    color:#211407;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .btn:hover{ transform:translateY(-2px); box-shadow:0 10px 20px rgba(192,125,63,.35); background:var(--copper-light); }
+  .btn:active{ transform:translateY(0); }
+  .btn:disabled{ opacity:.35; cursor:not-allowed; transform:none; box-shadow:none; }
+  .btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,.25); color:var(--paper); }
+  .btn.ghost:hover{ background:rgba(255,255,255,.08); }
+
+  /* --- Welcome --- */
+  #screen-welcome .card-panel{ text-align:center; }
+  #screen-welcome h2{ font-family:var(--font-display); font-size:26px; margin-top:0; }
+  #screen-welcome p{ color:#e3d5ba; line-height:1.6; font-size:15px; }
+  .stage-preview{ display:flex; gap:14px; justify-content:center; margin:22px 0; flex-wrap:wrap; }
+  .stage-preview .chip{
+    font-family:var(--font-mono); font-size:12px; padding:8px 12px; border-radius:10px;
+    background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.1);
+  }
+
+  /* --- Ticket (task) card --- */
+  .ticket{
+    position:relative;
+    background: repeating-linear-gradient(var(--paper), var(--paper) 100%);
+    color: var(--ink);
+    border-radius:4px 4px 14px 14px;
+    padding:22px 24px 26px;
+    margin:0 auto 26px;
+    max-width:560px;
+    box-shadow:0 14px 30px rgba(0,0,0,.4);
+    font-family:var(--font-mono);
+  }
+  .ticket::after{
+    content:"";
+    position:absolute; left:0; right:0; bottom:-9px; height:18px;
+    background:
+      radial-gradient(circle at 10px 0, transparent 9px, var(--paper) 9.5px) 0 0/20px 18px repeat-x;
+  }
+  .ticket .ticket-head{
+    display:flex; justify-content:space-between; align-items:center;
+    font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft);
+    border-bottom:1px dashed var(--ink-soft); padding-bottom:8px; margin-bottom:12px;
+  }
+  .ticket .ticket-body{
+    font-family: var(--font-display);
+    font-size:19px; line-height:1.5; color:var(--ink);
+  }
+  .ticket.urgent{ background: linear-gradient(180deg,#f7e6d8,var(--paper)); border-left:5px solid var(--kitchen); }
+
+  .stamp{
+    position:absolute; top:14px; right:18px;
+    font-family: var(--font-display);
+    font-weight:700; font-size:26px; letter-spacing:.05em;
+    color: var(--kitchen); border:3px solid var(--kitchen);
+    padding:4px 10px; border-radius:6px;
+    transform:rotate(-14deg) scale(0);
+    opacity:0;
+    text-transform:uppercase;
+    pointer-events:none;
+    mix-blend-mode:multiply;
+  }
+  .stamp.show{ animation: slam .5s cubic-bezier(.2,1.4,.4,1) forwards; }
+  @keyframes slam{
+    0%{ transform:rotate(-14deg) scale(2.6); opacity:0; }
+    55%{ transform:rotate(-14deg) scale(.92); opacity:1; }
+    75%{ transform:rotate(-14deg) scale(1.08); }
+    100%{ transform:rotate(-14deg) scale(1); opacity:1; }
+  }
+
+  .meta-row{ display:flex; justify-content:center; gap:10px; margin-bottom:18px; font-family:var(--font-mono); font-size:12px; color:#c9b892; }
+
+  /* --- Slots --- */
+  .slots{ display:flex; gap:12px; justify-content:center; flex-wrap:wrap; margin-bottom:24px; }
+  .slot{
+    width:126px; min-height:74px;
+    border:2px dashed rgba(255,255,255,.28);
+    border-radius:14px;
+    display:flex; align-items:center; justify-content:center;
+    flex-direction:column; gap:4px;
+    font-size:12px; color:#a9977a;
+    transition: all .2s ease;
+    cursor:pointer;
+    text-align:center;
+    padding:6px;
+  }
+  .slot.owner-slot{ width:170px; min-height:88px; }
+  .slot.dragover{ border-color:var(--copper); background:rgba(192,125,63,.12); }
+  .slot .slot-index{ position:absolute; }
+  .slot.filled{ border-style:solid; border-color:var(--copper); background:rgba(192,125,63,.12); color:var(--paper); }
+  .slot .role-icon{ font-size:22px; }
+  .slot-wrap{ position:relative; display:flex; flex-direction:column; align-items:center; gap:4px; }
+  .slot-num{ font-family:var(--font-mono); font-size:10px; color:#8a7a5e; }
+  .arrow{ align-self:center; font-size:18px; color:var(--copper-light); }
+
+  /* --- Role pool --- */
+  .role-pool{ display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-bottom:8px; }
+  .role-card{
+    width:112px; padding:14px 8px 12px;
+    border-radius:14px;
+    text-align:center; cursor:grab;
+    background: rgba(255,255,255,.05);
+    border:1px solid rgba(255,255,255,.12);
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+    user-select:none;
+  }
+  .role-card:hover{ transform:translateY(-4px); box-shadow:0 8px 18px rgba(0,0,0,.35); }
+  .role-card:active{ cursor:grabbing; }
+  .role-card .icon{ font-size:26px; display:block; margin-bottom:6px; }
+  .role-card .name{ font-size:12px; font-weight:600; }
+  .role-card .dept-tag{ font-family:var(--font-mono); font-size:9px; text-transform:uppercase; letter-spacing:.06em; opacity:.7; margin-top:3px; display:block; }
+  .role-card.held{ outline:2px solid var(--copper-light); transform:translateY(-4px) scale(1.03); }
+  .role-card.selected{ outline:2px solid var(--copper-light); background:rgba(192,125,63,.18); }
+  .role-card.disabled{ opacity:.35; cursor:not-allowed; }
+
+  .role-card[data-dept="kitchen"]{ border-top:3px solid var(--kitchen); }
+  .role-card[data-dept="foh"]{ border-top:3px solid var(--foh); }
+  .role-card[data-dept="bar"]{ border-top:3px solid var(--bar); }
+  .role-card[data-dept="mgmt"]{ border-top:3px solid var(--mgmt); }
+
+  .dept-pill{ display:inline-block; font-family:var(--font-mono); font-size:10px; padding:2px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:.05em; }
+  .dept-pill.kitchen{ background:var(--kitchen-soft); color:#ff9d8f; }
+  .dept-pill.foh{ background:var(--foh-soft); color:#ffd888; }
+  .dept-pill.bar{ background:var(--bar-soft); color:#8bf0da; }
+  .dept-pill.mgmt{ background:var(--mgmt-soft); color:#a8d3f2; }
+
+  .actions{ display:flex; justify-content:center; gap:12px; margin-top:8px; }
+
+  /* --- Reveal panel --- */
+  .reveal{
+    margin-top:22px; padding-top:20px; border-top:1px solid rgba(255,255,255,.12);
+    animation: fadeUp .4s ease both;
+  }
+  .reveal h4{ margin:0 0 8px; font-family:var(--font-display); font-size:17px; }
+  .reveal .owner-line{ display:flex; align-items:center; gap:10px; margin-bottom:10px; }
+  .reveal .why{ color:#e3d5ba; font-size:14px; line-height:1.55; margin-bottom:14px; }
+  .assist-chips{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:6px; }
+  .assist-label{ font-family:var(--font-mono); font-size:11px; text-transform:uppercase; letter-spacing:.05em; color:#a9977a; margin-bottom:8px; }
+
+  .flow-row{ display:flex; align-items:center; gap:8px; flex-wrap:wrap; margin-top:6px; }
+  .flow-chip{ font-size:12px; padding:6px 10px; border-radius:10px; background:rgba(255,255,255,.07); }
+  .flow-arrow{ color:var(--copper-light); }
+
+  /* --- Stage3 select counter --- */
+  .select-counter{ text-align:center; font-family:var(--font-mono); font-size:12px; color:#c9b892; margin-bottom:14px; }
+
+  /* --- Results --- */
+  .chart{ display:flex; justify-content:center; align-items:flex-end; gap:26px; height:180px; margin:26px 0 10px; }
+  .chart-bar-wrap{ display:flex; flex-direction:column; align-items:center; gap:8px; width:70px; }
+  .chart-bar-track{ width:36px; height:150px; background:rgba(255,255,255,.08); border-radius:10px; display:flex; align-items:flex-end; overflow:hidden; }
+  .chart-bar{ width:100%; border-radius:10px 10px 0 0; height:0%; transition:height 1.1s cubic-bezier(.2,.8,.2,1); }
+  .chart-label{ font-family:var(--font-mono); font-size:10px; text-align:center; color:#c9b892; line-height:1.3; }
+  .chart-value{ font-family:var(--font-mono); font-size:13px; font-weight:700; }
+
+  .reflection{ margin-top:26px; }
+  .reflection .item{ background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:14px; padding:14px 16px; margin-bottom:12px; }
+  .reflection .item .tag{ font-family:var(--font-mono); font-size:10px; text-transform:uppercase; letter-spacing:.06em; color:var(--copper-light); display:block; margin-bottom:6px; }
+  .reflection .item p{ margin:0; font-size:14px; line-height:1.55; color:#f1e6d0; }
+
+  .celebrate{ text-align:center; margin-top:10px; }
+  .celebrate .big-stamp{ display:inline-block; font-family:var(--font-display); font-size:22px; border:3px solid var(--good); color:var(--good); padding:6px 16px; border-radius:8px; transform:rotate(-6deg); }
+
+  .confetti{ position:fixed; top:-20px; width:8px; height:14px; z-index:5; pointer-events:none; opacity:.9; }
+
+  footer.hint{ text-align:center; font-size:11px; color:#8a7a5e; margin-top:30px; font-family:var(--font-mono); }
+
+  @media (max-width:520px){
+    .role-card{ width:92px; }
+    .slot{ width:104px; }
+    .slot.owner-slot{ width:150px; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <div class="brand">
+    <span class="kicker">Task Compass</span>
+    <h1>The Line</h1>
+    <p>Learn how work flows through a real café &amp; restaurant.</p>
+  </div>
+
+  <div class="rail" id="rail"></div>
+
+  <!-- WELCOME -->
+  <section class="screen visible" id="screen-welcome">
+    <div class="card-panel">
+      <h2>Tonight, you're running the floor.</h2>
+      <p>Nine tickets are already on the rail. Your job isn't to memorize job titles — it's to understand who owns what, how work moves between stations, and when a problem needs more than one person.</p>
+      <div class="stage-preview">
+        <span class="chip">Stage 1 · Who Owns This?</span>
+        <span class="chip">Stage 2 · Task Routing</span>
+        <span class="chip">Stage 3 · All Hands</span>
+      </div>
+      <button class="btn" id="btn-start">Begin Service</button>
+    </div>
+  </section>
+
+  <!-- STAGE 1 -->
+  <section class="screen" id="screen-s1">
+    <div class="meta-row"><span id="s1-progress">Stage 1 · Ticket 1 of 3</span></div>
+    <div class="ticket" id="s1-ticket">
+      <div class="stamp" id="s1-stamp">Fired</div>
+      <div class="ticket-head"><span id="s1-num">#000</span><span>Who Owns This?</span></div>
+      <div class="ticket-body" id="s1-text">—</div>
+    </div>
+    <div class="slots">
+      <div class="slot owner-slot" id="s1-slot" data-slot="0">
+        <span class="role-icon">🎯</span>
+        <span>Drop the owner here</span>
+      </div>
+    </div>
+    <div class="role-pool" id="s1-pool"></div>
+    <div class="actions">
+      <button class="btn" id="s1-submit" disabled>Submit</button>
+    </div>
+    <div class="card-panel reveal" id="s1-reveal" style="display:none;"></div>
+    <div class="actions" id="s1-next-wrap" style="display:none;">
+      <button class="btn" id="s1-next">Next Ticket →</button>
+    </div>
+  </section>
+
+  <!-- STAGE 2 -->
+  <section class="screen" id="screen-s2">
+    <div class="meta-row"><span id="s2-progress">Stage 2 · Ticket 1 of 3</span></div>
+    <div class="ticket" id="s2-ticket">
+      <div class="stamp" id="s2-stamp">Sent</div>
+      <div class="ticket-head"><span id="s2-num">#000</span><span>Task Routing</span></div>
+      <div class="ticket-body" id="s2-text">—</div>
+    </div>
+    <div class="slots" id="s2-slots"></div>
+    <div class="role-pool" id="s2-pool"></div>
+    <div class="actions">
+      <button class="btn ghost" id="s2-clear">Clear</button>
+      <button class="btn" id="s2-submit" disabled>Submit</button>
+    </div>
+    <div class="card-panel reveal" id="s2-reveal" style="display:none;"></div>
+    <div class="actions" id="s2-next-wrap" style="display:none;">
+      <button class="btn" id="s2-next">Next Ticket →</button>
+    </div>
+  </section>
+
+  <!-- STAGE 3 -->
+  <section class="screen" id="screen-s3">
+    <div class="meta-row"><span id="s3-progress">Stage 3 · Ticket 1 of 3</span></div>
+    <div class="ticket urgent" id="s3-ticket">
+      <div class="stamp" id="s3-stamp">All Hands</div>
+      <div class="ticket-head"><span id="s3-num">#000</span><span>Collaboration Challenge</span></div>
+      <div class="ticket-body" id="s3-text">—</div>
+    </div>
+    <div class="select-counter" id="s3-counter">Select up to 4 roles who should be involved (0/4)</div>
+    <div class="role-pool" id="s3-pool"></div>
+    <div class="actions">
+      <button class="btn" id="s3-submit" disabled>Submit</button>
+    </div>
+    <div class="card-panel reveal" id="s3-reveal" style="display:none;"></div>
+    <div class="actions" id="s3-next-wrap" style="display:none;">
+      <button class="btn" id="s3-next">Next Ticket →</button>
+    </div>
+  </section>
+
+  <!-- RESULTS -->
+  <section class="screen" id="screen-results">
+    <div class="card-panel">
+      <h2 style="font-family:var(--font-display); margin-top:0;">Closing Report</h2>
+      <div class="chart" id="chart"></div>
+      <div class="reflection" id="reflection"></div>
+      <div class="celebrate">
+        <span class="big-stamp">Service Complete</span>
+      </div>
+      <div class="actions" style="margin-top:22px;">
+        <button class="btn" id="btn-replay">Run Service Again</button>
+      </div>
+    </div>
+  </section>
+
+  <footer class="hint">Drag a role card onto a slot, or tap a card then tap a slot. Works with mouse and touch.</footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Data ---------- */
+  var ROLES = {
+    headChef:  { name:"Head Chef",        icon:"👨‍🍳", dept:"kitchen" },
+    lineCook:  { name:"Line Cook",         icon:"🍳",  dept:"kitchen" },
+    dishwasher:{ name:"Dishwasher",        icon:"🧼",  dept:"kitchen" },
+    server:    { name:"Server",           icon:"🧑‍🍽️", dept:"foh" },
+    host:      { name:"Host",             icon:"🪑",  dept:"foh" },
+    cashier:   { name:"Cashier",          icon:"💳",  dept:"foh" },
+    barista:   { name:"Barista",          icon:"☕",  dept:"bar" },
+    gm:        { name:"General Manager",  icon:"🧑‍💼", dept:"mgmt" }
+  };
+  var ROLE_ORDER = ["headChef","lineCook","dishwasher","server","host","cashier","barista","gm"];
+
+  var STAGE1 = [
+    { num:"#204", text:"A guest says their soup arrived lukewarm.", owner:"lineCook",
+      why:"The Line Cook fires every dish and is responsible for hitting the right temperature before it leaves the pass.",
+      assist:["server","headChef"] },
+    { num:"#217", text:"A to-go order is missing a side dish when the customer gets home.", owner:"lineCook",
+      why:"The Line Cook plates and packs the order, so a missing side starts as a packing-accuracy issue.",
+      assist:["cashier","server"] },
+    { num:"#188", text:"The espresso machine has been pulling burnt-tasting shots all morning.", owner:"barista",
+      why:"The Barista owns beverage quality and is closest to dialing in grind, dose, and machine temperature.",
+      assist:["gm"] },
+    { num:"#231", text:"A party of eight's reservation never made it onto the seating chart.", owner:"host",
+      why:"The Host owns the reservation book and the seating chart from end to end.",
+      assist:["gm","server"] },
+    { num:"#242", text:"A guest notices they were charged twice for the same bill.", owner:"cashier",
+      why:"The Cashier owns the accuracy of every transaction that runs through the register.",
+      assist:["gm","server"] },
+    { num:"#155", text:"Clean plates are running out mid-rush and the kitchen is falling behind.", owner:"dishwasher",
+      why:"The Dishwasher owns the turnaround of clean dishware, which the entire kitchen depends on.",
+      assist:["gm","lineCook"] },
+    { num:"#199", text:"A regular says their favorite dish tastes different than usual.", owner:"headChef",
+      why:"The Head Chef owns recipe standards and consistency across every plate that goes out.",
+      assist:["lineCook","server"] },
+    { num:"#260", text:"A new online review says service was painfully slow during lunch rush.", owner:"gm",
+      why:"The General Manager owns overall service pacing and staffing decisions.",
+      assist:["server","host"] },
+    { num:"#173", text:"A guest with a nut allergy wasn't warned about a hidden ingredient.", owner:"server",
+      why:"The Server owns communicating allergy details accurately between the guest and the kitchen.",
+      assist:["headChef","lineCook"] }
+  ];
+
+  var STAGE2 = [
+    { num:"#301", text:"A guest wants to change their order after it's already gone to the kitchen.",
+      order:["server","lineCook","headChef","server"],
+      why:"The request has to reach the kitchen before it's too late, get judged against what's already fired by someone who can rule on prep standards, and then the answer has to travel back through the same server before the guest hears anything definite." },
+    { num:"#312", text:"A supplier delivers the wrong ingredients for tonight's menu.",
+      order:["gm","headChef","lineCook","server"],
+      why:"Whoever receives the delivery flags the shortage first, the chef decides what the menu can still support, the line adjusts prep, and the server explains any changes at the table." },
+    { num:"#307", text:"A table calls ahead asking for a custom birthday cake.",
+      order:["host","headChef","server"],
+      why:"The host logs the special request, the chef is the only one who can actually plan and prep it, and the server delivers it and manages the moment at the table." },
+    { num:"#298", text:"A group calls to reserve a table for twelve this weekend.",
+      order:["host","gm","server"],
+      why:"Reservations start with the host, but a party that size needs a manager's sign-off on staffing before a server is assigned to run the table." },
+    { num:"#340", text:"The kitchen runs out of a popular dish in the middle of dinner rush.",
+      order:["lineCook","headChef","server","cashier"],
+      why:"The shortage is spotted on the line, the chef decides what replaces it, the server breaks the news at the table, and the register reflects whatever substitution was agreed to." },
+    { num:"#286", text:"A table asks to split one check three ways at the end of the meal.",
+      order:["server","cashier","server"],
+      why:"The server carries the request to the register, the cashier processes the split, and the receipts travel back through the same server to the table." },
+    { num:"#355", text:"A delivery-app order comes in during a packed dinner rush.",
+      order:["cashier","lineCook","server","cashier"],
+      why:"The order lands wherever it's received first, the line queues it in with everything already fired, someone preps it for pickup, and the register closes the loop once it's out the door." },
+    { num:"#319", text:"A new seasonal dish is finally ready to go on the menu.",
+      order:["headChef","gm","server","cashier"],
+      why:"The chef finalizes the recipe, the manager signs off on pricing, servers learn how to describe it to guests, and the register gets updated so it rings up correctly." },
+    { num:"#274", text:"A guest's coffee order comes out wrong.",
+      order:["server","barista","server"],
+      why:"The server is the one who hears about it first, the barista is the only one who can actually fix the drink, and it travels back to the table through the same server." }
+  ];
+
+  var STAGE3 = [
+    { num:"#401", text:"Customer satisfaction scores have dropped across every shift this month.",
+      primary:"gm", supporting:["server","headChef","host"],
+      why:"A drop this broad rarely has one cause — service pace, food consistency, and wait times are all worth checking at once, and the manager is positioned to look across all three.",
+      flow:["server","headChef","host","gm"] },
+    { num:"#412", text:"A viral social post causes a huge surge of walk-in guests this weekend.",
+      primary:"gm", supporting:["headChef","host","server"],
+      why:"A sudden surge stresses seating, kitchen capacity, and table turnover all at once, so the manager needs input from all three fronts before deciding how to handle it.",
+      flow:["host","headChef","server","gm"] },
+    { num:"#420", text:"Online reviews start mentioning inconsistent food quality.",
+      primary:"headChef", supporting:["lineCook","gm","server"],
+      why:"Quality issues usually trace back to execution on the line, but fixing it for good takes the chef's standards, the manager's oversight, and the server's read on what guests are noticing.",
+      flow:["server","lineCook","gm","headChef"] },
+    { num:"#433", text:"A large catering order won't be ready on time.",
+      primary:"headChef", supporting:["gm","lineCook","server"],
+      why:"The chef manages the actual delay, but the manager handles the customer relationship, the line needs new priorities, and the server needs to know if it touches the dining room too.",
+      flow:["lineCook","headChef","gm","server"] },
+    { num:"#447", text:"A health inspector is arriving for a surprise visit in one hour.",
+      primary:"gm", supporting:["headChef","dishwasher","lineCook"],
+      why:"Passing inspection touches storage, cleanliness, and prep all at once, so the manager coordinates a fast cleanup across the whole back of house.",
+      flow:["dishwasher","lineCook","headChef","gm"] },
+    { num:"#455", text:"Three servers call out sick on the same busy Saturday night.",
+      primary:"gm", supporting:["host","server","cashier"],
+      why:"A staffing gap this size changes seating pace, table coverage, and who's running the register, so the manager rebalances across all three at once.",
+      flow:["host","server","cashier","gm"] },
+    { num:"#462", text:"Regulars are upset that menu prices went up with no warning.",
+      primary:"gm", supporting:["server","cashier","headChef"],
+      why:"The pricing decision sits with the manager, but servers field the reaction, the register reflects it on every receipt, and the chef can explain the ingredient costs behind it.",
+      flow:["headChef","gm","server","cashier"] },
+    { num:"#470", text:"A messy service moment from the floor goes viral online.",
+      primary:"gm", supporting:["server","host","headChef"],
+      why:"A public moment like this is a reputation issue first — the manager leads the response while pulling in whoever was actually involved on the floor and in the kitchen.",
+      flow:["server","host","headChef","gm"] }
+  ];
+
+  /* ---------- State ---------- */
+  var state = {
+    stage: 0,
+    s1Set: [], s1Idx: 0, s1Scores: [], s1Slot: null, s1Held: null, s1Submitted:false,
+    s2Set: [], s2Idx: 0, s2Scores: [], s2Slots: [], s2Held: null, s2Submitted:false,
+    s3Set: [], s3Idx: 0, s3Recall: [], s3Precision: [], s3Selected: [], s3Submitted:false
+  };
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for (var i=a.length-1; i>0; i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var t=a[i]; a[i]=a[j]; a[j]=t;
+    }
+    return a;
+  }
+  function pick3(arr){ return shuffle(arr).slice(0,3); }
+  function deptLabel(d){ return { kitchen:"Kitchen", foh:"Front of House", bar:"Bar", mgmt:"Management" }[d]; }
+
+  /* ---------- Sound ---------- */
+  var audioCtx = null;
+  function blip(freq, dur){
+    try{
+      if(!audioCtx){ audioCtx = new (window.AudioContext||window.webkitAudioContext)(); }
+      var o = audioCtx.createOscillator();
+      var g = audioCtx.createGain();
+      o.type = "sine"; o.frequency.value = freq || 520;
+      g.gain.setValueAtTime(0.06, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + (dur||0.18));
+      o.connect(g); g.connect(audioCtx.destination);
+      o.start(); o.stop(audioCtx.currentTime + (dur||0.18));
+    }catch(e){}
+  }
+
+  /* ---------- Rail ---------- */
+  function renderRail(){
+    var rail = document.getElementById("rail");
+    var stages = [
+      { key:1, label:"Stage 1", sub: state.s1Scores.length },
+      { key:2, label:"Stage 2", sub: state.s2Scores.length },
+      { key:3, label:"Stage 3", sub: state.s3Recall.length }
+    ];
+    rail.innerHTML = "";
+    stages.forEach(function(s){
+      var el = document.createElement("div");
+      el.className = "rail-ticket" + (state.stage===s.key ? " active":"") + (state.stage>s.key ? " done":"");
+      var dots = "";
+      for(var i=0;i<3;i++){ dots += '<span class="dot' + (i<s.sub ? " filled":"") + '"></span>'; }
+      el.innerHTML = '<span class="stage-label">' + s.label + '</span><span class="dots">' + dots + '</span>';
+      rail.appendChild(el);
+    });
+  }
+
+  function showScreen(id){
+    document.querySelectorAll(".screen").forEach(function(s){ s.classList.remove("visible"); });
+    document.getElementById(id).classList.add("visible");
+    window.scrollTo({top:0, behavior:"smooth"});
+  }
+
+  function roleCardHTML(roleId, extraClass){
+    var r = ROLES[roleId];
+    return '<div class="role-card ' + (extraClass||"") + '" data-role="' + roleId + '" data-dept="' + r.dept + '" draggable="true">' +
+      '<span class="icon">' + r.icon + '</span>' +
+      '<span class="name">' + r.name + '</span>' +
+      '<span class="dept-tag">' + deptLabel(r.dept) + '</span>' +
+      '</div>';
+  }
+
+  /* =========================================================
+     STAGE 1 — Who Owns This?
+  ==========================================================*/
+  function startStage1(){
+    state.stage = 1;
+    state.s1Set = pick3(STAGE1);
+    state.s1Idx = 0;
+    state.s1Scores = [];
+    renderRail();
+    loadS1();
+    showScreen("screen-s1");
+  }
+
+  function loadS1(){
+    state.s1Slot = null;
+    state.s1Held = null;
+    state.s1Submitted = false;
+    var task = state.s1Set[state.s1Idx];
+    document.getElementById("s1-progress").textContent = "Stage 1 · Ticket " + (state.s1Idx+1) + " of 3";
+    document.getElementById("s1-num").textContent = task.num;
+    document.getElementById("s1-text").textContent = task.text;
+    document.getElementById("s1-stamp").className = "stamp";
+    document.getElementById("s1-reveal").style.display = "none";
+    document.getElementById("s1-next-wrap").style.display = "none";
+    document.getElementById("s1-submit").disabled = true;
+    document.getElementById("s1-submit").style.display = "inline-block";
+
+    var slot = document.getElementById("s1-slot");
+    slot.className = "slot owner-slot";
+    slot.innerHTML = '<span class="role-icon">🎯</span><span>Drop the owner here</span>';
+
+    var pool = document.getElementById("s1-pool");
+    pool.innerHTML = ROLE_ORDER.map(function(id){ return roleCardHTML(id); }).join("");
+
+    attachRoleCardHandlers(pool, function(roleId, cardEl){
+      placeS1(roleId);
+    });
+    attachSlotHandlers(slot, function(roleId){
+      placeS1(roleId);
+    }, function(){ clearS1(); });
+  }
+
+  function clearS1(){
+    if(state.s1Submitted) return;
+    state.s1Slot = null;
+    var slot = document.getElementById("s1-slot");
+    slot.className = "slot owner-slot";
+    slot.innerHTML = '<span class="role-icon">🎯</span><span>Drop the owner here</span>';
+    document.getElementById("s1-submit").disabled = true;
+  }
+
+  function placeS1(roleId){
+    if(state.s1Submitted) return;
+    state.s1Slot = roleId;
+    var r = ROLES[roleId];
+    var slot = document.getElementById("s1-slot");
+    slot.className = "slot owner-slot filled";
+    slot.innerHTML = '<span class="role-icon">' + r.icon + '</span><span>' + r.name + '</span>';
+    document.getElementById("s1-submit").disabled = false;
+  }
+
+  document.getElementById("s1-submit").addEventListener("click", function(){
+    if(!state.s1Slot || state.s1Submitted) return;
+    state.s1Submitted = true;
+    var task = state.s1Set[state.s1Idx];
+    var picked = state.s1Slot;
+    var score = 0;
+    if(picked === task.owner) score = 1;
+    else if(task.assist.indexOf(picked) !== -1) score = 0.5;
+    state.s1Scores.push(score);
+
+    var stamp = document.getElementById("s1-stamp");
+    stamp.textContent = "Fired";
+    stamp.classList.add("show");
+    blip(picked===task.owner ? 660: 380, 0.2);
+
+    var ownerR = ROLES[task.owner];
+    var assistChips = task.assist.map(function(id){
+      var r = ROLES[id];
+      return '<span class="flow-chip">' + r.icon + ' ' + r.name + '</span>';
+    }).join("");
+
+    var verdict = picked===task.owner
+      ? '<span style="color:var(--good); font-weight:700;">✓ Matches the primary owner</span>'
+      : (score===0.5
+        ? '<span style="color:var(--copper-light); font-weight:700;">◐ ' + ROLES[picked].name + ' would help, but isn\'t the primary owner</span>'
+        : '<span style="color:var(--bad); font-weight:700;">✕ Not the closest owner here</span>');
+
+    document.getElementById("s1-reveal").style.display = "block";
+    document.getElementById("s1-reveal").innerHTML =
+      '<div class="owner-line">' + verdict + '</div>' +
+      '<h4>' + ownerR.icon + ' Primary Owner: ' + ownerR.name + '</h4>' +
+      '<div class="why">' + task.why + '</div>' +
+      '<div class="assist-label">May Also Assist</div>' +
+      '<div class="assist-chips">' + assistChips + '</div>';
+
+    document.getElementById("s1-submit").style.display = "none";
+    document.getElementById("s1-next-wrap").style.display = "flex";
+    renderRail();
+  });
+
+  document.getElementById("s1-next").addEventListener("click", function(){
+    if(state.s1Idx < 2){
+      state.s1Idx++;
+      loadS1();
+    } else {
+      startStage2();
+    }
+  });
+
+  /* =========================================================
+     STAGE 2 — Task Routing
+  ==========================================================*/
+  function startStage2(){
+    state.stage = 2;
+    state.s2Set = pick3(STAGE2);
+    state.s2Idx = 0;
+    state.s2Scores = [];
+    renderRail();
+    loadS2();
+    showScreen("screen-s2");
+  }
+
+  function loadS2(){
+    state.s2Slots = [];
+    state.s2Held = null;
+    state.s2Submitted = false;
+    var task = state.s2Set[state.s2Idx];
+    document.getElementById("s2-progress").textContent = "Stage 2 · Ticket " + (state.s2Idx+1) + " of 3";
+    document.getElementById("s2-num").textContent = task.num;
+    document.getElementById("s2-text").textContent = task.text;
+    document.getElementById("s2-stamp").className = "stamp";
+    document.getElementById("s2-reveal").style.display = "none";
+    document.getElementById("s2-next-wrap").style.display = "none";
+    document.getElementById("s2-submit").disabled = true;
+    document.getElementById("s2-submit").style.display = "inline-block";
+    document.getElementById("s2-clear").style.display = "inline-block";
+
+    var n = task.order.length;
+    for(var i=0;i<n;i++){ state.s2Slots.push(null); }
+
+    var slotsWrap = document.getElementById("s2-slots");
+    var html = "";
+    for(var i=0;i<n;i++){
+      html += '<div class="slot-wrap"><div class="slot-num">Step ' + (i+1) + '</div>' +
+        '<div class="slot" data-slot="' + i + '"><span class="role-icon">＋</span></div></div>';
+      if(i<n-1) html += '<span class="arrow">→</span>';
+    }
+    slotsWrap.innerHTML = html;
+
+    var pool = document.getElementById("s2-pool");
+    pool.innerHTML = ROLE_ORDER.map(function(id){ return roleCardHTML(id); }).join("");
+
+    attachRoleCardHandlers(pool, function(roleId){
+      placeS2Next(roleId);
+    });
+
+    var slotEls = slotsWrap.querySelectorAll(".slot");
+    slotEls.forEach(function(slotEl){
+      attachSlotHandlers(slotEl, function(roleId){
+        placeS2At(parseInt(slotEl.getAttribute("data-slot"),10), roleId);
+      }, function(){
+        clearS2At(parseInt(slotEl.getAttribute("data-slot"),10));
+      });
+    });
+  }
+
+  function renderS2Slot(i){
+    var slotEl = document.querySelector('#s2-slots .slot[data-slot="' + i + '"]');
+    var roleId = state.s2Slots[i];
+    if(roleId){
+      var r = ROLES[roleId];
+      slotEl.className = "slot filled";
+      slotEl.innerHTML = '<span class="role-icon">' + r.icon + '</span><span style="font-size:11px;">' + r.name + '</span>';
+    } else {
+      slotEl.className = "slot";
+      slotEl.innerHTML = '<span class="role-icon">＋</span>';
+    }
+  }
+
+  function placeS2At(idx, roleId){
+    if(state.s2Submitted) return;
+    state.s2Slots[idx] = roleId;
+    renderS2Slot(idx);
+    checkS2Ready();
+  }
+  function placeS2Next(roleId){
+    if(state.s2Submitted) return;
+    var idx = state.s2Slots.indexOf(null);
+    if(idx === -1) idx = state.s2Slots.length - 1;
+    placeS2At(idx, roleId);
+  }
+  function clearS2At(idx){
+    if(state.s2Submitted) return;
+    state.s2Slots[idx] = null;
+    renderS2Slot(idx);
+    checkS2Ready();
+  }
+  function checkS2Ready(){
+    var full = state.s2Slots.every(function(v){ return v!==null; });
+    document.getElementById("s2-submit").disabled = !full;
+  }
+
+  document.getElementById("s2-clear").addEventListener("click", function(){
+    if(state.s2Submitted) return;
+    for(var i=0;i<state.s2Slots.length;i++){ state.s2Slots[i]=null; renderS2Slot(i); }
+    checkS2Ready();
+  });
+
+  document.getElementById("s2-submit").addEventListener("click", function(){
+    if(state.s2Submitted) return;
+    var full = state.s2Slots.every(function(v){ return v!==null; });
+    if(!full) return;
+    state.s2Submitted = true;
+    var task = state.s2Set[state.s2Idx];
+    var matches = 0;
+    for(var i=0;i<task.order.length;i++){
+      if(state.s2Slots[i] === task.order[i]) matches++;
+    }
+    var pct = matches / task.order.length;
+    state.s2Scores.push(pct);
+
+    var stamp = document.getElementById("s2-stamp");
+    stamp.textContent = "Sent";
+    stamp.classList.add("show");
+    blip(pct===1 ? 660 : 420, 0.2);
+
+    // animate correct order flow
+    var flowHTML = task.order.map(function(id,i){
+      var r = ROLES[id];
+      var correct = state.s2Slots[i] === id;
+      return '<span class="flow-chip" style="border:1px solid ' + (correct ? "var(--good)" : "var(--bad)") + ';">' + r.icon + ' ' + r.name + '</span>';
+    }).join('<span class="flow-arrow">→</span>');
+
+    document.getElementById("s2-reveal").style.display = "block";
+    document.getElementById("s2-reveal").innerHTML =
+      '<h4>' + Math.round(pct*100) + '% of steps matched the common routing</h4>' +
+      '<div class="flow-row" style="margin-bottom:14px;">' + flowHTML + '</div>' +
+      '<div class="why">' + task.why + '</div>';
+
+    document.getElementById("s2-submit").style.display = "none";
+    document.getElementById("s2-clear").style.display = "none";
+    document.getElementById("s2-next-wrap").style.display = "flex";
+    renderRail();
+  });
+
+  document.getElementById("s2-next").addEventListener("click", function(){
+    if(state.s2Idx < 2){
+      state.s2Idx++;
+      loadS2();
+    } else {
+      startStage3();
+    }
+  });
+
+  /* =========================================================
+     STAGE 3 — Collaboration Challenge
+  ==========================================================*/
+  function startStage3(){
+    state.stage = 3;
+    state.s3Set = pick3(STAGE3);
+    state.s3Idx = 0;
+    state.s3Recall = [];
+    state.s3Precision = [];
+    renderRail();
+    loadS3();
+    showScreen("screen-s3");
+  }
+
+  function loadS3(){
+    state.s3Selected = [];
+    state.s3Submitted = false;
+    var task = state.s3Set[state.s3Idx];
+    document.getElementById("s3-progress").textContent = "Stage 3 · Ticket " + (state.s3Idx+1) + " of 3";
+    document.getElementById("s3-num").textContent = task.num;
+    document.getElementById("s3-text").textContent = task.text;
+    document.getElementById("s3-stamp").className = "stamp";
+    document.getElementById("s3-reveal").style.display = "none";
+    document.getElementById("s3-next-wrap").style.display = "none";
+    document.getElementById("s3-submit").disabled = true;
+    document.getElementById("s3-submit").style.display = "inline-block";
+    document.getElementById("s3-counter").textContent = "Select up to 4 roles who should be involved (0/4)";
+
+    var pool = document.getElementById("s3-pool");
+    pool.innerHTML = ROLE_ORDER.map(function(id){ return roleCardHTML(id); }).join("");
+
+    var cards = pool.querySelectorAll(".role-card");
+    cards.forEach(function(card){
+      card.addEventListener("click", function(){
+        if(state.s3Submitted) return;
+        var roleId = this.getAttribute("data-role");
+        var i = state.s3Selected.indexOf(roleId);
+        if(i !== -1){
+          state.s3Selected.splice(i,1);
+          this.classList.remove("selected");
+        } else {
+          if(state.s3Selected.length >= 4) return;
+          state.s3Selected.push(roleId);
+          this.classList.add("selected");
+        }
+        document.getElementById("s3-counter").textContent =
+          "Select up to 4 roles who should be involved (" + state.s3Selected.length + "/4)";
+        document.getElementById("s3-submit").disabled = state.s3Selected.length === 0;
+      });
+    });
+  }
+
+  document.getElementById("s3-submit").addEventListener("click", function(){
+    if(state.s3Submitted || state.s3Selected.length===0) return;
+    state.s3Submitted = true;
+    var task = state.s3Set[state.s3Idx];
+    var required = [task.primary].concat(task.supporting);
+    var overlap = state.s3Selected.filter(function(id){ return required.indexOf(id)!==-1; });
+    var recall = overlap.length / required.length;
+    var precision = overlap.length / state.s3Selected.length;
+    state.s3Recall.push(recall);
+    state.s3Precision.push(precision);
+
+    var stamp = document.getElementById("s3-stamp");
+    stamp.textContent = "All Hands";
+    stamp.classList.add("show");
+    blip(recall>=0.7 ? 660 : 420, 0.22);
+
+    var supportChips = task.supporting.map(function(id){
+      var r = ROLES[id];
+      return '<span class="flow-chip">' + r.icon + ' ' + r.name + '</span>';
+    }).join("");
+
+    var flowHTML = task.flow.map(function(id){
+      var r = ROLES[id];
+      return '<span class="flow-chip">' + r.icon + ' ' + r.name + '</span>';
+    }).join('<span class="flow-arrow">→</span>');
+
+    document.getElementById("s3-reveal").style.display = "block";
+    document.getElementById("s3-reveal").innerHTML =
+      '<h4>' + ROLES[task.primary].icon + ' Primary Owner: ' + ROLES[task.primary].name + '</h4>' +
+      '<div class="assist-label">Supporting Teams</div>' +
+      '<div class="assist-chips">' + supportChips + '</div>' +
+      '<div class="why">' + task.why + '</div>' +
+      '<div class="assist-label">Possible Communication Flow</div>' +
+      '<div class="flow-row">' + flowHTML + '</div>';
+
+    document.getElementById("s3-submit").style.display = "none";
+    document.getElementById("s3-next-wrap").style.display = "flex";
+    renderRail();
+  });
+
+  document.getElementById("s3-next").addEventListener("click", function(){
+    if(state.s3Idx < 2){
+      state.s3Idx++;
+      loadS3();
+    } else {
+      showResults();
+    }
+  });
+
+  /* =========================================================
+     Drag & drop + click-to-place helpers
+  ==========================================================*/
+  function attachRoleCardHandlers(container, onPick){
+    var cards = container.querySelectorAll(".role-card");
+    cards.forEach(function(card){
+      card.addEventListener("dragstart", function(e){
+        e.dataTransfer.setData("text/plain", this.getAttribute("data-role"));
+        this.classList.add("held");
+      });
+      card.addEventListener("dragend", function(){ this.classList.remove("held"); });
+      card.addEventListener("click", function(){
+        onPick(this.getAttribute("data-role"), this);
+      });
+    });
+  }
+
+  function attachSlotHandlers(slotEl, onDrop, onClear){
+    slotEl.addEventListener("dragover", function(e){ e.preventDefault(); this.classList.add("dragover"); });
+    slotEl.addEventListener("dragleave", function(){ this.classList.remove("dragover"); });
+    slotEl.addEventListener("drop", function(e){
+      e.preventDefault();
+      this.classList.remove("dragover");
+      var roleId = e.dataTransfer.getData("text/plain");
+      if(roleId) onDrop(roleId);
+    });
+    slotEl.addEventListener("click", function(){
+      if(this.classList.contains("filled")){ onClear(); }
+    });
+  }
+
+  /* =========================================================
+     Results
+  ==========================================================*/
+  function avg(arr){ if(!arr.length) return 0; return arr.reduce(function(a,b){return a+b;},0)/arr.length; }
+
+  function showResults(){
+    state.stage = 4;
+    renderRail();
+    var ownership = Math.round(avg(state.s1Scores)*100);
+    var workflow = Math.round(avg(state.s2Scores)*100);
+    var collaboration = Math.round(avg(state.s3Recall)*100);
+    var delegation = Math.round(avg(state.s3Precision)*100);
+
+    var bars = [
+      { label:"Ownership", value: ownership, color:"var(--kitchen)" },
+      { label:"Delegation", value: delegation, color:"var(--foh)" },
+      { label:"Collaboration", value: collaboration, color:"var(--bar)" },
+      { label:"Workflow Thinking", value: workflow, color:"var(--mgmt)" }
+    ];
+
+    var chart = document.getElementById("chart");
+    chart.innerHTML = bars.map(function(b){
+      return '<div class="chart-bar-wrap">' +
+        '<span class="chart-value">' + b.value + '</span>' +
+        '<div class="chart-bar-track"><div class="chart-bar" style="background:' + b.color + ';" data-target="' + b.value + '"></div></div>' +
+        '<span class="chart-label">' + b.label + '</span>' +
+        '</div>';
+    }).join("");
+
+    showScreen("screen-results");
+
+    setTimeout(function(){
+      chart.querySelectorAll(".chart-bar").forEach(function(bar){
+        bar.style.height = bar.getAttribute("data-target") + "%";
+      });
+    }, 80);
+
+    buildReflection(ownership, delegation, collaboration, workflow);
+    launchConfetti();
+  }
+
+  function buildReflection(ownership, delegation, collaboration, workflow){
+    var scores = { Ownership:ownership, Delegation:delegation, Collaboration:collaboration, "Workflow Thinking":workflow };
+    var names = Object.keys(scores);
+    var strong = names.filter(function(n){ return scores[n] >= 70; });
+    var understoodText = strong.length
+      ? "You showed the strongest instincts around " + strong.join(", ") + " — your calls there consistently lined up with how these situations actually play out on a real floor."
+      : "Your instincts are still forming across the board — each replay will sharpen where you place ownership and who you loop in.";
+
+    var overAssignText = delegation < 70
+      ? "When situations got complex, you often pulled in more roles than the situation actually needed. That instinct isn't wrong, but not every problem needs four people in the room."
+      : "You stayed lean under pressure — you rarely called in more roles than a situation actually needed, which keeps communication fast.";
+
+    var underCollabText = collaboration < 70
+      ? "In multi-department situations, you sometimes leaned on a single owner when the real fix needed a wider team involved from the start."
+      : "You consistently recognized when a problem needed more than one department at the table — that instinct will serve you well in a real kitchen.";
+
+    var lowest = names.reduce(function(a,b){ return scores[a] <= scores[b] ? a : b; });
+    var insights = {
+      "Ownership": "Ownership isn't about who's standing closest to the problem — it's about who's actually positioned to fix it.",
+      "Delegation": "Not every problem needs everyone in the room; knowing who to leave out is its own skill.",
+      "Collaboration": "Many real workplace problems are solved by teams rather than individuals.",
+      "Workflow Thinking": "The order work moves through an organization is rarely arbitrary — it usually reflects who needs information before they can act."
+    };
+
+    var html =
+      '<div class="item"><span class="tag">What you understood well</span><p>' + understoodText + '</p></div>' +
+      '<div class="item"><span class="tag">Where you tended to over-assign responsibility</span><p>' + overAssignText + '</p></div>' +
+      '<div class="item"><span class="tag">Where you underestimated collaboration</span><p>' + underCollabText + '</p></div>' +
+      '<div class="item"><span class="tag">One thing worth remembering</span><p>' + insights[lowest] + '</p></div>';
+
+    document.getElementById("reflection").innerHTML = html;
+  }
+
+  function launchConfetti(){
+    var colors = ["#c1443a","#dc9a2e","#2f8f7c","#4d7fa3","#c07d3f"];
+    for(var i=0;i<28;i++){
+      (function(i){
+        setTimeout(function(){
+          var el = document.createElement("div");
+          el.className = "confetti";
+          el.style.left = Math.random()*100 + "vw";
+          el.style.background = colors[Math.floor(Math.random()*colors.length)];
+          el.style.transform = "rotate(" + (Math.random()*360) + "deg)";
+          document.body.appendChild(el);
+          var duration = 2200 + Math.random()*1400;
+          el.animate([
+            { transform: el.style.transform + " translateY(0)", opacity: 1 },
+            { transform: "rotate(" + (Math.random()*720) + "deg) translateY(100vh)", opacity: 0.9 }
+          ], { duration: duration, easing:"ease-in" });
+          setTimeout(function(){ el.remove(); }, duration + 50);
+        }, i*40);
+      })(i);
+    }
+  }
+
+  document.getElementById("btn-replay").addEventListener("click", function(){
+    showScreen("screen-welcome");
+    state.stage = 0;
+    renderRail();
+  });
+
+  /* ---------- Boot ---------- */
+  document.getElementById("btn-start").addEventListener("click", startStage1);
+  renderRail();
+
+})();
+</script>
+</body>
+</html>
