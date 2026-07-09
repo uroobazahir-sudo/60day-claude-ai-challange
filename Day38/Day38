@@ -1,0 +1,42 @@
+Typing Speed Studio — Business Edition
+A premium, single-file typing platform that generates real business writing — memos, emails, negotiation lines, and reports — as practice text, then grades every session with a Monkeytype-style analytics report.
+Built for Day 38 of #60DaysOfClaudeAI.
+�
+Why this exists
+Generic typing tests train you on random text. This one trains you on the kind of writing you actually type at work, so the practice transfers directly to your inbox and your reports — not just your typing score.
+Features
+Typing modes
+Time — 15 / 30 / 60 / 120 second sprints
+Word Count — 25 / 50 / 100 / 250 word passages
+Quote — short business and leadership aphorisms
+Custom Text — paste your own passage to practice
+Adaptive — difficulty (easy / medium / hard vocabulary) auto-tunes based on your accuracy and speed after each run
+Zen — untimed, distraction-free practice
+Focus Mode — an optional overlay that only reveals the current line
+Live stats
+WPM, Raw WPM, Accuracy, CPM, elapsed/remaining time, mistake count, current streak, and a live progress bar — all updating on every keystroke, with correct/incorrect/current character highlighting.
+Post-session analytics dashboard
+Net WPM, Raw WPM, Accuracy, Consistency, Completion %
+Characters typed: correct / incorrect / extra / missed
+WPM + accuracy graph (canvas-drawn, no chart library)
+Error heatmap of most mistyped keys
+Percentile estimate against a general typist baseline
+Achievement badges (Speed Demon, Precision Master, Steady Hand, Marathon Draft, and more)
+Personal bests per mode
+Auto-generated summary of strengths, weaknesses, and next-step suggestions
+Personalization
+Dark and parchment surface themes, with 4 selectable accent palettes
+Adjustable font size
+Optional keystroke and completion sound (Web Audio, no audio files)
+Keyboard shortcuts: Tab to restart, Esc to pause/resume
+Fully responsive and accessible (visible focus states, reduced-motion support)
+Data & privacy
+All session history, streaks, and personal bests are stored in the browser's localStorage. No account, no backend, no external requests except Google Fonts.
+Tech stack
+Vanilla HTML, CSS, and JavaScript. Zero frameworks, zero build step, zero dependencies.
+Run it
+Download typing-speed-studio.html and open it directly in any modern browser. That's it.
+File structure
+Code
+Part of the #60DaysOfClaudeAI challenge — one polished single-file web app, every day, built in public.
+#BuildInPublic #WomenInTech #PakistaniDevs
