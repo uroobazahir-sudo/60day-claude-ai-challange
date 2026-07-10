@@ -1,0 +1,31 @@
+PDF Splitter & Merger
+
+📄 Overview
+
+A premium single-page web application that allows users to split and merge PDF files directly in the browser using HTML, CSS, and JavaScript. All processing is performed on the client side, ensuring privacy and offline functionality after the initial load.
+
+✨ Features
+
+- Split PDFs by page number or custom ranges
+- Extract selected pages
+- Merge multiple PDF files
+- Drag-and-drop file uploads
+- Page previews and thumbnails
+- Reorder files before merging
+- Responsive UI with Dark Mode
+- Processing indicators and smooth animations
+- Accessible and user-friendly interface
+- Offline support after initial load
+
+🛠️ Technologies Used
+
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- Browser-based PDF libraries
+
+🙏 Acknowledgements
+
+This project was created as Day 39 of the 60 Days AI Challenge.
+
+Special thanks to ABTalks, Anil Bajpai, and Anthropic for inspiring continuous learning and hands-on project building.
