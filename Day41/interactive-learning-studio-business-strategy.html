@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Learning Studio — Business Strategy Frameworks</title>
+<style>
+  :root{
+    --bg:#0b0e14;
+    --bg-2:#0e1220;
+    --panel:#131826;
+    --panel-2:#1a2133;
+    --border:#242c40;
+    --border-soft:#1c2336;
+    --text:#e8eaf1;
+    --text-dim:#98a2b8;
+    --text-faint:#5c657c;
+    --gold:#e8a33d;
+    --gold-dim:#8a6a30;
+    --teal:#2fd4c0;
+    --violet:#9b8cff;
+    --danger:#e8615d;
+    --success:#4ade80;
+    --font-display:'Segoe UI Semibold','Segoe UI',-apple-system,BlinkMacSystemFont,'Helvetica Neue',Arial,sans-serif;
+    --font-body:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+    --font-mono:'SFMono-Regular',Consolas,'Liberation Mono',Menlo,Courier,monospace;
+    --radius:10px;
+    --shadow:0 8px 30px rgba(0,0,0,.35);
+  }
+  [data-theme="light"]{
+    --bg:#f3f1ea;
+    --bg-2:#ece9df;
+    --panel:#ffffff;
+    --panel-2:#f7f5ee;
+    --border:#ddd8c8;
+    --border-soft:#e6e2d3;
+    --text:#1c1e26;
+    --text-dim:#565c6b;
+    --text-faint:#8b8f9c;
+    --shadow:0 8px 24px rgba(30,25,10,.08);
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 10% -10%, rgba(232,163,61,.06), transparent 60%),
+      radial-gradient(1000px 700px at 100% 0%, rgba(155,140,255,.06), transparent 60%),
+      var(--bg);
+    color:var(--text);
+    font-family:var(--font-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    transition:background .3s ease,color .3s ease;
+    padding-bottom:60px;
+  }
+  h1,h2,h3,h4{font-family:var(--font-display); letter-spacing:-.01em;}
+  a{color:var(--teal);}
+  .mono{font-family:var(--font-mono); letter-spacing:.02em;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 24px;}
+  ::selection{background:var(--gold); color:#1a1206;}
+
+  /* ---------- TOP BAR ---------- */
+  .topbar{
+    position:sticky; top:0; z-index:100;
+    background:rgba(11,14,20,.86);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-soft);
+  }
+  [data-theme="light"] .topbar{background:rgba(243,241,234,.86);}
+  .topbar-inner{
+    max-width:1040px; margin:0 auto; padding:12px 24px;
+    display:flex; align-items:center; gap:18px;
+  }
+  .brand{display:flex; align-items:center; gap:10px; font-weight:700; font-size:15px; white-space:nowrap;}
+  .brand .mark{
+    width:26px; height:26px; border-radius:6px;
+    background:linear-gradient(135deg,var(--gold),var(--violet));
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-mono); font-size:11px; font-weight:700; color:#0b0e14;
+  }
+  .progress-track{
+    flex:1; height:6px; border-radius:4px; background:var(--panel-2);
+    border:1px solid var(--border-soft); overflow:hidden; position:relative;
+  }
+  .progress-fill{
+    height:100%; width:0%; border-radius:4px;
+    background:linear-gradient(90deg,var(--gold),var(--teal));
+    transition:width .5s cubic-bezier(.4,0,.2,1);
+  }
+  .progress-label{font-size:12px; color:var(--text-dim); font-family:var(--font-mono); white-space:nowrap;}
+  .theme-toggle{
+    width:34px; height:34px; border-radius:8px; border:1px solid var(--border);
+    background:var(--panel); color:var(--text); cursor:pointer; font-size:15px;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .theme-toggle:hover{border-color:var(--gold);}
+
+  /* module nav dots */
+  .modnav{display:flex; gap:6px;}
+  .modnav .dot{
+    width:9px; height:9px; border-radius:50%; background:var(--border);
+    border:1px solid var(--border); transition:.25s;
+  }
+  .modnav .dot.done{background:var(--success); border-color:var(--success);}
+  .modnav .dot.active{background:var(--gold); border-color:var(--gold); transform:scale(1.3);}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:64px 0 40px; position:relative;}
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:8px;
+    font-family:var(--font-mono); font-size:12px; color:var(--gold);
+    border:1px solid var(--gold-dim); background:rgba(232,163,61,.08);
+    padding:5px 12px; border-radius:100px; margin-bottom:20px;
+  }
+  .hero h1{font-size:44px; line-height:1.08; max-width:780px; margin-bottom:16px;}
+  .hero h1 span{color:var(--gold);}
+  .hero p.lede{font-size:17px; color:var(--text-dim); max-width:620px; margin-bottom:32px;}
+
+  .briefing-board{
+    border:1px solid var(--border); border-radius:16px; background:var(--panel);
+    box-shadow:var(--shadow); overflow:hidden; margin-bottom:40px;
+  }
+  .board-head{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:14px 20px; border-bottom:1px solid var(--border-soft);
+    background:var(--panel-2); font-family:var(--font-mono); font-size:12px; color:var(--text-dim);
+  }
+  .board-head .lights{display:flex; gap:6px;}
+  .board-head .lights span{width:9px; height:9px; border-radius:50%; display:inline-block;}
+  .board-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:1px; background:var(--border-soft);
+  }
+  .board-cell{background:var(--panel); padding:20px; position:relative; min-height:110px;}
+  .board-cell .tag{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; margin-bottom:6px; display:block;}
+  .board-cell.s .tag{color:var(--success);}
+  .board-cell.w .tag{color:var(--danger);}
+  .board-cell.o .tag{color:var(--teal);}
+  .board-cell.t .tag{color:var(--violet);}
+  .board-cell p{font-size:13px; color:var(--text-dim);}
+
+  .meta-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:36px;}
+  .meta-card{
+    border:1px solid var(--border); background:var(--panel); border-radius:12px; padding:16px;
+  }
+  .meta-card .k{font-family:var(--font-mono); font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px;}
+  .meta-card .v{font-size:15px; font-weight:600;}
+
+  .reward-strip{
+    display:flex; align-items:center; gap:14px; padding:16px 20px;
+    border:1px dashed var(--gold-dim); border-radius:12px; background:rgba(232,163,61,.05);
+    margin-bottom:8px; font-size:14px; color:var(--text-dim);
+  }
+  .reward-strip strong{color:var(--gold);}
+  .start-btn{
+    display:inline-flex; align-items:center; gap:8px; margin-top:24px;
+    background:linear-gradient(135deg,var(--gold),#c9822b); color:#1a1206;
+    font-weight:700; font-size:15px; border:none; padding:14px 26px;
+    border-radius:10px; cursor:pointer; transition:transform .15s, box-shadow .15s;
+    box-shadow:0 6px 20px rgba(232,163,61,.25);
+  }
+  .start-btn:hover{transform:translateY(-2px); box-shadow:0 10px 26px rgba(232,163,61,.35);}
+
+  /* ---------- MODULES ---------- */
+  .module{
+    padding:56px 0; border-top:1px solid var(--border-soft);
+    opacity:.35; filter:grayscale(.5); pointer-events:none; transition:opacity .5s, filter .5s;
+  }
+  .module.unlocked{opacity:1; filter:none; pointer-events:auto;}
+  .module.locked-msg{
+    display:flex; align-items:center; gap:10px; padding:22px 24px;
+    border:1px dashed var(--border); border-radius:12px; color:var(--text-faint);
+    font-family:var(--font-mono); font-size:13px;
+  }
+  .mod-head{display:flex; align-items:baseline; gap:14px; margin-bottom:6px; flex-wrap:wrap;}
+  .mod-num{
+    font-family:var(--font-mono); font-size:13px; color:var(--gold);
+    border:1px solid var(--gold-dim); padding:3px 10px; border-radius:100px;
+  }
+  .mod-diff{font-family:var(--font-mono); font-size:12px; color:var(--text-faint);}
+  .module h2{font-size:28px; margin-bottom:8px;}
+  .module > .wrap > p.dek{color:var(--text-dim); font-size:15px; max-width:680px; margin-bottom:32px;}
+
+  .block{margin-bottom:34px;}
+  .block h3{font-size:19px; margin-bottom:12px; display:flex; align-items:center; gap:8px;}
+  .block h3::before{content:''; width:4px; height:18px; background:var(--teal); border-radius:2px; display:inline-block;}
+  .block p{color:var(--text-dim); font-size:15px; margin-bottom:12px;}
+  .block p strong{color:var(--text); font-weight:600;}
+
+  .callout{
+    border-left:3px solid var(--teal); background:var(--panel); border-radius:0 10px 10px 0;
+    padding:14px 18px; margin:14px 0; font-size:14px; color:var(--text-dim);
+  }
+  .callout.analogy{border-left-color:var(--violet);}
+  .callout.analogy::before{content:'ANALOGY'; display:block; font-family:var(--font-mono); font-size:10px; color:var(--violet); margin-bottom:4px; letter-spacing:.08em;}
+  .callout.example::before{content:'EXAMPLE'; display:block; font-family:var(--font-mono); font-size:10px; color:var(--teal); margin-bottom:4px; letter-spacing:.08em;}
+  .callout.misconception{border-left-color:var(--danger);}
+  .callout.misconception::before{content:'COMMON MISCONCEPTION'; display:block; font-family:var(--font-mono); font-size:10px; color:var(--danger); margin-bottom:4px; letter-spacing:.08em;}
+
+  table.compare{width:100%; border-collapse:collapse; font-size:14px; margin:14px 0;}
+  table.compare th, table.compare td{border:1px solid var(--border); padding:10px 12px; text-align:left;}
+  table.compare th{background:var(--panel-2); color:var(--gold); font-family:var(--font-mono); font-size:12px; text-transform:uppercase; letter-spacing:.04em;}
+  table.compare td{color:var(--text-dim);}
+
+  .takeaways{
+    border:1px solid var(--border); background:var(--panel); border-radius:12px; padding:18px 20px;
+  }
+  .takeaways h4{font-size:13px; color:var(--gold); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px;}
+  .takeaways ul{padding-left:18px; color:var(--text-dim); font-size:14px;}
+  .takeaways li{margin-bottom:6px;}
+
+  /* Diagrams */
+  .diagram-wrap{
+    border:1px solid var(--border); background:var(--panel); border-radius:14px;
+    padding:24px; margin:16px 0; overflow-x:auto;
+  }
+  .diagram-title{font-family:var(--font-mono); font-size:11px; color:var(--text-faint); text-transform:uppercase; letter-spacing:.08em; margin-bottom:16px;}
+
+  /* SWOT quadrant */
+  .swot-grid{display:grid; grid-template-columns:1fr 1fr; gap:2px; background:var(--border); border-radius:10px; overflow:hidden; min-width:420px;}
+  .swot-q{padding:18px; min-height:100px;}
+  .swot-q.s{background:rgba(74,222,128,.08);}
+  .swot-q.w{background:rgba(232,97,93,.08);}
+  .swot-q.o{background:rgba(47,212,192,.08);}
+  .swot-q.t{background:rgba(155,140,255,.08);}
+  .swot-q .lbl{font-family:var(--font-mono); font-weight:700; font-size:13px; margin-bottom:6px; display:block;}
+  .swot-q.s .lbl{color:var(--success);} .swot-q.w .lbl{color:var(--danger);}
+  .swot-q.o .lbl{color:var(--teal);} .swot-q.t .lbl{color:var(--violet);}
+  .swot-q ul{padding-left:16px; font-size:13px; color:var(--text-dim);}
+
+  /* Five forces pentagon */
+  .forces-pent{min-width:460px;}
+  .forces-svg text{fill:var(--text-dim); font-family:var(--font-body); font-size:11px;}
+  .forces-svg .center-text{fill:var(--gold); font-family:var(--font-mono); font-weight:700; font-size:12px;}
+  .forces-svg polygon.frame{fill:rgba(47,212,192,.06); stroke:var(--teal); stroke-width:1;}
+  .forces-svg circle.node{fill:var(--panel-2); stroke:var(--gold); stroke-width:1.5;}
+  .forces-svg line{stroke:var(--border); stroke-width:1;}
+
+  /* BCG matrix */
+  .bcg-grid{display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:2px; background:var(--border); min-width:420px; aspect-ratio:1.6/1; border-radius:10px; overflow:hidden;}
+  .bcg-cell{padding:16px; display:flex; flex-direction:column; justify-content:space-between; font-size:12px;}
+  .bcg-cell .name{font-family:var(--font-mono); font-weight:700; font-size:13px;}
+  .bcg-cell.star{background:rgba(232,163,61,.1);} .bcg-cell.star .name{color:var(--gold);}
+  .bcg-cell.qm{background:rgba(155,140,255,.1);} .bcg-cell.qm .name{color:var(--violet);}
+  .bcg-cell.cow{background:rgba(47,212,192,.1);} .bcg-cell.cow .name{color:var(--teal);}
+  .bcg-cell.dog{background:rgba(232,97,93,.1);} .bcg-cell.dog .name{color:var(--danger);}
+  .bcg-axis{display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:10px; color:var(--text-faint); min-width:420px; padding:4px 4px 0;}
+
+  /* Ansoff matrix */
+  .ansoff-grid{display:grid; grid-template-columns:120px 1fr 1fr; min-width:460px;}
+  .ansoff-grid .hcell{background:var(--panel-2); padding:10px; font-family:var(--font-mono); font-size:11px; color:var(--text-faint); text-align:center; border:1px solid var(--border-soft);}
+  .ansoff-grid .cell{border:1px solid var(--border-soft); padding:14px; font-size:12px;}
+  .ansoff-grid .cell b{display:block; font-family:var(--font-mono); font-size:12px; margin-bottom:4px;}
+  .a1 b{color:var(--success);} .a2 b{color:var(--teal);} .a3 b{color:var(--violet);} .a4 b{color:var(--danger);}
+
+  /* Value chain */
+  .vchain{border:1px solid var(--border); border-radius:10px; overflow:hidden; min-width:520px;}
+  .vchain .support{display:grid; grid-template-columns:repeat(4,1fr); background:var(--panel-2);}
+  .vchain .support div{padding:10px; font-size:11px; text-align:center; border-right:1px solid var(--border-soft); color:var(--text-dim); font-family:var(--font-mono);}
+  .vchain .primary{display:grid; grid-template-columns:repeat(5,1fr);}
+  .vchain .primary div{padding:16px 10px; font-size:11.5px; text-align:center; background:rgba(47,212,192,.07); border-right:1px solid var(--border-soft); color:var(--text-dim);}
+  .vchain .primary div b{display:block; color:var(--teal); font-family:var(--font-mono); font-size:11px; margin-bottom:4px;}
+  .vchain .margin{background:linear-gradient(90deg,var(--gold),#c9822b); text-align:center; padding:10px; font-family:var(--font-mono); font-size:12px; color:#1a1206; font-weight:700;}
+
+  /* Interactive exercises */
+  .exercise{border:1px solid var(--border); border-radius:12px; padding:20px; background:var(--panel-2);}
+  .exercise .prompt{font-size:14px; color:var(--text-dim); margin-bottom:14px;}
+  .chip-row{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px;}
+  .chip{
+    border:1px solid var(--border); background:var(--panel); color:var(--text);
+    padding:8px 14px; border-radius:100px; font-size:13px; cursor:pointer; transition:.15s;
+  }
+  .chip:hover{border-color:var(--gold);}
+  .chip.picked{background:var(--gold); color:#1a1206; border-color:var(--gold); font-weight:600;}
+  .drop-zones{display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:10px;}
+  .zone{border:1.5px dashed var(--border); border-radius:10px; padding:12px; min-height:70px; font-size:12px;}
+  .zone .zlbl{font-family:var(--font-mono); font-size:11px; color:var(--text-faint); margin-bottom:6px; display:block;}
+  .zone .item{background:var(--panel); border:1px solid var(--border); border-radius:6px; padding:6px 8px; font-size:12px; margin-bottom:5px;}
+  .exercise-feedback{margin-top:14px; font-size:13px; padding:10px 14px; border-radius:8px; display:none;}
+  .exercise-feedback.show{display:block;}
+  .exercise-feedback.good{background:rgba(74,222,128,.12); color:var(--success); border:1px solid rgba(74,222,128,.3);}
+  .exercise-feedback.bad{background:rgba(232,97,93,.12); color:var(--danger); border:1px solid rgba(232,97,93,.3);}
+  .check-btn{
+    background:var(--teal); color:#08211e; border:none; padding:9px 18px; border-radius:8px;
+    font-weight:700; font-size:13px; cursor:pointer; margin-top:4px;
+  }
+  .check-btn:hover{filter:brightness(1.08);}
+  .reset-btn{background:none; border:1px solid var(--border); color:var(--text-dim); padding:9px 16px; border-radius:8px; font-size:13px; cursor:pointer; margin-left:8px;}
+
+  /* Slider exercise (five forces intensity) */
+  .force-row{display:grid; grid-template-columns:180px 1fr 90px; align-items:center; gap:14px; margin-bottom:14px; font-size:13px;}
+  .force-row input[type=range]{width:100%; accent-color:var(--teal);}
+  .force-row .val{font-family:var(--font-mono); color:var(--gold); text-align:right;}
+
+  /* ---------- QUIZ ---------- */
+  .quiz{
+    margin-top:40px; border:1px solid var(--border); border-radius:16px; background:var(--panel);
+    padding:28px; box-shadow:var(--shadow);
+  }
+  .quiz-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;}
+  .quiz-head h3{font-size:17px; display:flex; align-items:center; gap:10px;}
+  .quiz-head h3::before{content:'?'; width:26px; height:26px; border-radius:50%; background:var(--violet); color:#12081f; font-family:var(--font-mono); font-weight:700; display:flex; align-items:center; justify-content:center; font-size:13px;}
+  .quiz-score-pill{font-family:var(--font-mono); font-size:12px; color:var(--text-dim); border:1px solid var(--border); padding:5px 12px; border-radius:100px;}
+  .qitem{margin-bottom:24px; padding-bottom:22px; border-bottom:1px solid var(--border-soft);}
+  .qitem:last-of-type{border-bottom:none;}
+  .qitem .qtext{font-size:15px; font-weight:600; margin-bottom:12px;}
+  .qopts{display:flex; flex-direction:column; gap:8px;}
+  .qopt{
+    display:flex; align-items:flex-start; gap:10px; border:1px solid var(--border); border-radius:10px;
+    padding:11px 14px; cursor:pointer; font-size:14px; color:var(--text-dim); transition:.15s;
+  }
+  .qopt:hover{border-color:var(--gold);}
+  .qopt .radio{width:16px; height:16px; border-radius:50%; border:1.5px solid var(--border); flex-shrink:0; margin-top:2px;}
+  .qopt.selected{border-color:var(--gold); background:rgba(232,163,61,.06);}
+  .qopt.selected .radio{border-color:var(--gold); background:var(--gold);}
+  .qopt.correct{border-color:var(--success); background:rgba(74,222,128,.08); color:var(--text);}
+  .qopt.correct .radio{border-color:var(--success); background:var(--success);}
+  .qopt.incorrect{border-color:var(--danger); background:rgba(232,97,93,.08); color:var(--text);}
+  .qopt.incorrect .radio{border-color:var(--danger); background:var(--danger);}
+  .qopt.disabled{cursor:default;}
+  .qexplain{
+    display:none; margin-top:10px; font-size:13px; color:var(--text-dim);
+    background:var(--panel-2); border-left:3px solid var(--gold); padding:10px 14px; border-radius:0 8px 8px 0;
+  }
+  .qexplain.show{display:block;}
+  .quiz-submit{
+    background:var(--gold); color:#1a1206; border:none; padding:12px 24px; border-radius:9px;
+    font-weight:700; font-size:14px; cursor:pointer;
+  }
+  .quiz-submit:disabled{opacity:.4; cursor:not-allowed;}
+  .quiz-result{
+    display:none; margin-top:20px; padding:20px; border-radius:12px; text-align:center;
+    background:var(--panel-2); border:1px solid var(--border);
+  }
+  .quiz-result.show{display:block;}
+  .quiz-result .score-big{font-family:var(--font-mono); font-size:34px; font-weight:700; color:var(--gold); margin-bottom:6px;}
+  .quiz-result p{color:var(--text-dim); font-size:13px; margin-bottom:14px;}
+  .unlock-btn{
+    background:linear-gradient(135deg,var(--teal),#1f9e8f); color:#06231f; border:none;
+    padding:12px 26px; border-radius:9px; font-weight:700; cursor:pointer; font-size:14px;
+  }
+  .retry-btn{background:none; border:1px solid var(--border); color:var(--text-dim); padding:12px 20px; border-radius:9px; cursor:pointer; margin-left:8px; font-size:14px;}
+
+  /* ---------- FINAL SECTION ---------- */
+  .final{padding:56px 0; border-top:1px solid var(--border-soft);}
+  .final.locked-msg-wrap{opacity:.35; filter:grayscale(.5); pointer-events:none;}
+  .final.unlocked{opacity:1; filter:none; pointer-events:auto;}
+  .challenge-box{border:1px solid var(--gold-dim); background:rgba(232,163,61,.05); border-radius:14px; padding:26px; margin-bottom:36px;}
+  .challenge-box h3{color:var(--gold); margin-bottom:10px;}
+  .challenge-box textarea{
+    width:100%; min-height:160px; background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    color:var(--text); padding:14px; font-family:var(--font-body); font-size:14px; resize:vertical; margin-top:12px;
+  }
+  .challenge-box .save-note{font-size:12px; color:var(--text-faint); margin-top:8px;}
+
+  .cheat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:36px;}
+  .cheat-card{border:1px solid var(--border); background:var(--panel); border-radius:12px; padding:16px 18px;}
+  .cheat-card h4{font-family:var(--font-mono); font-size:13px; color:var(--teal); margin-bottom:8px;}
+  .cheat-card p{font-size:13px; color:var(--text-dim);}
+
+  .notes-box{border:1px solid var(--border); background:var(--panel); border-radius:12px; padding:22px; margin-bottom:36px;}
+  .notes-box ul{padding-left:20px; color:var(--text-dim); font-size:14px;}
+  .notes-box li{margin-bottom:8px;}
+  .print-btn{background:none; border:1px solid var(--border); color:var(--text); padding:9px 18px; border-radius:8px; cursor:pointer; font-size:13px; margin-top:10px;}
+
+  .continue-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:20px;}
+  .cl-card{border:1px solid var(--border); background:var(--panel); border-radius:12px; padding:18px 20px;}
+  .cl-card h4{font-size:13px; font-family:var(--font-mono); color:var(--violet); margin-bottom:10px; text-transform:uppercase; letter-spacing:.05em;}
+  .cl-card ul{padding-left:18px; font-size:13.5px; color:var(--text-dim);}
+  .cl-card li{margin-bottom:7px;}
+  .kw{display:inline-block; background:var(--panel-2); border:1px solid var(--border); font-family:var(--font-mono); font-size:11.5px; padding:4px 10px; border-radius:6px; margin:3px 4px 3px 0; color:var(--gold);}
+
+  .certificate{
+    margin-top:40px; text-align:center; padding:40px; border:1px solid var(--gold-dim); border-radius:16px;
+    background:radial-gradient(circle at 50% 0%, rgba(232,163,61,.08), transparent 70%);
+    display:none;
+  }
+  .certificate.show{display:block;}
+  .certificate .badge{font-size:40px; margin-bottom:10px;}
+  .certificate h3{font-size:22px; margin-bottom:6px;}
+  .certificate p{color:var(--text-dim); font-size:14px;}
+
+  footer{text-align:center; padding:40px 0; color:var(--text-faint); font-size:12px; font-family:var(--font-mono);}
+
+  @media (max-width:720px){
+    .hero h1{font-size:32px;}
+    .meta-grid{grid-template-columns:1fr 1fr;}
+    .board-grid{grid-template-columns:1fr;}
+    .cheat-grid, .continue-grid{grid-template-columns:1fr;}
+    .progress-label{display:none;}
+    .force-row{grid-template-columns:1fr; gap:4px;}
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{transition:none !important; animation:none !important;}
+  }
+  .fade-in{animation:fadeIn .6s ease both;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+</style>
+</head>
+<body data-theme="dark">
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand"><span class="mark">SF</span> Strategy Frameworks</div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+    <div class="progress-label" id="progressLabel">0% complete</div>
+    <div class="modnav" id="modNav">
+      <div class="dot active" data-m="0"></div>
+      <div class="dot" data-m="1"></div>
+      <div class="dot" data-m="2"></div>
+      <div class="dot" data-m="3"></div>
+      <div class="dot" data-m="4"></div>
+    </div>
+    <button class="theme-toggle" id="themeToggle" title="Toggle light/dark">🌙</button>
+  </div>
+</div>
+
+<!-- ===================== HERO / INTRO ===================== -->
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">● INTERACTIVE LEARNING STUDIO</span>
+    <h1>Think Like a <span>Strategist</span>. Master the frameworks CEOs actually use.</h1>
+    <p class="lede">A single, complete tutorial on Business Strategy Frameworks — SWOT, PESTEL, Porter's Five Forces, VRIO, the Value Chain, BCG Matrix, Ansoff Matrix, and Blue Ocean Strategy — taught from first principles through to real-world application.</p>
+
+    <div class="briefing-board">
+      <div class="board-head">
+        <span>WAR ROOM — STRATEGY BRIEFING BOARD</span>
+        <div class="lights"><span style="background:var(--danger)"></span><span style="background:var(--gold)"></span><span style="background:var(--success)"></span></div>
+      </div>
+      <div class="board-grid">
+        <div class="board-cell s"><span class="tag">STRENGTHS</span><p>What your organization does better than anyone else — the internal edge you control.</p></div>
+        <div class="board-cell w"><span class="tag">WEAKNESSES</span><p>Internal gaps that quietly limit what strategy can achieve.</p></div>
+        <div class="board-cell o"><span class="tag">OPPORTUNITIES</span><p>External shifts you could exploit before competitors notice.</p></div>
+        <div class="board-cell t"><span class="tag">THREATS</span><p>External forces that could damage the business if ignored.</p></div>
+      </div>
+    </div>
+
+    <div class="meta-grid">
+      <div class="meta-card"><div class="k">Est. Time</div><div class="v">70–90 min</div></div>
+      <div class="meta-card"><div class="k">Modules</div><div class="v">4 + Final Challenge</div></div>
+      <div class="meta-card"><div class="k">Prerequisites</div><div class="v">None — beginner friendly</div></div>
+      <div class="meta-card"><div class="k">Outcome</div><div class="v">Build a full strategic plan</div></div>
+    </div>
+
+    <div class="block">
+      <h3 style="margin-bottom:10px;">Learning Objectives</h3>
+      <div class="takeaways" style="border-color:var(--border);">
+        <ul>
+          <li>Explain what each major strategy framework measures, and when to reach for it</li>
+          <li>Classify real business situations correctly using SWOT, PESTEL, and Porter's Five Forces</li>
+          <li>Evaluate whether a resource creates <em>sustained</em> competitive advantage using VRIO</li>
+          <li>Read and build a Value Chain, a BCG Matrix, and an Ansoff Matrix from scratch</li>
+          <li>Combine multiple frameworks into a single, coherent strategic recommendation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="reward-strip">
+      🏆 <span><strong>Reward system:</strong> Score 75%+ on each module quiz to unlock the next module. Finish all 4 modules + the Final Challenge to earn your <strong>Strategy Analyst Certificate</strong> at the end.</span>
+    </div>
+
+    <button class="start-btn" id="startBtn">Begin Module 1 ↓</button>
+  </div>
+</section>
+
+<!-- ===================== MODULE 1 ===================== -->
+<section class="module unlocked fade-in" id="module-1">
+  <div class="wrap">
+    <div class="mod-head">
+      <span class="mod-num">MODULE 1</span>
+      <span class="mod-diff">Foundational</span>
+    </div>
+    <h2>Strategic Thinking &amp; the SWOT Framework</h2>
+    <p class="dek">Before comparing frameworks, you need a mental model for what "strategy" even means — and the simplest, most widely used lens for organizing strategic facts: SWOT.</p>
+
+    <div class="block">
+      <h3>What "strategy" actually means</h3>
+      <p>Strategy is not a to-do list, and it isn't the same as a goal. A goal is <strong>where</strong> you want to end up ("become the #1 ride-hailing app in Lahore"). Strategy is the <strong>coherent set of choices</strong> about where to compete and how to win there, given limited resources and a reactive environment full of competitors. Every strategy framework in this tutorial exists to answer one of two questions: <strong>"What is really going on around us?"</strong> (external analysis) or <strong>"What can we actually do about it?"</strong> (internal analysis).</p>
+      <div class="callout analogy">Strategy is like planning a trek up a mountain you've never climbed. Your <strong>internal</strong> assessment is your fitness, gear, and experience. Your <strong>external</strong> assessment is the weather, terrain, and other climbers on the route. A good route plan (strategy) uses both — not just one.</div>
+    </div>
+
+    <div class="block">
+      <h3>The SWOT Framework</h3>
+      <p>SWOT organizes strategic facts into a 2×2 grid along two axes: <strong>internal vs. external</strong>, and <strong>helpful vs. harmful</strong>. Strengths and Weaknesses live inside the organization — things it directly controls (skills, brand, cash, culture). Opportunities and Threats live outside it — things that happen regardless of what the company decides (regulation, competitor moves, technology shifts).</p>
+      <div class="diagram-wrap">
+        <span class="diagram-title">Diagram — The SWOT Quadrant</span>
+        <div class="swot-grid">
+          <div class="swot-q s"><span class="lbl">STRENGTHS (internal · helpful)</span><ul><li>Loyal customer base</li><li>Proprietary technology</li><li>Strong cash reserves</li></ul></div>
+          <div class="swot-q w"><span class="lbl">WEAKNESSES (internal · harmful)</span><ul><li>High employee turnover</li><li>Outdated logistics system</li><li>Limited brand awareness abroad</li></ul></div>
+          <div class="swot-q o"><span class="lbl">OPPORTUNITIES (external · helpful)</span><ul><li>New trade agreement lowers tariffs</li><li>Rising demand for the category</li><li>Competitor exiting the market</li></ul></div>
+          <div class="swot-q t"><span class="lbl">THREATS (external · harmful)</span><ul><li>New low-cost entrant</li><li>Rising raw material costs</li><li>Tightening data-privacy law</li></ul></div>
+        </div>
+      </div>
+      <div class="callout example">
+        <strong>Zenith Coffee Co.</strong>, a mid-sized Pakistani coffee chain, is evaluating national expansion. Its <strong>strength</strong> is a beloved loyalty app with 200,000 active users. Its <strong>weakness</strong> is that it only roasts beans in one city, creating supply bottlenecks. An <strong>opportunity</strong> is that specialty-coffee consumption in Pakistan's tier-2 cities is growing fast. A <strong>threat</strong> is that a well-funded international chain just announced entry into the same cities.
+      </div>
+      <div class="callout misconception">A long SWOT list feels productive but isn't strategy — it's raw material. The real work is <strong>prioritizing</strong> the 2–3 items in each box that matter most, then deciding how a strength can be used to capture an opportunity, or how a weakness makes a threat more dangerous.</div>
+    </div>
+
+    <div class="block">
+      <h3>Try it — Classify the facts</h3>
+      <div class="exercise" id="ex1">
+        <p class="prompt">Zenith Coffee Co. just learned five new facts. Click each fact, then click the quadrant it belongs in. (Internal + helpful = Strength, Internal + harmful = Weakness, External + helpful = Opportunity, External + harmful = Threat.)</p>
+        <div class="chip-row" id="ex1-items">
+          <span class="chip" data-item="0" data-answer="s">Their head roaster has 15 years of specialty-coffee experience</span>
+        </div>
+        <div class="chip-row" id="ex1-items2"></div>
+        <div class="drop-zones">
+          <div class="zone" data-zone="s"><span class="zlbl">STRENGTH</span></div>
+          <div class="zone" data-zone="w"><span class="zlbl">WEAKNESS</span></div>
+          <div class="zone" data-zone="o"><span class="zlbl">OPPORTUNITY</span></div>
+          <div class="zone" data-zone="t"><span class="zlbl">THREAT</span></div>
+        </div>
+        <button class="check-btn" id="ex1-check">Check Placement</button>
+        <button class="reset-btn" id="ex1-reset">Reset</button>
+        <div class="exercise-feedback" id="ex1-feedback"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="takeaways">
+        <h4>Key Takeaways</h4>
+        <ul>
+          <li>Strategy = deliberate choices about where to compete and how to win, not a wish list of goals</li>
+          <li>SWOT sorts facts by internal/external and helpful/harmful — nothing more, nothing less</li>
+          <li>The value of SWOT comes from prioritizing and cross-linking items, not listing more of them</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quiz" id="quiz-1">
+      <div class="quiz-head"><h3>Module 1 Quiz</h3><span class="quiz-score-pill" id="score-1">0 / 4</span></div>
+      <div id="qlist-1"></div>
+      <button class="quiz-submit" id="submit-1">Submit Answers</button>
+      <div class="quiz-result" id="result-1">
+        <div class="score-big" id="resultScore-1">0%</div>
+        <p id="resultText-1"></p>
+        <button class="unlock-btn" id="unlock-1">Unlock Module 2 →</button>
+        <button class="retry-btn" id="retry-1">Retry Quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MODULE 2 ===================== -->
+<section class="module fade-in" id="module-2">
+  <div class="wrap">
+    <div class="mod-head"><span class="mod-num">MODULE 2</span><span class="mod-diff">Applied</span></div>
+    <h2>External Analysis — PESTEL &amp; Porter's Five Forces</h2>
+    <p class="dek">Now zoom out. Before you can win a market, you need to understand the macro world the market sits in, and the competitive physics inside the industry itself.</p>
+
+    <div class="block">
+      <h3>PESTEL — scanning the macro-environment</h3>
+      <p>PESTEL is a checklist for the big, slow-moving forces no single company controls: <strong>Political, Economic, Social, Technological, Environmental, Legal.</strong> It answers "what's happening in the world that could reshape this industry?" — the same territory as the Opportunities/Threats side of SWOT, but far more structured.</p>
+      <table class="compare">
+        <tr><th>Factor</th><th>Typical questions</th><th>Example</th></tr>
+        <tr><td>Political</td><td>Trade policy, subsidies, political stability</td><td>Import duties on packaging materials rise</td></tr>
+        <tr><td>Economic</td><td>Inflation, interest rates, income levels</td><td>Rising inflation squeezes discretionary spending</td></tr>
+        <tr><td>Social</td><td>Demographics, values, lifestyle shifts</td><td>Growing café culture among urban youth</td></tr>
+        <tr><td>Technological</td><td>Automation, digital platforms, R&amp;D pace</td><td>Mobile ordering becomes the default channel</td></tr>
+        <tr><td>Environmental</td><td>Climate, sustainability expectations</td><td>Water scarcity affects agricultural supply chains</td></tr>
+        <tr><td>Legal</td><td>Labor law, IP, compliance</td><td>New minimum-wage legislation</td></tr>
+      </table>
+    </div>
+
+    <div class="block">
+      <h3>Porter's Five Forces — the physics of an industry</h3>
+      <p>Where PESTEL looks at the whole macro-environment, Michael Porter's Five Forces zooms into a single industry and asks one sharp question: <strong>who has the power to capture the profit?</strong> Five pressures determine how much profit potential an industry actually has, regardless of how well any single company executes.</p>
+      <div class="diagram-wrap">
+        <span class="diagram-title">Diagram — Porter's Five Forces</span>
+        <svg class="forces-svg" viewBox="0 0 460 380" width="100%" height="380" style="min-width:420px;">
+          <polygon class="frame" points="230,40 380,140 330,310 130,310 80,140"></polygon>
+          <line x1="230" y1="190" x2="230" y2="80"></line>
+          <line x1="230" y1="190" x2="350" y2="150"></line>
+          <line x1="230" y1="190" x2="310" y2="290"></line>
+          <line x1="230" y1="190" x2="150" y2="290"></line>
+          <line x1="230" y1="190" x2="110" y2="150"></line>
+          <circle class="node" cx="230" cy="190" r="42"></circle>
+          <text class="center-text" x="230" y="186" text-anchor="middle">INDUSTRY</text>
+          <text class="center-text" x="230" y="200" text-anchor="middle">RIVALRY</text>
+          <circle class="node" cx="230" cy="60" r="34"></circle>
+          <text x="230" y="56" text-anchor="middle">New Entrant</text>
+          <text x="230" y="68" text-anchor="middle">Threat</text>
+          <circle class="node" cx="370" cy="145" r="34"></circle>
+          <text x="370" y="141" text-anchor="middle">Supplier</text>
+          <text x="370" y="153" text-anchor="middle">Power</text>
+          <circle class="node" cx="325" cy="315" r="34"></circle>
+          <text x="325" y="311" text-anchor="middle">Substitute</text>
+          <text x="325" y="323" text-anchor="middle">Threat</text>
+          <circle class="node" cx="135" cy="315" r="34"></circle>
+          <text x="135" y="311" text-anchor="middle">Buyer</text>
+          <text x="135" y="323" text-anchor="middle">Power</text>
+          <circle class="node" cx="90" cy="145" r="34"></circle>
+          <text x="90" y="141" text-anchor="middle">— (5th force</text>
+          <text x="90" y="153" text-anchor="middle">shown left)</text>
+        </svg>
+      </div>
+      <table class="compare">
+        <tr><th>Force</th><th>Increases when…</th></tr>
+        <tr><td>Threat of new entrants</td><td>Barriers to entry are low (little capital, no regulation, no brand loyalty needed)</td></tr>
+        <tr><td>Bargaining power of suppliers</td><td>Few suppliers control a critical input with no substitute</td></tr>
+        <tr><td>Bargaining power of buyers</td><td>Buyers are concentrated, price-sensitive, and can switch easily</td></tr>
+        <tr><td>Threat of substitutes</td><td>A different product/service can satisfy the same need</td></tr>
+        <tr><td>Industry rivalry</td><td>Many similar competitors fight over slow-growing demand</td></tr>
+      </table>
+      <div class="callout analogy">Think of Five Forces like weather pressure around a fortress. Even a well-built fortress (a great company) struggles if it's surrounded on all five sides by storms — cheap new entrants, powerful suppliers, powerful buyers, easy substitutes, and brutal rivals. A "weak" industry can make even excellent execution unprofitable.</div>
+      <div class="callout example">Airlines are a classic low-profitability industry under Five Forces: <strong>high rivalry</strong> (many carriers competing on price), <strong>high supplier power</strong> (only two major aircraft makers, fuel priced globally), <strong>high buyer power</strong> (price-comparison sites make switching instant), and a real <strong>substitute threat</strong> from high-speed rail or video conferencing on short/business routes.</div>
+      <div class="callout misconception">Five Forces is not about naming your direct competitors — that's just rivalry, one of five forces. Many students skip supplier and buyer power entirely, missing the forces that often determine industry profitability the most.</div>
+    </div>
+
+    <div class="block">
+      <h3>Try it — Rate the forces for online food delivery</h3>
+      <div class="exercise" id="ex2">
+        <p class="prompt">Slide each force to how intense you think it is in the online food-delivery industry (e.g., Foodpanda-type platforms), then check against the model answer.</p>
+        <div class="force-row"><span>New Entrants</span><input type="range" min="1" max="5" value="3" id="f-entrant"><span class="val" id="v-entrant">3</span></div>
+        <div class="force-row"><span>Supplier Power (restaurants)</span><input type="range" min="1" max="5" value="3" id="f-supplier"><span class="val" id="v-supplier">3</span></div>
+        <div class="force-row"><span>Buyer Power (customers)</span><input type="range" min="1" max="5" value="3" id="f-buyer"><span class="val" id="v-buyer">3</span></div>
+        <div class="force-row"><span>Substitutes (cooking at home)</span><input type="range" min="1" max="5" value="3" id="f-sub"><span class="val" id="v-sub">3</span></div>
+        <div class="force-row"><span>Rivalry</span><input type="range" min="1" max="5" value="3" id="f-rivalry"><span class="val" id="v-rivalry">3</span></div>
+        <button class="check-btn" id="ex2-check">Compare to Analyst View</button>
+        <div class="exercise-feedback" id="ex2-feedback"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="takeaways">
+        <h4>Key Takeaways</h4>
+        <ul>
+          <li>PESTEL scans the macro-environment; Five Forces analyzes competitive intensity within one industry</li>
+          <li>Profit potential is structural — it depends on the industry's forces, not just how well any one firm executes</li>
+          <li>Supplier and buyer power are the most commonly overlooked forces — don't skip them</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quiz" id="quiz-2">
+      <div class="quiz-head"><h3>Module 2 Quiz</h3><span class="quiz-score-pill" id="score-2">0 / 4</span></div>
+      <div id="qlist-2"></div>
+      <button class="quiz-submit" id="submit-2">Submit Answers</button>
+      <div class="quiz-result" id="result-2">
+        <div class="score-big" id="resultScore-2">0%</div>
+        <p id="resultText-2"></p>
+        <button class="unlock-btn" id="unlock-2">Unlock Module 3 →</button>
+        <button class="retry-btn" id="retry-2">Retry Quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MODULE 3 ===================== -->
+<section class="module fade-in" id="module-3">
+  <div class="wrap">
+    <div class="mod-head"><span class="mod-num">MODULE 3</span><span class="mod-diff">Advanced</span></div>
+    <h2>Internal Analysis — VRIO, Value Chain &amp; BCG Matrix</h2>
+    <p class="dek">External analysis tells you where the profit pools are. Now turn inward: which of your resources can actually win, where in your operations is value created, and how should you manage a portfolio of businesses?</p>
+
+    <div class="block">
+      <h3>VRIO — does this resource actually give you an edge?</h3>
+      <p>Not every strength is equally strategic. VRIO tests a resource or capability with four questions, in order. If it fails at any step, stop — you already have your answer.</p>
+      <table class="compare">
+        <tr><th>Question</th><th>If NO</th><th>If YES, continue to…</th></tr>
+        <tr><td><strong>V</strong>aluable — does it help exploit an opportunity or neutralize a threat?</td><td>Competitive disadvantage</td><td>Rarity</td></tr>
+        <tr><td><strong>R</strong>are — do few competitors have it?</td><td>Competitive parity</td><td>Imitability</td></tr>
+        <tr><td><strong>I</strong>mitable — is it costly for others to copy or substitute?</td><td>Temporary advantage</td><td>Organization</td></tr>
+        <tr><td><strong>O</strong>rganized — is the company structured to actually exploit it?</td><td>Unused advantage</td><td><strong>Sustained competitive advantage</strong></td></tr>
+      </table>
+      <div class="callout example">Zenith Coffee's loyalty app is <strong>valuable</strong> (drives repeat visits) and was briefly <strong>rare</strong>, but competitors copied similar apps within a year — it's not costly to imitate. Result: <strong>temporary</strong> advantage only. Their head roaster's 15 years of proprietary bean-sourcing relationships in specific highland regions, however, are valuable, rare, hard to copy (built over a decade of trust), and the company is organized around them — that's a candidate for <strong>sustained</strong> advantage.</div>
+      <div class="callout misconception">Students often stop at "Valuable + Rare" and call it a sustained advantage. But rarity alone is fragile — if it's cheap to copy, competitors close the gap fast. Imitability is usually the real test.</div>
+    </div>
+
+    <div class="block">
+      <h3>The Value Chain — where is value actually created?</h3>
+      <p>Porter's Value Chain breaks a company into activities that either directly create the product/service (<strong>primary activities</strong>) or make those activities possible (<strong>support activities</strong>). Margin is what's left after all activities are paid for.</p>
+      <div class="diagram-wrap">
+        <span class="diagram-title">Diagram — The Value Chain</span>
+        <div class="vchain">
+          <div class="support">
+            <div>Firm Infrastructure</div><div>HR Management</div><div>Technology Development</div><div>Procurement</div>
+          </div>
+          <div class="primary">
+            <div><b>Inbound Logistics</b>Receiving &amp; storing green coffee beans</div>
+            <div><b>Operations</b>Roasting &amp; quality control</div>
+            <div><b>Outbound Logistics</b>Distribution to stores</div>
+            <div><b>Marketing &amp; Sales</b>Loyalty app, promotions</div>
+            <div><b>Service</b>In-store experience, support</div>
+          </div>
+          <div class="margin">MARGIN</div>
+        </div>
+      </div>
+      <p>Use it to find where costs can be cut without hurting differentiation, or where a competitor is winning because of one specific activity — not the whole business.</p>
+    </div>
+
+    <div class="block">
+      <h3>The BCG Matrix — managing a portfolio</h3>
+      <p>When a company runs multiple products or business units, the Boston Consulting Group Matrix plots each on <strong>market growth rate</strong> (vertical) vs. <strong>relative market share</strong> (horizontal) to decide where to invest.</p>
+      <div class="diagram-wrap">
+        <span class="diagram-title">Diagram — BCG Growth-Share Matrix</span>
+        <div class="bcg-axis"><span>↑ High Market Growth</span><span>High Market Share →</span></div>
+        <div class="bcg-grid">
+          <div class="bcg-cell qm"><span class="name">QUESTION MARK</span><span>High growth, low share — invest selectively or divest</span></div>
+          <div class="bcg-cell star"><span class="name">STAR</span><span>High growth, high share — invest heavily to defend</span></div>
+          <div class="bcg-cell dog"><span class="name">DOG</span><span>Low growth, low share — harvest or divest</span></div>
+          <div class="bcg-cell cow"><span class="name">CASH COW</span><span>Low growth, high share — milk for cash, fund other units</span></div>
+        </div>
+      </div>
+      <div class="callout example">If Zenith Coffee's core café chain is the mature, profitable, market-leading <strong>Cash Cow</strong>, a new bottled cold-brew product line in the fast-growing RTD (ready-to-drink) beverage category with low current share would be a <strong>Question Mark</strong> — worth a bounded investment to see if it can become a Star.</div>
+    </div>
+
+    <div class="block">
+      <h3>Try it — Place the resource on the VRIO ladder</h3>
+      <div class="exercise" id="ex3">
+        <p class="prompt">Zenith's exclusive 10-year supply contract with a highland farming cooperative is valuable, rare, and very costly to replicate — but Zenith's operations team has never built a process to actually leverage it in marketing or pricing. What's the VRIO outcome?</p>
+        <div class="chip-row" id="ex3-opts">
+          <span class="chip" data-v="parity">Competitive Parity</span>
+          <span class="chip" data-v="temp">Temporary Advantage</span>
+          <span class="chip" data-v="unused">Unused Competitive Advantage</span>
+          <span class="chip" data-v="sustained">Sustained Competitive Advantage</span>
+        </div>
+        <button class="check-btn" id="ex3-check">Check Answer</button>
+        <div class="exercise-feedback" id="ex3-feedback"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="takeaways">
+        <h4>Key Takeaways</h4>
+        <ul>
+          <li>VRIO is sequential: fail any step and the advantage type is already capped</li>
+          <li>The Value Chain locates exactly where value (and cost) is created inside operations</li>
+          <li>BCG Matrix guides portfolio investment decisions, not single-product strategy</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quiz" id="quiz-3">
+      <div class="quiz-head"><h3>Module 3 Quiz</h3><span class="quiz-score-pill" id="score-3">0 / 4</span></div>
+      <div id="qlist-3"></div>
+      <button class="quiz-submit" id="submit-3">Submit Answers</button>
+      <div class="quiz-result" id="result-3">
+        <div class="score-big" id="resultScore-3">0%</div>
+        <p id="resultText-3"></p>
+        <button class="unlock-btn" id="unlock-3">Unlock Module 4 →</button>
+        <button class="retry-btn" id="retry-3">Retry Quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== MODULE 4 ===================== -->
+<section class="module fade-in" id="module-4">
+  <div class="wrap">
+    <div class="mod-head"><span class="mod-num">MODULE 4</span><span class="mod-diff">Mastery</span></div>
+    <h2>Strategy Formulation — Ansoff, Blue Ocean &amp; Synthesis</h2>
+    <p class="dek">The final step: turning analysis into a direction for growth, and combining every framework from this tutorial into one coherent recommendation.</p>
+
+    <div class="block">
+      <h3>The Ansoff Matrix — choosing a growth direction</h3>
+      <p>Once you know your strengths and the external landscape, Ansoff's matrix maps four growth strategies by whether you're using an <strong>existing or new product</strong>, in an <strong>existing or new market</strong> — and each step outward increases risk.</p>
+      <div class="diagram-wrap">
+        <span class="diagram-title">Diagram — Ansoff Growth Matrix</span>
+        <div class="ansoff-grid">
+          <div class="hcell"></div><div class="hcell">EXISTING PRODUCT</div><div class="hcell">NEW PRODUCT</div>
+          <div class="hcell">EXISTING MARKET</div>
+          <div class="cell a1"><b>Market Penetration</b>Sell more of the same to the same customers (loyalty programs, promotions). Lowest risk.</div>
+          <div class="cell a3"><b>Product Development</b>New products for current customers (Zenith launching bottled cold-brew for existing café customers).</div>
+          <div class="hcell">NEW MARKET</div>
+          <div class="cell a2"><b>Market Development</b>Existing product into a new market (Zenith's café format entering a new city).</div>
+          <div class="cell a4"><b>Diversification</b>New product, new market — highest risk (Zenith launching a home-goods brand in a new country).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="block">
+      <h3>Blue Ocean Strategy — escaping the fight altogether</h3>
+      <p>Most of the frameworks above assume you're competing in an existing industry ("red ocean," bloody from rivalry). Blue Ocean Strategy (Kim &amp; Mauborgne) asks a different question: can you make competition <strong>irrelevant</strong> by creating uncontested market space — combining value the industry hasn't combined before, often by simultaneously reducing some features and raising others.</p>
+      <div class="callout analogy">Red ocean strategy is fighting harder for the same fish in a shrinking pond. Blue ocean strategy is finding — or making — a new pond nobody else is fishing in yet.</div>
+      <div class="callout example">If Zenith created "Coffee + Co-working," bundling café seating with bookable desks and fast wifi for freelancers — a combination neither cafés nor co-working spaces fully offer — it wouldn't be competing head-on with either category. That's a blue-ocean move.</div>
+    </div>
+
+    <div class="block">
+      <h3>Putting it all together</h3>
+      <p>A complete strategic analysis flows in a logical order, not a random checklist:</p>
+      <table class="compare">
+        <tr><th>Step</th><th>Framework</th><th>Question it answers</th></tr>
+        <tr><td>1</td><td>PESTEL</td><td>What macro forces are shaping this industry?</td></tr>
+        <tr><td>2</td><td>Five Forces</td><td>How much profit potential does this industry structurally have?</td></tr>
+        <tr><td>3</td><td>VRIO / Value Chain</td><td>What can we actually do better than rivals, and where is our value created?</td></tr>
+        <tr><td>4</td><td>SWOT</td><td>Synthesize 1–3 into a prioritized internal/external snapshot</td></tr>
+        <tr><td>5</td><td>Ansoff / Blue Ocean / BCG</td><td>Given all of that, which growth direction and portfolio moves make sense?</td></tr>
+      </table>
+      <div class="callout misconception">Treating SWOT as the <em>first</em> step is a common mistake — without PESTEL and Five Forces feeding it real external data, the Opportunities/Threats boxes end up as guesses instead of analysis.</div>
+    </div>
+
+    <div class="block">
+      <h3>Try it — Pick the right growth strategy</h3>
+      <div class="exercise" id="ex4">
+        <p class="prompt">Zenith wants to launch a brand-new packaged snack line (never made food before) and sell it in a country it has never operated in. Which Ansoff strategy is this?</p>
+        <div class="chip-row" id="ex4-opts">
+          <span class="chip" data-v="pen">Market Penetration</span>
+          <span class="chip" data-v="dev">Market Development</span>
+          <span class="chip" data-v="prod">Product Development</span>
+          <span class="chip" data-v="div">Diversification</span>
+        </div>
+        <button class="check-btn" id="ex4-check">Check Answer</button>
+        <div class="exercise-feedback" id="ex4-feedback"></div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="takeaways">
+        <h4>Key Takeaways</h4>
+        <ul>
+          <li>Ansoff risk increases as you move away from existing products and existing markets</li>
+          <li>Blue Ocean Strategy sidesteps competition entirely by combining value in a new way</li>
+          <li>A real strategic plan sequences frameworks: macro → industry → internal → synthesis → direction</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="quiz" id="quiz-4">
+      <div class="quiz-head"><h3>Module 4 Quiz</h3><span class="quiz-score-pill" id="score-4">0 / 4</span></div>
+      <div id="qlist-4"></div>
+      <button class="quiz-submit" id="submit-4">Submit Answers</button>
+      <div class="quiz-result" id="result-4">
+        <div class="score-big" id="resultScore-4">0%</div>
+        <p id="resultText-4"></p>
+        <button class="unlock-btn" id="unlock-4">Unlock Final Challenge →</button>
+        <button class="retry-btn" id="retry-4">Retry Quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FINAL SECTION ===================== -->
+<section class="final" id="final-section">
+  <div class="wrap">
+    <div class="mod-head"><span class="mod-num">FINAL</span><span class="mod-diff">Synthesis Challenge</span></div>
+    <h2 style="margin-bottom:24px;">Final Practical Challenge, Cheat Sheet &amp; Next Steps</h2>
+
+    <div class="challenge-box">
+      <h3>Final Challenge — Build a Strategic Recommendation</h3>
+      <p style="color:var(--text-dim); font-size:14px;">Pick any real or fictional company. In the box below, write a short strategic brief that: (1) names one PESTEL factor and one dominant Porter's Force affecting it, (2) lists one Strength and one Weakness, (3) applies VRIO to one resource, and (4) recommends one Ansoff growth strategy with reasoning. Aim for 150–250 words.</p>
+      <textarea id="challengeText" placeholder="e.g. Company: ... 
+PESTEL factor: ...
+Dominant Force: ...
+Strength: ... / Weakness: ...
+VRIO verdict on [resource]: ...
+Recommended Ansoff strategy: ... because ..."></textarea>
+      <div class="save-note">Your response stays on this page for this session — use the print button below to save your notes and this challenge together.</div>
+    </div>
+
+    <h3 style="margin-bottom:14px;">Cheat Sheet</h3>
+    <div class="cheat-grid">
+      <div class="cheat-card"><h4>SWOT</h4><p>Internal: Strengths, Weaknesses. External: Opportunities, Threats. Use to prioritize, not just list.</p></div>
+      <div class="cheat-card"><h4>PESTEL</h4><p>Political, Economic, Social, Technological, Environmental, Legal — macro-environment scan.</p></div>
+      <div class="cheat-card"><h4>Five Forces</h4><p>Entrants, Suppliers, Buyers, Substitutes, Rivalry — determines industry profit potential.</p></div>
+      <div class="cheat-card"><h4>VRIO</h4><p>Valuable → Rare → Inimitable → Organized. Sequential test; fail one step, advantage is capped.</p></div>
+      <div class="cheat-card"><h4>Value Chain</h4><p>Primary: Inbound, Operations, Outbound, Marketing, Service. Support: Infrastructure, HR, Tech, Procurement.</p></div>
+      <div class="cheat-card"><h4>BCG Matrix</h4><p>Stars (invest), Cash Cows (harvest), Question Marks (selective bet), Dogs (divest).</p></div>
+      <div class="cheat-card"><h4>Ansoff Matrix</h4><p>Penetration → Market Dev → Product Dev → Diversification, in order of increasing risk.</p></div>
+      <div class="cheat-card"><h4>Blue Ocean</h4><p>Make competition irrelevant by creating uncontested demand through new value combinations.</p></div>
+    </div>
+
+    <div class="notes-box">
+      <h3 style="margin-bottom:10px;">Summary Notes</h3>
+      <ul>
+        <li>Strategy is a coherent set of choices about where to compete and how to win — not a goal or a wish list.</li>
+        <li>External frameworks (PESTEL, Five Forces) tell you the shape of the playing field; internal frameworks (VRIO, Value Chain) tell you what you can actually do about it.</li>
+        <li>SWOT is a synthesis tool that works best <em>after</em> real external and internal analysis, not as a first step done from guesswork.</li>
+        <li>Portfolio tools (BCG) and growth tools (Ansoff, Blue Ocean) turn analysis into a directional decision.</li>
+        <li>No single framework is "the answer" — each removes a different blind spot, and mature strategic thinking uses them together.</li>
+      </ul>
+      <button class="print-btn" id="printBtn">🖨 Print / Save Notes</button>
+    </div>
+
+    <h3 style="margin-bottom:14px;">Continue Learning</h3>
+    <div class="continue-grid">
+      <div class="cl-card">
+        <h4>Books</h4>
+        <ul>
+          <li><em>Competitive Strategy</em> — Michael E. Porter</li>
+          <li><em>Good Strategy / Bad Strategy</em> — Richard Rumelt</li>
+          <li><em>Playing to Win</em> — A.G. Lafley &amp; Roger Martin</li>
+          <li><em>Blue Ocean Strategy</em> — W. Chan Kim &amp; Renée Mauborgne</li>
+        </ul>
+      </div>
+      <div class="cl-card">
+        <h4>Documentation &amp; Guides</h4>
+        <ul>
+          <li>Harvard Business Review — Strategy topic archive</li>
+          <li>MindTools — Strategic Analysis Tools section</li>
+          <li>Strategyzer — Business Model &amp; Value Proposition guides</li>
+        </ul>
+      </div>
+      <div class="cl-card">
+        <h4>Foundational Research</h4>
+        <ul>
+          <li>Porter, M.E. (1979). "How Competitive Forces Shape Strategy." <em>Harvard Business Review.</em></li>
+          <li>Barney, J. (1991). "Firm Resources and Sustained Competitive Advantage." <em>Journal of Management.</em> (basis of VRIO)</li>
+          <li>Ansoff, H.I. (1957). "Strategies for Diversification." <em>Harvard Business Review.</em></li>
+        </ul>
+      </div>
+      <div class="cl-card">
+        <h4>Communities</h4>
+        <ul>
+          <li>r/strategy and r/consulting on Reddit</li>
+          <li>LinkedIn strategy &amp; consulting professional groups</li>
+          <li>Local university entrepreneurship/case-competition clubs</li>
+        </ul>
+      </div>
+      <div class="cl-card">
+        <h4>Practice Platforms</h4>
+        <ul>
+          <li>Harvard Business School Online — Strategy courses</li>
+          <li>Coursera — Business Strategy specializations</li>
+          <li>Case-in-Point style case interview practice sites</li>
+        </ul>
+      </div>
+      <div class="cl-card">
+        <h4>Search Keywords</h4>
+        <p>
+          <span class="kw">SWOT analysis template</span><span class="kw">Porter five forces example</span>
+          <span class="kw">VRIO framework case study</span><span class="kw">BCG matrix examples</span>
+          <span class="kw">Ansoff matrix real companies</span><span class="kw">blue ocean strategy canvas</span>
+        </p>
+      </div>
+    </div>
+
+    <div class="cl-card" style="margin-top:20px;">
+      <h4>AI Prompts for Further Learning</h4>
+      <ul>
+        <li>"Give me a real company and walk me through a full Five Forces analysis for its industry."</li>
+        <li>"Quiz me on VRIO with three ambiguous resource examples and explain the correct classification."</li>
+        <li>"Take this SWOT list I give you and help me turn it into a prioritized strategic recommendation."</li>
+        <li>"Compare Ansoff Matrix and Blue Ocean Strategy for a small business considering international expansion."</li>
+      </ul>
+    </div>
+
+    <div class="certificate" id="certificate">
+      <div class="badge">🏅</div>
+      <h3>Strategy Analyst Certificate — Earned</h3>
+      <p>You completed all 4 modules and the Final Challenge of the Business Strategy Frameworks tutorial.</p>
+    </div>
+  </div>
+</section>
+
+<footer>INTERACTIVE LEARNING STUDIO · BUSINESS STRATEGY FRAMEWORKS · BUILT FOR SINGLE-SESSION MASTERY</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- THEME ---------------- */
+  var themeBtn = document.getElementById('themeToggle');
+  themeBtn.addEventListener('click', function(){
+    var body = document.body;
+    var isLight = body.getAttribute('data-theme') === 'light';
+    body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+    themeBtn.textContent = isLight ? '🌙' : '☀️';
+  });
+
+  /* ---------------- STATE ---------------- */
+  var state = { modulesDone: [false,false,false,false], currentUnlocked: 1 };
+
+  function updateProgress(){
+    var doneCount = state.modulesDone.filter(Boolean).length;
+    var pct = Math.round((doneCount/4)*100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = pct + '% complete';
+    var dots = document.querySelectorAll('#modNav .dot');
+    dots.forEach(function(d){
+      var m = parseInt(d.getAttribute('data-m'),10);
+      d.classList.remove('active','done');
+      if(m < doneCount) d.classList.add('done');
+      else if(m === doneCount) d.classList.add('active');
+    });
+    if(doneCount === 4){
+      document.getElementById('final-section').classList.add('unlocked');
+      document.getElementById('certificateTrigger');
+    }
+  }
+
+  document.getElementById('startBtn').addEventListener('click', function(){
+    document.getElementById('module-1').scrollIntoView({behavior:'smooth'});
+  });
+
+  /* ---------------- QUIZ DATA ---------------- */
+  var quizzes = {
+    1: [
+      {q:"Strengths and Weaknesses are ___ factors, while Opportunities and Threats are ___ factors.",
+       opts:["Internal / External","External / Internal","Financial / Operational","Short-term / Long-term"],
+       correct:0,
+       exp:"Strengths and Weaknesses come from inside the organization (resources, capabilities). Opportunities and Threats come from the external environment (market, competitors, regulation)."},
+      {q:"A company has a beloved brand but faces rising raw material costs from inflation. How should these be classified?",
+       opts:["Strength & Weakness","Strength & Threat","Opportunity & Weakness","Threat & Opportunity"],
+       correct:1,
+       exp:"The brand is internal and helpful (Strength). Inflation is external, uncontrollable, and harmful (Threat)."},
+      {q:"What is the primary purpose of a SWOT analysis?",
+       opts:["To calculate exact market share","To structure a snapshot of internal and external factors for decision-making","To forecast next quarter's revenue precisely","To replace a financial audit"],
+       correct:1,
+       exp:"SWOT is an organizing framework, not a calculation or forecast — it structures qualitative facts so they can inform strategic choices."},
+      {q:"Which of these is a common misconception about SWOT analysis?",
+       opts:["That listing many items automatically produces a strategy","That it only works for large corporations","That it requires no real external research","All of the above"],
+       correct:3,
+       exp:"All three are common mistakes: SWOT is a starting point that needs prioritization to become strategy, it works for businesses of any size, and it should be grounded in real external research, not assumptions."}
+    ],
+    2: [
+      {q:"What does the 'E' and second-to-last letter combination in PESTEL stand for?",
+       opts:["Economic and Legal","Environmental and Legal","Educational and Local","Environmental and Logistical"],
+       correct:1,
+       exp:"PESTEL = Political, Economic, Social, Technological, Environmental, Legal."},
+      {q:"An industry with low barriers to entry and many available substitute products tends to have:",
+       opts:["Low competitive intensity and high margins","High competitive intensity and pressured profitability","No effect on profitability","Guaranteed high margins for early movers"],
+       correct:1,
+       exp:"Low entry barriers invite new competitors, and easy substitutes give customers alternatives — both push profitability down structurally."},
+      {q:"Bargaining power of suppliers is typically HIGH when:",
+       opts:["Many suppliers compete for your business","A few suppliers control a critical input with no substitute","Buyers can easily switch between suppliers","Supplier products are fully commoditized"],
+       correct:1,
+       exp:"Concentrated control over a critical, hard-to-substitute input gives suppliers leverage to raise prices or dictate terms."},
+      {q:"How do PESTEL and Porter's Five Forces differ in scope?",
+       opts:["PESTEL analyzes the macro-environment; Five Forces analyzes industry-level competitive dynamics","PESTEL analyzes a single company; Five Forces analyzes the whole economy","They analyze exactly the same thing","PESTEL is only used for financial forecasting"],
+       correct:0,
+       exp:"PESTEL scans broad, slow-moving macro forces. Five Forces zooms into the competitive structure of one specific industry."}
+    ],
+    3: [
+      {q:"According to VRIO, a resource that is Valuable and Rare, but easy for competitors to imitate, provides:",
+       opts:["Sustained competitive advantage","Temporary competitive advantage","Competitive disadvantage","Exactly the same position as rivals (parity)"],
+       correct:1,
+       exp:"Being valuable and rare helps in the short term, but if it's cheap to copy, competitors close the gap quickly — so the advantage is only temporary."},
+      {q:"In the BCG Matrix, a business unit with high market share in a low-growth market is classified as a:",
+       opts:["Star","Cash Cow","Question Mark","Dog"],
+       correct:1,
+       exp:"Cash Cows have high share in mature, low-growth markets — they generate strong, stable cash flow used to fund other units."},
+      {q:"Which activities belong to the 'primary activities' in Porter's Value Chain?",
+       opts:["HR Management and Procurement","Inbound Logistics, Operations, Outbound Logistics, Marketing & Sales, Service","Firm Infrastructure only","Technology Development only"],
+       correct:1,
+       exp:"Primary activities directly create and deliver the product: Inbound Logistics, Operations, Outbound Logistics, Marketing & Sales, and Service. The others are support activities."},
+      {q:"A 'Dog' in the BCG Matrix (low growth, low share) typically warrants which response?",
+       opts:["Heavy reinvestment to grow share","Divest or harvest for remaining cash","Aggressive international expansion","Ignore it and maintain the status quo indefinitely"],
+       correct:1,
+       exp:"Dogs tie up resources without strong returns — the typical move is to harvest remaining value or divest and redirect resources to Stars or Question Marks."}
+    ],
+    4: [
+      {q:"Selling an existing product into a brand-new market is which Ansoff strategy?",
+       opts:["Market Penetration","Market Development","Product Development","Diversification"],
+       correct:1,
+       exp:"Market Development keeps the product the same but targets new customer segments or geographies."},
+      {q:"Blue Ocean Strategy primarily focuses on:",
+       opts:["Beating competitors harder in an existing market","Creating uncontested market space, making competition irrelevant","Copying whatever the market leader does","Always competing purely on lowest price"],
+       correct:1,
+       exp:"Blue Ocean Strategy is about combining value in a new way so the company competes in space rivals aren't even in, rather than fighting head-on."},
+      {q:"Diversification (new product + new market) is the ___ risk strategy in the Ansoff Matrix.",
+       opts:["Lowest","Highest","Medium","Ansoff doesn't rank risk"],
+       correct:1,
+       exp:"Diversification changes both variables at once — new product AND new market — making it the highest-risk quadrant."},
+      {q:"When combining SWOT, PESTEL, Five Forces, and VRIO into one strategic plan, what's the most logical sequence?",
+       opts:["Order doesn't matter at all","Macro/industry analysis (PESTEL, Five Forces) informs SWOT's external side, while VRIO refines the internal side, then both feed strategic choices","Only VRIO is needed — skip the rest","SWOT should always replace the other frameworks entirely"],
+       correct:1,
+       exp:"External frameworks generate real evidence for SWOT's Opportunities/Threats, and VRIO sharpens the Strengths side — then the combined, prioritized picture informs growth-direction decisions like Ansoff or Blue Ocean."}
+    ]
+  };
+
+  function buildQuiz(modNum){
+    var container = document.getElementById('qlist-'+modNum);
+    var data = quizzes[modNum];
+    var html = '';
+    data.forEach(function(item, qi){
+      html += '<div class="qitem" data-qi="'+qi+'">';
+      html += '<div class="qtext">'+(qi+1)+'. '+item.q+'</div>';
+      html += '<div class="qopts">';
+      item.opts.forEach(function(opt, oi){
+        html += '<div class="qopt" data-oi="'+oi+'"><span class="radio"></span><span>'+opt+'</span></div>';
+      });
+      html += '</div>';
+      html += '<div class="qexplain">'+item.exp+'</div>';
+      html += '</div>';
+    });
+    container.innerHTML = html;
+
+    container.querySelectorAll('.qitem').forEach(function(qEl){
+      var qi = parseInt(qEl.getAttribute('data-qi'),10);
+      qEl.querySelectorAll('.qopt').forEach(function(oEl){
+        oEl.addEventListener('click', function(){
+          if(oEl.classList.contains('disabled')) return;
+          qEl.querySelectorAll('.qopt').forEach(function(o){ o.classList.remove('selected'); });
+          oEl.classList.add('selected');
+          oEl.setAttribute('data-picked','1');
+        });
+      });
+    });
+  }
+
+  function gradeQuiz(modNum){
+    var data = quizzes[modNum];
+    var container = document.getElementById('qlist-'+modNum);
+    var correctCount = 0;
+    container.querySelectorAll('.qitem').forEach(function(qEl){
+      var qi = parseInt(qEl.getAttribute('data-qi'),10);
+      var correctIdx = data[qi].correct;
+      var opts = qEl.querySelectorAll('.qopt');
+      var pickedIdx = -1;
+      opts.forEach(function(o){ if(o.classList.contains('selected')) pickedIdx = parseInt(o.getAttribute('data-oi'),10); });
+      opts.forEach(function(o){
+        o.classList.add('disabled');
+        var oi = parseInt(o.getAttribute('data-oi'),10);
+        if(oi === correctIdx) o.classList.add('correct');
+        else if(oi === pickedIdx) o.classList.add('incorrect');
+      });
+      qEl.querySelector('.qexplain').classList.add('show');
+      if(pickedIdx === correctIdx) correctCount++;
+    });
+    document.getElementById('score-'+modNum).textContent = correctCount + ' / ' + data.length;
+    var pct = Math.round((correctCount/data.length)*100);
+    document.getElementById('resultScore-'+modNum).textContent = pct + '%';
+    var passed = pct >= 75;
+    var msg = passed
+      ? "Nicely done — you've cleared the 75% bar. The next module is unlocked."
+      : "You need 75% to unlock the next module. Review the explanations above and try again.";
+    document.getElementById('resultText-'+modNum).textContent = msg;
+    document.getElementById('unlock-'+modNum).style.display = passed ? 'inline-block' : 'none';
+    document.getElementById('result-'+modNum).classList.add('show');
+    document.getElementById('submit-'+modNum).disabled = true;
+    return passed;
+  }
+
+  [1,2,3,4].forEach(function(modNum){
+    buildQuiz(modNum);
+    document.getElementById('submit-'+modNum).addEventListener('click', function(){
+      gradeQuiz(modNum);
+    });
+    document.getElementById('retry-'+modNum).addEventListener('click', function(){
+      document.getElementById('result-'+modNum).classList.remove('show');
+      document.getElementById('submit-'+modNum).disabled = false;
+      buildQuiz(modNum);
+    });
+    var unlockBtn = document.getElementById('unlock-'+modNum);
+    unlockBtn.addEventListener('click', function(){
+      state.modulesDone[modNum-1] = true;
+      updateProgress();
+      if(modNum < 4){
+        var next = document.getElementById('module-'+(modNum+1));
+        next.classList.add('unlocked');
+        next.scrollIntoView({behavior:'smooth'});
+      } else {
+        document.getElementById('final-section').classList.add('unlocked');
+        document.getElementById('final-section').scrollIntoView({behavior:'smooth'});
+      }
+    });
+  });
+
+  /* ---------------- EXERCISE 1: classify facts ---------------- */
+  var ex1Items = [
+    {text:"Their head roaster has 15 years of specialty-coffee experience", ans:"s"},
+    {text:"Only one roasting facility creates supply bottlenecks nationwide", ans:"w"},
+    {text:"Specialty-coffee demand is rising fast in tier-2 cities", ans:"o"},
+    {text:"A well-funded international chain just announced entry", ans:"t"},
+    {text:"Loyalty app has 200,000 active monthly users", ans:"s"}
+  ];
+  (function initEx1(){
+    var row1 = document.getElementById('ex1-items');
+    var row2 = document.getElementById('ex1-items2');
+    row1.innerHTML = '';
+    ex1Items.forEach(function(item, idx){
+      var chip = document.createElement('span');
+      chip.className = 'chip';
+      chip.textContent = item.text;
+      chip.setAttribute('data-idx', idx);
+      chip.setAttribute('data-answer', item.ans);
+      (idx < 3 ? row1 : row2).appendChild(chip);
+    });
+    var selectedChip = null;
+    document.querySelectorAll('#ex1-items .chip, #ex1-items2 .chip').forEach(function(chip){
+      chip.addEventListener('click', function(){
+        document.querySelectorAll('#ex1-items .chip, #ex1-items2 .chip').forEach(function(c){c.classList.remove('picked');});
+        chip.classList.add('picked');
+        selectedChip = chip;
+      });
+    });
+    document.querySelectorAll('#ex1 .zone').forEach(function(zone){
+      zone.addEventListener('click', function(){
+        if(!selectedChip) return;
+        var itemDiv = document.createElement('div');
+        itemDiv.className = 'item';
+        itemDiv.textContent = selectedChip.textContent;
+        itemDiv.setAttribute('data-answer', selectedChip.getAttribute('data-answer'));
+        itemDiv.setAttribute('data-zone', zone.getAttribute('data-zone'));
+        zone.appendChild(itemDiv);
+        selectedChip.remove();
+        selectedChip = null;
+      });
+    });
+    document.getElementById('ex1-check').addEventListener('click', function(){
+      var items = document.querySelectorAll('#ex1 .zone .item');
+      var fb = document.getElementById('ex1-feedback');
+      if(items.length < 5){
+        fb.textContent = 'Place all 5 facts into a quadrant first.';
+        fb.className = 'exercise-feedback show bad';
+        return;
+      }
+      var correct = 0;
+      items.forEach(function(it){
+        if(it.getAttribute('data-answer') === it.getAttribute('data-zone')) correct++;
+      });
+      fb.textContent = correct + ' / 5 correctly placed. ' + (correct === 5 ? 'Perfect classification!' : 'Review internal-vs-external and helpful-vs-harmful, then compare against the diagram above.');
+      fb.className = 'exercise-feedback show ' + (correct === 5 ? 'good' : 'bad');
+    });
+    document.getElementById('ex1-reset').addEventListener('click', function(){ initEx1(); document.getElementById('ex1-feedback').classList.remove('show'); });
+  })();
+
+  /* ---------------- EXERCISE 2: five forces sliders ---------------- */
+  ['entrant','supplier','buyer','sub','rivalry'].forEach(function(id){
+    var slider = document.getElementById('f-'+id);
+    var val = document.getElementById('v-'+id);
+    slider.addEventListener('input', function(){ val.textContent = slider.value; });
+  });
+  document.getElementById('ex2-check').addEventListener('click', function(){
+    var analystView = {entrant:'Medium (2–3): app-based platforms are relatively easy to launch but scaling logistics is hard',
+      supplier:'Low–Medium (2): many restaurants compete to be listed, so platforms hold leverage',
+      buyer:'High (4–5): customers compare apps instantly and switch for small discounts',
+      sub:'High (4): home cooking and takeout directly from restaurants are easy substitutes',
+      rivalry:'High (4–5): several platforms fight for the same riders and restaurants'};
+    var fb = document.getElementById('ex2-feedback');
+    var html = 'Analyst view for comparison:<br>';
+    Object.keys(analystView).forEach(function(k){
+      html += '• <strong>'+k.charAt(0).toUpperCase()+k.slice(1)+':</strong> '+analystView[k]+'<br>';
+    });
+    fb.innerHTML = html;
+    fb.className = 'exercise-feedback show good';
+  });
+
+  /* ---------------- EXERCISE 3: VRIO ladder ---------------- */
+  var ex3Picked = null;
+  document.querySelectorAll('#ex3-opts .chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      document.querySelectorAll('#ex3-opts .chip').forEach(function(c){c.classList.remove('picked');});
+      chip.classList.add('picked');
+      ex3Picked = chip.getAttribute('data-v');
+    });
+  });
+  document.getElementById('ex3-check').addEventListener('click', function(){
+    var fb = document.getElementById('ex3-feedback');
+    if(!ex3Picked){ fb.textContent='Pick an option first.'; fb.className='exercise-feedback show bad'; return; }
+    var correct = ex3Picked === 'unused';
+    fb.textContent = correct
+      ? 'Correct — Valuable, Rare, and costly to Imitate, but NOT Organized to exploit it, results in an Unused Competitive Advantage. The potential exists, but execution is missing.'
+      : 'Not quite. It passes Valuable, Rare, and Inimitable — but fails the Organized step, since there\'s no process to exploit it. That specific combination is an Unused Competitive Advantage.';
+    fb.className = 'exercise-feedback show ' + (correct ? 'good' : 'bad');
+  });
+
+  /* ---------------- EXERCISE 4: Ansoff ---------------- */
+  var ex4Picked = null;
+  document.querySelectorAll('#ex4-opts .chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      document.querySelectorAll('#ex4-opts .chip').forEach(function(c){c.classList.remove('picked');});
+      chip.classList.add('picked');
+      ex4Picked = chip.getAttribute('data-v');
+    });
+  });
+  document.getElementById('ex4-check').addEventListener('click', function(){
+    var fb = document.getElementById('ex4-feedback');
+    if(!ex4Picked){ fb.textContent='Pick an option first.'; fb.className='exercise-feedback show bad'; return; }
+    var correct = ex4Picked === 'div';
+    fb.textContent = correct
+      ? 'Correct — new product (never made food) + new market (never operated there) = Diversification, the highest-risk Ansoff quadrant.'
+      : 'Not quite. Since it\'s both a brand-new product AND a brand-new market simultaneously, this is Diversification — the riskiest quadrant.';
+    fb.className = 'exercise-feedback show ' + (correct ? 'good' : 'bad');
+  });
+
+  /* ---------------- PRINT ---------------- */
+  document.getElementById('printBtn').addEventListener('click', function(){ window.print(); });
+
+  /* ---------------- final certificate reveal on scroll after modules done ---------------- */
+  function checkCertificate(){
+    if(state.modulesDone.every(Boolean)){
+      var challenge = document.getElementById('challengeText').value.trim();
+      if(challenge.length > 20){
+        document.getElementById('certificate').classList.add('show');
+      }
+    }
+  }
+  document.getElementById('challengeText').addEventListener('input', checkCertificate);
+
+  updateProgress();
+})();
+</script>
+</body>
+</html>
