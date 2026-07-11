@@ -1,0 +1,18 @@
+Day 41/60 — Interactive Learning Studio: Business Strategy Frameworks
+Part of the #60DaysOfClaudeAI challenge by ABTalks.
+What it is
+A single-file, self-contained HTML app that teaches Business Strategy Frameworks end-to-end — not a roadmap, a full tutorial. Covers SWOT, PESTEL, Porter's Five Forces, VRIO, the Value Chain, BCG Matrix, Ansoff Matrix, and Blue Ocean Strategy.
+Structure
+Intro — learning objectives, estimated time, prerequisites, reward system
+Module 1 (Foundational) — Strategic thinking + SWOT Analysis
+Module 2 (Applied) — PESTEL + Porter's Five Forces
+Module 3 (Advanced) — VRIO, Value Chain, BCG Matrix
+Module 4 (Mastery) — Ansoff Matrix, Blue Ocean Strategy, framework synthesis
+Final section — practical challenge, cheat sheet, printable summary notes, curated books/research papers/communities/practice platforms, and AI prompts for further learning
+Each module includes custom SVG/CSS diagrams, topic-specific examples, analogies, comparison tables, click-based interactive exercises, common misconceptions, key takeaways, and a 4-question auto-scored quiz with instant feedback. Score 75%+ to unlock the next module. Complete all 4 + the final challenge to earn a Strategy Analyst Certificate.
+Tech
+Pure HTML, CSS, JavaScript — zero external libraries or CDN dependencies
+Fully responsive, dark/light mode toggle, progress tracking, printable notes
+How to use
+Open interactive-learning-studio-business-strategy.html directly in any browser. No build step, no server required.
+🔗 LinkedIn · GitHub
