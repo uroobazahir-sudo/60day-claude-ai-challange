@@ -1,0 +1,18 @@
+Signal Check — AI Mock Interview Coach
+Day 40/60 — #60DaysOfClaudeAI
+A single-file, zero-dependency web app that runs a 3-question mock interview and gives structured, honest feedback on every answer — plus a live "readiness" score you can watch fill up like a studio VU meter.
+What it does
+Takes a target role (e.g. Frontend Developer Intern)
+Asks one behavioral, one technical, and one situational/deeper question, one at a time
+Scores each answer 0–100 with a verdict, strengths, gaps, and a rewritten "stronger version" of your own answer
+Ends with an overall readiness score and a single top priority to fix before your next real interview
+Why it looks like this
+The UI borrows from a recording studio instead of a generic chat box — a circular readiness dial, a signal-chain style eyebrow label, and a strict type split: monospace for anything measured (scores, question numbers, labels) and a display face for anything spoken (questions, feedback). The metaphor: this tool is measuring the signal in a spoken answer.
+Tech
+Pure HTML/CSS/JS, single file, zero external libraries or CDN fonts
+Live version calls the Claude API (claude-sonnet-4-6) with a strict JSON-only system prompt covering three actions: question, evaluate, summary
+This build ships in demo mode — a fully pre-written session (role, answers, feedback) runs end-to-end on clicks alone, so it's reliable for screen recording with no network dependency
+Built-in "How this was built" panel documents the system prompt design and extension ideas (tools, memory, voice input via Web Speech API)
+Run it
+Open the HTML file in any browser. No build step, no install.
+Built as part of the #60DaysOfClaudeAI challenge by @abtalksonai — one polished app a day, in public.
