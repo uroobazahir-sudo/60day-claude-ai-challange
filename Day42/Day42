@@ -1,0 +1,24 @@
+Khaata — Personal Financial Command Center
+Day 42/60 — #60DaysOfClaudeAI
+A single-file financial dashboard built for a student living on a family allowance — designed like a traditional Pakistani khaata (ledger book), not a generic expense tracker.
+Features
+Financial Health Score — a stamped, ledger-style score (0–100) blending savings rate, budget discipline, and needs-vs-wants balance
+Money In / Money Out — log allowance and expenses by category
+Budget — set per-category monthly limits with live progress bars
+Savings Pot — a no-deadline rainy-day fund tracker
+Cash Flow — 6-month income vs. expense trend (hand-built SVG bar chart)
+Insights — auto-generated, rule-based observations on spending patterns
+What-If Lab — sliders to simulate cutting a category and see semester-long savings
+Calculators — 50/30/20 allowance planner + cash runway calculator
+Reports — printable monthly summary
+Learn — tips, a monthly checklist, resources, and ready-to-use Claude prompts
+Tech
+Pure HTML, CSS, and vanilla JavaScript — zero external libraries or CDNs
+Fully offline-capable, works by just opening the file
+Data persists in localStorage — nothing leaves the browser
+Dark/light mode toggle, responsive down to mobile, printable report view
+Design
+Ledger/notebook aesthetic: ruled-paper background, navy-ink base, brass-gold accents, and a rotated "ink stamp" health score as the signature visual element — built around the idea of a student's hisaab-kitaab, not a SaaS dashboard template.
+Run it
+Just open Khaata-Financial-Command-Center.html in any browser. No install, no server, no dependencies.
+Built as part of #60DaysOfClaudeAI — one polished single-file app a day.
