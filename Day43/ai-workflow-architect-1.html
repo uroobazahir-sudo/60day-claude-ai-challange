@@ -1,0 +1,1231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Workflow Architect — Product Brand Launch</title>
+<style>
+:root{
+  --bg:#0a0e14;
+  --bg-elev:#0f1520;
+  --bg-card:#131a26;
+  --border:#1f2937;
+  --border-soft:#182130;
+  --text:#e7ecf4;
+  --text-dim:#8b96ab;
+  --text-faint:#5a6478;
+  --amber:#f5a623;
+  --amber-dim:#8a6023;
+  --teal:#14b8a6;
+  --teal-dim:#0d6e64;
+  --navy-glow: radial-gradient(circle at 20% -10%, rgba(20,184,166,0.12), transparent 45%), radial-gradient(circle at 90% 0%, rgba(245,166,35,0.10), transparent 40%);
+  --radius:10px;
+  --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', 'Cascadia Code', Consolas, monospace;
+  --display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --body: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  background-image:var(--navy-glow);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:14px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+  padding-bottom:80px;
+}
+::selection{background:var(--amber);color:#0a0e14;}
+a{color:var(--teal);}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px;}
+
+/* ---------- Progress Rail ---------- */
+#rail{
+  position:fixed;top:0;left:0;height:3px;width:0%;
+  background:linear-gradient(90deg,var(--teal),var(--amber));
+  z-index:999;transition:width .15s ease;
+}
+
+/* ---------- Top bar ---------- */
+header.topbar{
+  position:sticky;top:0;z-index:90;
+  backdrop-filter:blur(14px);
+  background:rgba(10,14,20,0.82);
+  border-bottom:1px solid var(--border-soft);
+}
+.topbar-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 24px;max-width:1180px;margin:0 auto;
+}
+.brandmark{display:flex;align-items:center;gap:10px;font-family:var(--display);font-weight:700;letter-spacing:-0.02em;}
+.brandmark .dot{width:9px;height:9px;border-radius:50%;background:var(--amber);box-shadow:0 0 12px var(--amber);}
+.brandmark small{display:block;color:var(--text-faint);font-weight:400;font-size:11px;font-family:var(--mono);letter-spacing:0.08em;text-transform:uppercase;}
+.topbar-actions{display:flex;gap:10px;align-items:center;}
+.btn{
+  font-family:var(--mono);font-size:12px;letter-spacing:0.03em;
+  padding:8px 14px;border-radius:7px;border:1px solid var(--border);
+  background:var(--bg-card);color:var(--text-dim);cursor:pointer;
+  transition:all .18s ease;white-space:nowrap;
+}
+.btn:hover{border-color:var(--teal);color:var(--teal);}
+.btn.primary{background:var(--teal);color:#06201c;border-color:var(--teal);font-weight:600;}
+.btn.primary:hover{background:#1cd2bd;}
+.btn.amber{background:var(--amber);color:#2a1a02;border-color:var(--amber);font-weight:600;}
+.btn.amber:hover{background:#ffb948;}
+
+/* ---------- Hero ---------- */
+.hero{padding:72px 0 48px;position:relative;}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;color:var(--teal);
+  letter-spacing:0.14em;text-transform:uppercase;margin-bottom:18px;
+  display:flex;align-items:center;gap:10px;
+}
+.eyebrow .line{width:32px;height:1px;background:var(--teal);}
+h1{
+  font-family:var(--display);font-size:clamp(26px,4vw,42px);
+  font-weight:700;letter-spacing:-0.03em;line-height:1.05;max-width:820px;
+}
+h1 em{font-style:normal;color:var(--amber);}
+.hero-sub{margin-top:20px;max-width:640px;color:var(--text-dim);font-size:13.5px;}
+.hero-meta{display:flex;gap:28px;margin-top:36px;flex-wrap:wrap;}
+.meta-item{font-family:var(--mono);font-size:10.5px;color:var(--text-faint);}
+.meta-item b{display:block;color:var(--text);font-size:16px;font-family:var(--display);font-weight:700;}
+
+/* ---------- Runway (signature element) ---------- */
+.runway{margin-top:56px;position:relative;padding:28px 0 10px;}
+.runway-track{
+  position:relative;height:2px;background:var(--border);border-radius:2px;
+  margin:0 6px;
+}
+.runway-fill{
+  position:absolute;top:0;left:0;height:2px;
+  background:linear-gradient(90deg,var(--teal),var(--amber));
+  border-radius:2px;transition:width .4s ease;
+}
+.runway-stops{display:flex;justify-content:space-between;margin-top:-7px;position:relative;}
+.stop{
+  width:16px;height:16px;border-radius:50%;background:var(--bg-elev);
+  border:2px solid var(--border);cursor:pointer;position:relative;
+  transition:all .2s ease;
+}
+.stop:hover{border-color:var(--amber);}
+.stop.done{background:var(--teal);border-color:var(--teal);}
+.stop-label{
+  position:absolute;top:26px;left:50%;transform:translateX(-50%);
+  font-family:var(--mono);font-size:10px;color:var(--text-faint);
+  white-space:nowrap;text-align:center;
+}
+
+/* ---------- Section shell ---------- */
+section{padding:64px 0;border-top:1px solid var(--border-soft);}
+.section-head{margin-bottom:36px;}
+.section-num{font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:0.1em;}
+h2{font-family:var(--display);font-size:clamp(19px,2.4vw,26px);font-weight:700;letter-spacing:-0.02em;margin-top:6px;}
+.section-desc{color:var(--text-dim);margin-top:10px;max-width:640px;font-size:12.5px;}
+
+/* ---------- Stage Card ---------- */
+.stage{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  margin-bottom:22px;overflow:hidden;
+}
+.stage-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 22px;cursor:pointer;gap:16px;
+}
+.stage-header:hover{background:rgba(255,255,255,0.015);}
+.stage-header-left{display:flex;align-items:center;gap:16px;min-width:0;}
+.stage-num{
+  font-family:var(--mono);font-size:13px;color:var(--bg);
+  background:var(--teal);width:34px;height:34px;border-radius:8px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;font-weight:700;
+}
+.stage.done .stage-num{background:var(--amber);}
+.stage-title-block{min-width:0;}
+.stage-title{font-family:var(--display);font-weight:700;font-size:14.5px;letter-spacing:-0.01em;}
+.stage-sub{font-family:var(--mono);font-size:10px;color:var(--text-faint);margin-top:3px;}
+.stage-header-right{display:flex;align-items:center;gap:14px;flex-shrink:0;}
+.chk{
+  width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:transparent;transition:all .15s ease;flex-shrink:0;
+}
+.chk.checked{background:var(--teal);border-color:var(--teal);color:#06201c;}
+.star{cursor:pointer;font-size:16px;color:var(--text-faint);transition:color .15s ease;}
+.star.active{color:var(--amber);}
+.chev{color:var(--text-faint);transition:transform .2s ease;font-size:12px;}
+.stage.open .chev{transform:rotate(180deg);}
+
+.stage-body{max-height:0;overflow:hidden;transition:max-height .35s ease;}
+.stage.open .stage-body{max-height:6000px;}
+.stage-body-inner{padding:6px 22px 26px;}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px;margin-top:8px;}
+@media(max-width:760px){.grid2{grid-template-columns:1fr;}}
+
+.subblock{margin-top:22px;}
+.subblock-label{
+  font-family:var(--mono);font-size:11px;color:var(--teal);
+  letter-spacing:0.08em;text-transform:uppercase;margin-bottom:10px;
+  display:flex;align-items:center;gap:8px;
+}
+.subblock-label::before{content:'';width:14px;height:1px;background:var(--teal);}
+ul.list{list-style:none;}
+ul.list li{
+  padding:6px 0 6px 18px;position:relative;font-size:12px;color:var(--text-dim);
+  border-bottom:1px solid var(--border-soft);
+}
+ul.list li:last-child{border-bottom:none;}
+ul.list li::before{content:'—';position:absolute;left:0;color:var(--text-faint);}
+ul.list.mistakes li::before{content:'✕';color:#e2635a;}
+ul.list.practices li::before{content:'✓';color:var(--teal);}
+
+.tool-card{
+  background:var(--bg-elev);border:1px solid var(--border-soft);border-radius:8px;
+  padding:14px 16px;margin-bottom:10px;
+}
+.tool-card-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;}
+.tool-name{font-family:var(--display);font-weight:700;font-size:12.5px;color:var(--amber);}
+.tool-alt{font-family:var(--mono);font-size:9.5px;color:var(--text-faint);}
+.tool-why{font-size:11.5px;color:var(--text-dim);margin-top:6px;}
+
+.prompt-box{
+  background:#080b11;border:1px solid var(--border);border-radius:8px;
+  padding:12px 14px;margin-bottom:10px;position:relative;font-family:var(--mono);
+  font-size:11px;color:#c8d3e6;line-height:1.6;
+}
+.prompt-copy{
+  position:absolute;top:10px;right:10px;font-family:var(--mono);font-size:10px;
+  color:var(--text-faint);cursor:pointer;background:var(--bg-card);
+  padding:4px 8px;border-radius:5px;border:1px solid var(--border);
+}
+.prompt-copy:hover{color:var(--teal);border-color:var(--teal);}
+
+.pill-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;}
+.pill{
+  font-family:var(--mono);font-size:10px;color:var(--text-dim);
+  border:1px solid var(--border);padding:4px 9px;border-radius:20px;
+}
+
+.notes-area{
+  width:100%;background:var(--bg-elev);border:1px solid var(--border-soft);
+  border-radius:8px;padding:10px 12px;color:var(--text);font-family:var(--body);
+  font-size:12px;min-height:70px;resize:vertical;
+}
+.notes-area:focus{outline:none;border-color:var(--teal);}
+.notes-save{font-family:var(--mono);font-size:10px;color:var(--text-faint);margin-top:6px;}
+
+.output-time-row{display:flex;gap:28px;margin-top:22px;flex-wrap:wrap;}
+.otr-item{font-size:11.5px;}
+.otr-item b{display:block;font-family:var(--mono);font-size:10.5px;color:var(--teal);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:5px;}
+
+/* ---------- Comparison table ---------- */
+.comp-wrap{overflow-x:auto;border:1px solid var(--border);border-radius:var(--radius);}
+table.comp{width:100%;border-collapse:collapse;min-width:640px;font-size:11.5px;}
+table.comp th{
+  text-align:left;padding:12px 16px;background:var(--bg-elev);
+  font-family:var(--mono);font-size:11px;color:var(--teal);text-transform:uppercase;
+  letter-spacing:0.05em;border-bottom:1px solid var(--border);
+}
+table.comp td{padding:12px 16px;border-bottom:1px solid var(--border-soft);color:var(--text-dim);}
+table.comp tr:last-child td{border-bottom:none;}
+table.comp td.tname{color:var(--text);font-weight:600;}
+.tag{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:12px;}
+.tag.free{background:rgba(20,184,166,0.14);color:var(--teal);}
+.tag.paid{background:rgba(245,166,35,0.14);color:var(--amber);}
+.tag.freemium{background:rgba(139,150,171,0.14);color:var(--text-dim);}
+
+/* ---------- Decision tree ---------- */
+.dtree{display:flex;flex-direction:column;gap:14px;}
+.dnode{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:8px;
+  padding:16px 18px;
+}
+.dq{font-family:var(--display);font-weight:700;font-size:12.5px;margin-bottom:12px;}
+.dopts{display:flex;flex-direction:column;gap:8px;}
+.dopt{
+  display:flex;justify-content:space-between;padding:10px 12px;
+  background:var(--bg-elev);border-radius:6px;border:1px solid var(--border-soft);
+  font-size:11.5px;cursor:pointer;transition:all .15s ease;
+}
+.dopt:hover{border-color:var(--amber);}
+.dopt span.result{color:var(--teal);font-family:var(--mono);font-size:11.5px;}
+
+/* ---------- Diagram ---------- */
+.diagram{
+  display:flex;overflow-x:auto;gap:0;padding:24px 4px 14px;
+}
+.dstep{
+  flex:0 0 200px;display:flex;flex-direction:column;align-items:center;
+  text-align:center;position:relative;padding:0 8px;
+}
+.dstep .dcircle{
+  width:44px;height:44px;border-radius:50%;border:2px solid var(--teal);
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);
+  font-weight:700;color:var(--teal);background:var(--bg);z-index:2;
+}
+.dstep .dtitle{font-family:var(--display);font-weight:700;font-size:11.5px;margin-top:12px;}
+.dstep .ddesc{font-size:10.5px;color:var(--text-faint);margin-top:5px;line-height:1.5;}
+.dconnector{
+  position:absolute;top:22px;left:calc(50% + 22px);width:calc(100% - 22px);
+  height:2px;background:linear-gradient(90deg,var(--teal),var(--border));
+  z-index:1;
+}
+.dstep:last-child .dconnector{display:none;}
+
+/* ---------- Summary / final blocks ---------- */
+.stack-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;}
+.stack-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:18px 20px;
+}
+.stack-card .role{font-family:var(--mono);font-size:10.5px;color:var(--amber);text-transform:uppercase;letter-spacing:0.06em;}
+.stack-card .name{font-family:var(--display);font-weight:700;font-size:14px;margin-top:6px;}
+.stack-card .desc{font-size:11px;color:var(--text-dim);margin-top:6px;}
+
+.kw-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.kw{
+  font-family:var(--mono);font-size:10.5px;padding:5px 10px;border-radius:6px;
+  background:var(--bg-elev);border:1px solid var(--border-soft);color:var(--text-dim);
+}
+
+.res-list{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px;}
+@media(max-width:700px){.res-list{grid-template-columns:1fr;}}
+.res-item{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 14px;background:var(--bg-card);border:1px solid var(--border);
+  border-radius:8px;font-size:11.5px;
+}
+.res-item .rtype{font-family:var(--mono);font-size:10px;color:var(--text-faint);}
+
+/* ---------- Footer / floating controls ---------- */
+.floatbar{
+  position:fixed;bottom:20px;right:20px;z-index:80;
+  display:flex;flex-direction:column;gap:10px;align-items:flex-end;
+}
+.progress-chip{
+  font-family:var(--mono);font-size:11px;background:var(--bg-card);
+  border:1px solid var(--border);padding:10px 14px;border-radius:24px;
+  display:flex;align-items:center;gap:10px;color:var(--text-dim);
+  box-shadow:0 8px 24px rgba(0,0,0,0.4);
+}
+.progress-chip b{color:var(--amber);}
+
+footer{padding:60px 0 40px;text-align:center;color:var(--text-faint);font-size:12px;font-family:var(--mono);}
+
+@media print{
+  header.topbar,.floatbar,#rail{display:none !important;}
+  body{background:#fff;color:#111;}
+  .stage-body{max-height:none !important;}
+  section{break-inside:avoid;}
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{transition:none !important;animation:none !important;}
+}
+</style>
+</head>
+<body>
+
+<div id="rail"></div>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brandmark">
+      <span class="dot"></span>
+      <div>AI Workflow Architect<small>Product Brand Launch · Physical Goods</small></div>
+    </div>
+    <div class="topbar-actions">
+      <button class="btn" onclick="window.print()">Print / Export</button>
+      <button class="btn" id="resetBtn" onclick="resetProgress()">Reset progress</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="hero">
+    <div class="eyebrow"><span class="line"></span>Marketing → Brand Strategy → Product Brand Launch</div>
+    <h1>Launching a physical product brand, <em>mapped end to end.</em></h1>
+    <p class="hero-sub">An 8-stage, execution-ready workflow — from market validation to post-launch scaling — with the exact AI tools, prompts, and decisions needed at each step. Not advice. A route.</p>
+    <div class="hero-meta">
+      <div class="meta-item"><b>8</b>Stages</div>
+      <div class="meta-item"><b>~10-14</b>Weeks total</div>
+      <div class="meta-item"><b>32+</b>AI tools mapped</div>
+      <div class="meta-item"><b id="progressPct">0%</b>Your progress</div>
+    </div>
+
+    <div class="runway">
+      <div class="runway-track">
+        <div class="runway-fill" id="runwayFill" style="width:0%"></div>
+      </div>
+      <div class="runway-stops" id="runwayStops"></div>
+    </div>
+  </div>
+
+  <!-- ================= WORKFLOW DIAGRAM ================= -->
+  <section id="diagram-section">
+    <div class="section-head">
+      <div class="section-num">MAP</div>
+      <h2>The full route, at a glance</h2>
+      <p class="section-desc">Each stage feeds the next. Scroll to see the whole runway from first research call to reorder decision.</p>
+    </div>
+    <div class="diagram" id="diagramRow"></div>
+  </section>
+
+  <!-- ================= STAGES ================= -->
+  <section id="stages-section">
+    <div class="section-head">
+      <div class="section-num">01–08</div>
+      <h2>Stage-by-stage workflow</h2>
+      <p class="section-desc">Click a stage to expand it. Check off tasks as you go — your progress saves automatically in this browser.</p>
+    </div>
+    <div id="stagesContainer"></div>
+  </section>
+
+  <!-- ================= DECISION TREE ================= -->
+  <section id="decision-section">
+    <div class="section-head">
+      <div class="section-num">DECIDE</div>
+      <h2>Which path fits your launch?</h2>
+      <p class="section-desc">Three decisions that change which stage-3 and stage-5 tools and tactics you should actually use.</p>
+    </div>
+    <div class="dtree" id="dtreeContainer"></div>
+  </section>
+
+  <!-- ================= COMPARISON ================= -->
+  <section id="comparison-section">
+    <div class="section-head">
+      <div class="section-num">COMPARE</div>
+      <h2>Tool comparison: brand & packaging design</h2>
+      <p class="section-desc">The tools that decide how your product actually looks on shelf or on screen.</p>
+    </div>
+    <div class="comp-wrap">
+      <table class="comp" id="compTable"></table>
+    </div>
+  </section>
+
+  <!-- ================= SUMMARY ================= -->
+  <section id="summary-section">
+    <div class="section-head">
+      <div class="section-num">SUMMARY</div>
+      <h2>Workflow summary</h2>
+    </div>
+    <p style="color:var(--text-dim);font-size:14.5px;max-width:760px;">
+      A physical product brand launch moves through validation, positioning, naming, visual identity and packaging,
+      go-to-market pricing, asset production, launch execution, and post-launch scaling. AI compresses the research,
+      naming, copywriting, and visual-drafting stages from weeks to days — but packaging finalization, retail
+      negotiation, manufacturing QA, and paid media budgets still need human judgment and real-world testing
+      (physical samples, focus groups, retailer feedback). Treat AI output in stages 1–3 and 5–6 as a fast first
+      draft, not a final decision.
+    </p>
+  </section>
+
+  <!-- ================= AI STACK ================= -->
+  <section id="stack-section">
+    <div class="section-head">
+      <div class="section-num">STACK</div>
+      <h2>Recommended AI stack</h2>
+      <p class="section-desc">If you only adopt five tools for this whole workflow, start here.</p>
+    </div>
+    <div class="stack-grid" id="stackGrid"></div>
+  </section>
+
+  <!-- ================= RESOURCES ================= -->
+  <section id="resources-section">
+    <div class="section-head">
+      <div class="section-num">LEARN</div>
+      <h2>Learning resources & communities</h2>
+    </div>
+    <div class="res-list" id="resourceList"></div>
+  </section>
+
+  <!-- ================= KEYWORDS ================= -->
+  <section id="keywords-section">
+    <div class="section-head">
+      <div class="section-num">SEARCH</div>
+      <h2>Search keywords for deeper research</h2>
+      <p class="section-desc">Use these to find case studies, templates, and communities specific to your launch.</p>
+    </div>
+    <div class="kw-row" id="kwRow"></div>
+  </section>
+
+  <!-- ================= ADDITIONAL PROMPTS ================= -->
+  <section id="prompts-section">
+    <div class="section-head">
+      <div class="section-num">PROMPTS</div>
+      <h2>Additional AI prompts worth saving</h2>
+      <p class="section-desc">General-purpose prompts that apply across multiple stages of the launch.</p>
+    </div>
+    <div id="extraPrompts"></div>
+  </section>
+
+  <!-- ================= FUTURE AUTOMATION ================= -->
+  <section id="future-section">
+    <div class="section-head">
+      <div class="section-num">NEXT</div>
+      <h2>Future automation opportunities</h2>
+      <p class="section-desc">Once the first launch is live, these are the pieces worth automating for the next SKU or restock cycle.</p>
+    </div>
+    <ul class="list practices" id="futureList"></ul>
+  </section>
+
+  <!-- ================= NOTES / BOOKMARKS OVERVIEW ================= -->
+  <section id="bookmarks-section">
+    <div class="section-head">
+      <div class="section-num">SAVED</div>
+      <h2>Your bookmarked stages & notes</h2>
+      <p class="section-desc">Everything you star or write above collects here automatically.</p>
+    </div>
+    <div id="bookmarksOverview" style="color:var(--text-faint);font-size:13px;font-family:var(--mono);">No bookmarks yet — click the star on any stage above.</div>
+  </section>
+
+</div>
+
+<div class="floatbar">
+  <div class="progress-chip"><span id="chipText">0 / 0 tasks</span> · <b id="chipPct">0%</b></div>
+</div>
+
+<footer>AI WORKFLOW ARCHITECT · BUILT FOR PRODUCT BRAND LAUNCH WORKFLOWS · DATA SAVED LOCALLY IN THIS BROWSER ONLY</footer>
+
+<script>
+/* ================= DATA ================= */
+const STAGES = [
+{
+  id:'research', num:1, title:'Market Research & Validation', duration:'1–2 weeks',
+  objectives:[
+    'Confirm real demand exists before spending on production or design',
+    'Identify the specific audience segment and unmet need',
+    'Map direct and adjacent competitors and pricing bands'
+  ],
+  tasks:[
+    'Define the problem the product solves in one sentence',
+    'Run 15–20 audience interviews or survey responses',
+    'Analyze 8–10 competitor products: pricing, reviews, packaging, positioning',
+    'Identify gaps in reviews (1–3 star complaints) competitors haven\'t fixed',
+    'Size the addressable market and realistic first-year volume',
+    'Validate willingness-to-pay with a price-sensitivity question set'
+  ],
+  tools:[
+    {name:'Claude / ChatGPT', why:'Synthesizes interview notes and review data into themes fast; good for drafting survey questions.', alt:['Perplexity','Gemini']},
+    {name:'Perplexity', why:'Cited, current market-size and competitor data pulled from live web sources.', alt:['You.com','Bing Copilot']},
+    {name:'SparkToro', why:'Shows where your real audience already hangs out — podcasts, accounts, sites.', alt:['Audiense','Exploding Topics']},
+    {name:'Google Trends', why:'Free demand-trajectory check before committing budget.', alt:['Glimpse','Exploding Topics']}
+  ],
+  prompts:[
+    'Act as a consumer insights analyst. Here are 15 raw interview notes about [product category]. Cluster them into the top 5 recurring pain points, and rank by frequency and emotional intensity.',
+    'List the 8 strongest direct and adjacent competitors for a [product type] targeting [audience]. For each, summarize pricing, positioning line, and their most common negative review theme.'
+  ],
+  bestPractices:[
+    'Talk to people outside your existing network — friends will over-validate',
+    'Weight negative reviews of competitors higher than positive ones; that\'s your opening',
+    'Write the target customer\'s exact words down, not your paraphrase'
+  ],
+  mistakes:[
+    'Skipping real interviews and trusting AI-generated personas as if they were data',
+    'Validating the category instead of validating this specific product',
+    'Ignoring manufacturing/unit-economics feasibility until after design is locked'
+  ],
+  outputs:['One-page problem/opportunity brief','Competitor matrix (pricing, positioning, gaps)','Target customer profile with verbatim quotes'],
+  time:'8–12 hrs of AI-assisted synthesis + 1 week of interview scheduling',
+  tips:['Batch all interview transcripts into one file and summarize in a single pass instead of one-by-one — cuts synthesis time by ~60%']
+},
+{
+  id:'strategy', num:2, title:'Brand Strategy & Positioning', duration:'1 week',
+  objectives:[
+    'Turn research into a defensible positioning statement',
+    'Define brand personality, tone, and values',
+    'Choose the category frame you\'re competing in (or creating)'
+  ],
+  tasks:[
+    'Write a positioning statement: for [audience], [product] is the [category] that [benefit], unlike [competitor], it [difference]',
+    'Define 3–5 brand personality traits and what they rule out',
+    'Draft brand voice guidelines (do/don\'t language examples)',
+    'Pressure-test positioning against the top 2 competitors\' claims',
+    'Choose a category entry point: existing category vs. new subcategory'
+  ],
+  tools:[
+    {name:'Claude', why:'Strong at structured strategy frameworks and stress-testing positioning logic against counterarguments.', alt:['ChatGPT (GPT-5.x)','Gemini']},
+    {name:'Notion AI', why:'Keeps the strategy doc, voice guide, and research in one linked workspace.', alt:['Coda AI','Obsidian']},
+    {name:'Brandwatch / Sprout Social Listening', why:'Shows how people already talk about this category, so your voice matches real language.', alt:['Talkwalker','Mention']}
+  ],
+  prompts:[
+    'Using this research brief [paste], draft 3 alternative positioning statements for the brand, each emphasizing a different differentiator. Then argue the strongest case for each one.',
+    'Given these 5 brand personality traits [list], write 10 example lines of brand voice — 5 "on-brand" and 5 "off-brand but tempting" — so I can see the boundary clearly.'
+  ],
+  bestPractices:[
+    'Positioning should be falsifiable — if a competitor could say the same line, it\'s too generic',
+    'Pick one primary emotional benefit; don\'t try to own three',
+    'Write the voice guide with real example sentences, not just adjectives'
+  ],
+  mistakes:[
+    'Positioning around a feature that\'s easy for competitors to copy in a month',
+    'Letting AI-generated positioning stay abstract ("premium, sustainable, innovative") without specifics',
+    'Skipping internal alignment — founders disagreeing on positioning later derails design'
+  ],
+  outputs:['Final positioning statement','Brand personality + voice guide (2–3 pages)','Category strategy decision'],
+  time:'6–10 hrs',
+  tips:['Ask AI to argue against your chosen positioning before you lock it — the counterargument surfaces weak spots fast']
+},
+{
+  id:'naming', num:3, title:'Naming & Verbal Identity', duration:'3–5 days',
+  objectives:[
+    'Generate and legally clear a name that carries the positioning',
+    'Lock tagline, product descriptors, and key messaging pillars'
+  ],
+  tasks:[
+    'Generate 50+ name candidates across 4–5 naming territories (descriptive, evocative, invented, founder, metaphor)',
+    'Shortlist to 8–10 names and check domain + social handle availability',
+    'Run a basic trademark clearance search in your target market',
+    'Draft 3 tagline options tied to the positioning statement',
+    'Write core messaging pillars (3 bullet claims the brand can always back up)'
+  ],
+  tools:[
+    {name:'Claude / ChatGPT', why:'Best for generating large, varied name lists fast across defined territories.', alt:['Namelix','Business Name Generator']},
+    {name:'Namelix', why:'Combines AI naming with instant logo-style previews and domain checks.', alt:['Squadhelp','Shopify Business Name Generator']},
+    {name:'USPTO TESS / IP Australia / relevant trademark portal', why:'Free official trademark search — not AI, but mandatory before falling in love with a name.', alt:['Trademarkia','Corsearch']},
+    {name:'Namecheap / GoDaddy domain search', why:'Instant availability check across domain + handles.', alt:['Instant Domain Search']}
+  ],
+  prompts:[
+    'Generate 40 brand name candidates for a [product category] targeting [audience], positioned as [positioning line]. Group them into 5 naming territories: descriptive, evocative/emotional, invented word, metaphor-based, and founder-story-based.',
+    'For these 8 shortlisted names [list], write one sentence each explaining how the name reinforces or undermines our positioning of [positioning statement].'
+  ],
+  bestPractices:[
+    'Say the name out loud in a sentence with the product category before shortlisting',
+    'Check pronunciation and unintended meanings in your top 2–3 target markets',
+    'Secure domain + main social handles before public testing of the name'
+  ],
+  mistakes:[
+    'Falling in love with a name before checking trademark and domain availability',
+    'Choosing a name only insiders find clever, that means nothing to the target customer',
+    'Skipping a professional trademark search for a name you\'ll invest real money behind'
+  ],
+  outputs:['Final brand name + tagline','3 messaging pillars','Domain/handle package secured'],
+  time:'4–6 hrs AI-assisted + 2–3 days for legal clearance',
+  tips:['Have AI red-team your top 3 names for negative meanings in Urdu, Hindi, Spanish, and Arabic before finalizing — cheap insurance']
+},
+{
+  id:'identity', num:4, title:'Visual Identity & Packaging Design', duration:'2–3 weeks',
+  objectives:[
+    'Build a coherent visual system: logo, color, type, packaging structure',
+    'Produce packaging that works on shelf and in a thumbnail'
+  ],
+  tasks:[
+    'Generate 15–20 logo concept directions with AI, refine top 3 with a designer',
+    'Define color palette, typography system, and photography/illustration style',
+    'Design packaging structure (box, label, pouch) with regulatory-required info blocked out',
+    'Mock up packaging on a virtual shelf next to competitors',
+    'Produce a one-page brand guideline (logo usage, colors, type, spacing)',
+    'Get physical proof/sample printed before mass production'
+  ],
+  tools:[
+    {name:'Midjourney', why:'Highest-quality AI concept art for logo mood boards and packaging texture/material exploration.', alt:['Ideogram','DALL·E 3']},
+    {name:'Adobe Firefly', why:'Commercially safe for direct-to-production assets; integrates with Photoshop/Illustrator.', alt:['Leonardo AI','Canva AI']},
+    {name:'Figma + Figma AI', why:'Where the final vector logo, packaging dieline, and brand system actually get built and handed to printers.', alt:['Adobe Illustrator','Canva Pro']},
+    {name:'Canva Magic Design', why:'Fast, affordable route to a usable packaging mockup if no designer budget yet.', alt:['Placeit','Kittl']}
+  ],
+  prompts:[
+    'Generate packaging concept directions for a [product type] brand named [name], positioned as [positioning]. Describe 5 distinct visual directions (minimalist, bold/color-blocked, illustrative, premium/matte, playful) before generating images.',
+    'Critique this packaging mockup [describe/attach] against these criteria: shelf standout at 3 feet, thumbnail clarity at 200px, alignment with our positioning of [positioning line], and legibility of required label info.'
+  ],
+  bestPractices:[
+    'Design for the smallest size it\'ll be seen at (mobile thumbnail) before the largest',
+    'Test packaging against 3 direct competitors on a mock shelf, not in isolation',
+    'Lock regulatory/label requirements (ingredients, weight, warnings) before finalizing layout'
+  ],
+  mistakes:[
+    'Using AI-generated logo images directly instead of vectorizing/rebuilding them properly for print',
+    'Skipping a physical print proof and discovering color/material issues after mass production',
+    'Designing packaging that looks great alone but disappears next to competitors on shelf'
+  ],
+  outputs:['Finalized logo (vector) + brand guideline','Packaging dieline + print-ready files','Physical sample proof'],
+  time:'20–30 hrs AI + design time, 1–2 weeks for print sampling',
+  tips:['Photograph your packaging mockup next to 3 competitor products under normal store lighting — screen mockups lie about real-world shelf presence']
+},
+{
+  id:'gtm', num:5, title:'Go-to-Market & Pricing Strategy', duration:'1 week',
+  objectives:[
+    'Set a price that reflects positioning and protects margin',
+    'Choose launch channels: DTC, marketplace, retail, or hybrid',
+    'Plan the pre-launch to launch-day sequence'
+  ],
+  tasks:[
+    'Calculate cost-plus and value-based price points, pick the defensible one',
+    'Decide channel mix: own e-commerce, Amazon/marketplace, retail pitch, or all three',
+    'Build a pre-launch waitlist or early-access mechanism',
+    'Map the launch week day-by-day: teaser, reveal, offer, social proof push',
+    'Set launch KPIs (sales target, traffic target, conversion rate target)'
+  ],
+  tools:[
+    {name:'Claude / ChatGPT', why:'Builds pricing scenarios and launch timelines fast from your cost and margin inputs.', alt:['Gemini']},
+    {name:'Triple Whale / Northbeam', why:'Post-launch attribution — but map your KPI dashboard now so tracking is ready day one.', alt:['GA4','Hyros']},
+    {name:'Shopify Magic', why:'AI-assisted store setup, product descriptions, and launch page copy if selling DTC.', alt:['WooCommerce + AI plugins','BigCommerce']},
+    {name:'ChatGPT + a spreadsheet', why:'Simple but effective for cost-plus vs. value-based price modeling.', alt:['Google Sheets + Claude']}
+  ],
+  prompts:[
+    'Given a unit cost of [X] and competitor pricing between [Y] and [Z], model three pricing strategies (cost-plus, value-based, penetration) and recommend one based on our positioning as [positioning line].',
+    'Build a 14-day pre-launch to launch-day content and email calendar for a [product] brand, including teaser, waitlist push, founder story, social proof, and launch-day offer.'
+  ],
+  bestPractices:[
+    'Price for the margin you need at year-one volume, not just to match competitors',
+    'Build the waitlist before the packaging is even finalized — audience-building is parallel, not sequential',
+    'Pick 1–2 launch channels to do well rather than 4 done thinly'
+  ],
+  mistakes:[
+    'Underpricing to "compete," which starves margin needed for marketing and reorders',
+    'Choosing retail-first without DTC validation data to bring to retailer meetings',
+    'No clear launch-day KPI, so success or failure can\'t actually be measured'
+  ],
+  outputs:['Final price + margin model','Channel strategy decision','14-day launch calendar with KPIs'],
+  time:'8–12 hrs',
+  tips:['Build the KPI dashboard before launch day, not after — you can\'t reconstruct day-one conversion data retroactively']
+},
+{
+  id:'assets', num:6, title:'Marketing Assets & Content Creation', duration:'2 weeks',
+  objectives:[
+    'Produce the full library of launch content across channels',
+    'Keep every asset consistent with brand voice and visual identity'
+  ],
+  tasks:[
+    'Write product page copy: headline, benefits, specs, FAQ, reviews section',
+    'Produce 15–20 social posts (organic) across launch sequence',
+    'Draft email sequence: waitlist welcome, launch announcement, cart reminder',
+    'Create ad creative variations (3–5) for paid social/search testing',
+    'Shoot or generate product photography and short-form video',
+    'Write press release / influencer outreach templates'
+  ],
+  tools:[
+    {name:'Claude / Jasper', why:'On-brand long-form copy (product pages, emails, press release) that holds tone across dozens of assets.', alt:['Copy.ai','ChatGPT']},
+    {name:'Midjourney / Adobe Firefly', why:'Lifestyle and hero product imagery when a full photoshoot isn\'t budgeted yet.', alt:['Leonardo AI','Freepik AI']},
+    {name:'Runway / CapCut AI', why:'Fast short-form video edits and B-roll generation for social and ads.', alt:['Pika','InVideo AI']},
+    {name:'Klaviyo AI', why:'Email sequence generation and send-time optimization built for e-commerce launches.', alt:['Mailchimp AI','Omnisend']}
+  ],
+  prompts:[
+    'Write product page copy for [product name], a [category] positioned as [positioning line]. Include: a benefit-driven headline, 3 supporting benefit blocks, a specs table, and 5 anticipated FAQ with answers, in our brand voice: [voice guide summary].',
+    'Write a 5-email launch sequence: waitlist welcome, 48-hour teaser, launch-day announcement, 24-hour reminder with urgency, and post-purchase thank-you. Keep each under 150 words, brand voice: [voice guide summary].'
+  ],
+  bestPractices:[
+    'Write one master copy doc first, then adapt lengths per channel — not the reverse',
+    'Keep a running brand-voice cheat sheet next to every AI writing prompt',
+    'Batch-generate ad variations for A/B testing rather than betting on one creative'
+  ],
+  mistakes:[
+    'Publishing AI copy without a human edit pass for accuracy and brand fit',
+    'Inconsistent tone across channels because each asset was written in isolation',
+    'No FAQ or objection-handling content ready for launch-day customer questions'
+  ],
+  outputs:['Complete product page copy','15–20 social posts + captions','5-email launch sequence','3–5 ad creative variants'],
+  time:'25–35 hrs AI-assisted (vs. 60+ hrs manual)',
+  tips:['Feed the brand voice guide into every prompt as fixed context — cuts revision rounds roughly in half']
+},
+{
+  id:'launch', num:7, title:'Launch Execution', duration:'1–2 weeks',
+  objectives:[
+    'Execute the launch sequence across owned, earned, and paid channels',
+    'Coordinate PR, influencer, and retail/e-commerce activity in the same window'
+  ],
+  tasks:[
+    'Send press release / pitch to relevant media and niche publications',
+    'Activate influencer/creator seeding with product + brief',
+    'Publish launch content per the 14-day calendar',
+    'Turn on paid social/search campaigns with tracked creative variants',
+    'Monitor site performance, inventory, and customer service in real time',
+    'Collect and respond to first-week reviews and UGC'
+  ],
+  tools:[
+    {name:'Claude / ChatGPT', why:'Real-time drafting of press pitches, influencer briefs, and customer-response templates during launch week.', alt:['Copy.ai']},
+    {name:'Buffer AI / Later', why:'Scheduling and light optimization of the social publishing calendar during a busy launch week.', alt:['Hootsuite','Sprout Social']},
+    {name:'Grin / Modash', why:'Influencer discovery and outreach management with AI-assisted matching to your audience.', alt:['Upfluence','Aspire']},
+    {name:'Intercom AI / Zendesk AI', why:'Handles first-wave customer questions instantly so launch-week support doesn\'t bottleneck sales.', alt:['Gorgias','Tidio']}
+  ],
+  prompts:[
+    'Write a press pitch email for [product name] launching [date], under 150 words, for a [publication type] journalist covering [beat]. Lead with the most newsworthy angle from our positioning: [positioning line].',
+    'Draft 3 response templates for common launch-week customer questions: shipping timing, ingredient/material questions, and return policy — in our brand voice: [voice guide summary].'
+  ],
+  bestPractices:[
+    'Stagger PR outreach 3–5 days before public launch so coverage can land on launch day',
+    'Brief influencers with the positioning line, not just free product — context improves content quality',
+    'Have a real human monitoring customer service in the first 48 hours, not just AI auto-replies'
+  ],
+  mistakes:[
+    'Launching all channels simultaneously with no staggered sequence, causing message fatigue',
+    'No inventory buffer for a faster-than-expected sell-through',
+    'Treating AI customer service replies as sufficient for every first-week question — escalate ambiguity to a human'
+  ],
+  outputs:['Live launch across all chosen channels','First-week media/influencer coverage log','Real-time KPI dashboard readings'],
+  time:'Full-time focus for launch week (~40 hrs)',
+  tips:['Pre-write 10 customer-service response templates before launch day so AI tools have brand-accurate answers ready instantly']
+},
+{
+  id:'scale', num:8, title:'Post-Launch Analytics & Scaling', duration:'Ongoing',
+  objectives:[
+    'Turn launch data into a repeatable growth and reorder plan',
+    'Decide what to double down on and what to cut'
+  ],
+  tasks:[
+    'Analyze week-1 KPIs against targets set in Stage 5',
+    'Identify top-performing channel, creative, and audience segment',
+    'Mine reviews and support tickets for product/packaging improvement signals',
+    'Plan reorder/inventory cycle based on real sell-through rate',
+    'Build a always-on content and retargeting cadence past launch week',
+    'Document what worked into a repeatable launch playbook for the next SKU'
+  ],
+  tools:[
+    {name:'GA4 + AI Insights', why:'Free, direct read on traffic, conversion, and channel performance with automated anomaly flags.', alt:['Mixpanel','Amplitude']},
+    {name:'Triple Whale', why:'Purpose-built e-commerce attribution to see true ROAS per channel post-launch.', alt:['Northbeam','Hyros']},
+    {name:'Claude / ChatGPT', why:'Synthesizes review text and support tickets into a ranked improvement backlog.', alt:['MonkeyLearn','Gemini']},
+    {name:'Klaviyo AI', why:'Builds retargeting and win-back flows automatically from post-launch purchase data.', alt:['Omnisend','Mailchimp AI']}
+  ],
+  prompts:[
+    'Here are our week-1 KPIs [paste] against these targets [paste targets]. Identify the 3 biggest gaps, likely causes, and one corrective action for each.',
+    'Analyze these 40 customer reviews [paste]. Rank the top 5 recurring product or packaging complaints by frequency and severity, and suggest a fix for each.'
+  ],
+  bestPractices:[
+    'Review KPIs weekly for the first month, not just once at 30 days',
+    'Let real sell-through data — not launch hype — drive the reorder quantity',
+    'Turn every learning into a written playbook entry before starting the next SKU'
+  ],
+  mistakes:[
+    'Declaring success or failure from launch-day numbers alone, before the full first month plays out',
+    'Ignoring review/support signal until it becomes a returns problem',
+    'Never documenting what worked, forcing the next launch to start from zero'
+  ],
+  outputs:['30-day performance report','Ranked product/packaging improvement backlog','Reorder plan','Written launch playbook v1'],
+  time:'4–6 hrs/week ongoing',
+  tips:['Build the review-mining prompt as a saved template — run it monthly for a running pulse on product quality']
+}
+];
+
+const DIAGRAM = STAGES.map(s=>({num:s.num,title:s.title,desc:s.objectives[0]}));
+
+const COMPARISON = [
+  {name:'Midjourney', best:'Highest visual quality for concept exploration', pricing:'paid', pricingLabel:'$10–$60/mo', bestFor:'Mood boards, packaging texture exploration'},
+  {name:'Adobe Firefly', best:'Commercially safe, integrates into production files', pricing:'freemium', pricingLabel:'Free tier + paid', bestFor:'Production-ready assets, Photoshop workflows'},
+  {name:'Ideogram', best:'Strong at rendering readable text on packaging mockups', pricing:'freemium', pricingLabel:'Free tier + paid', bestFor:'Label/typography mockups'},
+  {name:'Canva Magic Design', best:'Fastest path to a usable mockup with zero design skill', pricing:'freemium', pricingLabel:'Free tier + Pro $13/mo', bestFor:'Budget-constrained early mockups'},
+  {name:'Figma + Figma AI', best:'Where final vector files get built and handed to printers', pricing:'freemium', pricingLabel:'Free tier + paid', bestFor:'Final production files, dielines'},
+  {name:'Leonardo AI', best:'Good balance of control and quality for iterative concepting', pricing:'freemium', pricingLabel:'Free tier + paid', bestFor:'Rapid concept iteration'}
+];
+
+const DECISION_TREE = [
+  {
+    q:'How much manufacturing budget do you have before first sale?',
+    opts:[
+      {label:'Under $2,000 (bootstrap)', result:'→ Start DTC-only, print-on-demand or small-batch supplier, skip retail pitch until sell-through proven'},
+      {label:'$2,000–$15,000', result:'→ Small production run, DTC + marketplace (Amazon/Etsy), build retail pitch deck for later'},
+      {label:'$15,000+', result:'→ Consider retail-ready packaging from day one, pursue DTC + retail hybrid launch'}
+    ]
+  },
+  {
+    q:'Do you have an existing audience (social following, email list, community)?',
+    opts:[
+      {label:'Yes, 1,000+ engaged followers/subscribers', result:'→ Waitlist-first launch, lean on organic + owned channels before paid spend'},
+      {label:'Small or no existing audience', result:'→ Front-load influencer seeding and PR in Stage 7; budget for paid acquisition testing'}
+    ]
+  },
+  {
+    q:'Is your product highly differentiated or entering a crowded category?',
+    opts:[
+      {label:'Highly differentiated / new subcategory', result:'→ Invest more time in Stage 2 education-led messaging; expect a longer consideration cycle'},
+      {label:'Crowded, established category', result:'→ Positioning must win on a single sharp differentiator; packaging must outperform on shelf, not just message'}
+    ]
+  }
+];
+
+const AI_STACK = [
+  {role:'Research & Strategy', name:'Claude', desc:'Synthesizing research, drafting positioning, stress-testing strategy with counterarguments.'},
+  {role:'Live Market Data', name:'Perplexity', desc:'Cited, current competitor and market data pulled from the live web.'},
+  {role:'Visual Concepting', name:'Midjourney', desc:'Highest-quality exploration for logo mood boards and packaging direction.'},
+  {role:'Production Design', name:'Figma + Firefly', desc:'Where concepts become print-ready, commercially safe final files.'},
+  {role:'Copy at Scale', name:'Claude / Jasper', desc:'On-brand product pages, email sequences, and ad copy that hold voice across dozens of assets.'}
+];
+
+const RESOURCES = [
+  {name:'Lenny\'s Newsletter — Product & GTM', type:'Newsletter'},
+  {name:'r/entrepreneur', type:'Community'},
+  {name:'Indie Hackers', type:'Community'},
+  {name:'Ahrefs Blog — brand & content strategy', type:'Blog'},
+  {name:'Y Combinator Startup Library', type:'Course/Library'},
+  {name:'Packaging of the World (Behance collection)', type:'Design Reference'},
+  {name:'Shopify Learn — DTC launch guides', type:'Course'},
+  {name:'r/BrandDesign', type:'Community'}
+];
+
+const KEYWORDS = [
+  'physical product brand launch checklist','consumer product positioning statement example',
+  'AI packaging design workflow','product naming trademark search','DTC launch KPI benchmarks',
+  'small batch manufacturer sourcing','influencer seeding brief template','launch week press pitch template',
+  'brand voice guide examples','pricing strategy value-based vs cost-plus'
+];
+
+const EXTRA_PROMPTS = [
+  {title:'Brand consistency auditor', body:'Review this piece of copy/design description against our brand voice guide [paste guide]. Flag any word, phrase, or visual choice that breaks tone, and suggest an on-brand alternative.'},
+  {title:'Objection-handling generator', body:'List the 8 most likely objections a skeptical customer would raise about [product], and write a one-sentence, non-defensive response to each in our brand voice.'},
+  {title:'Weekly performance digest', body:'Summarize this week\'s KPI data [paste] into a 5-bullet executive update: what worked, what underperformed, and one recommended action for next week.'}
+];
+
+const FUTURE_AUTOMATION = [
+  'Auto-generate weekly performance digests from GA4 + ad platform exports',
+  'Trigger review-mining prompt monthly and route flagged issues to a shared backlog',
+  'Template the next-SKU launch calendar from this playbook instead of rebuilding from scratch',
+  'Automate influencer outreach follow-ups based on response status',
+  'Set inventory reorder alerts tied to real sell-through velocity, not fixed calendar dates',
+  'Build a standing customer-question knowledge base that auto-updates AI support responses'
+];
+
+/* ================= STORAGE ================= */
+const LS_KEY = 'awa_product_launch_state_v1';
+function loadState(){
+  try{
+    const raw = localStorage.getItem(LS_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  return {tasks:{}, stars:{}, notes:{}, open:{}};
+}
+let STATE = loadState();
+function saveState(){
+  try{ localStorage.setItem(LS_KEY, JSON.stringify(STATE)); }catch(e){}
+}
+
+/* ================= RENDER: DIAGRAM ================= */
+function renderDiagram(){
+  const row = document.getElementById('diagramRow');
+  row.innerHTML = DIAGRAM.map(d=>`
+    <div class="dstep">
+      <div class="dcircle">${String(d.num).padStart(2,'0')}</div>
+      <div class="dconnector"></div>
+      <div class="dtitle">${d.title}</div>
+      <div class="ddesc">${d.desc}</div>
+    </div>
+  `).join('');
+}
+
+/* ================= RENDER: RUNWAY ================= */
+function renderRunway(){
+  const stops = document.getElementById('runwayStops');
+  stops.innerHTML = STAGES.map(s=>`
+    <div class="stop ${isStageDone(s)?'done':''}" data-jump="${s.id}" title="${s.title}">
+      <div class="stop-label">${String(s.num).padStart(2,'0')}</div>
+    </div>
+  `).join('');
+  stops.querySelectorAll('.stop').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const target = document.getElementById('stage-'+el.dataset.jump);
+      if(target){
+        target.scrollIntoView({behavior:'smooth',block:'start'});
+        const stage = STAGES.find(x=>x.id===el.dataset.jump);
+        openStage(stage.id,true);
+      }
+    });
+  });
+}
+
+/* ================= RENDER: STAGES ================= */
+function taskKey(stageId,i){ return stageId+'::'+i; }
+function isStageDone(stage){
+  return stage.tasks.every((_,i)=> STATE.tasks[taskKey(stage.id,i)]);
+}
+function stageProgress(stage){
+  const total = stage.tasks.length;
+  const done = stage.tasks.filter((_,i)=>STATE.tasks[taskKey(stage.id,i)]).length;
+  return {done,total};
+}
+
+function renderStages(){
+  const container = document.getElementById('stagesContainer');
+  container.innerHTML = STAGES.map(stage=>{
+    const {done,total} = stageProgress(stage);
+    const complete = done===total;
+    const starred = !!STATE.stars[stage.id];
+    const open = !!STATE.open[stage.id];
+    return `
+    <div class="stage ${complete?'done':''} ${open?'open':''}" id="stage-${stage.id}">
+      <div class="stage-header" data-toggle="${stage.id}">
+        <div class="stage-header-left">
+          <div class="stage-num">${String(stage.num).padStart(2,'0')}</div>
+          <div class="stage-title-block">
+            <div class="stage-title">${stage.title}</div>
+            <div class="stage-sub">${stage.duration} · ${done}/${total} tasks complete</div>
+          </div>
+        </div>
+        <div class="stage-header-right">
+          <span class="star ${starred?'active':''}" data-star="${stage.id}">★</span>
+          <span class="chev">▾</span>
+        </div>
+      </div>
+      <div class="stage-body">
+        <div class="stage-body-inner">
+          <div class="grid2">
+            <div>
+              <div class="subblock-label">Objectives</div>
+              <ul class="list">${stage.objectives.map(o=>`<li>${o}</li>`).join('')}</ul>
+            </div>
+            <div>
+              <div class="subblock-label">Tasks</div>
+              <ul class="list" style="list-style:none;padding:0;">
+                ${stage.tasks.map((t,i)=>{
+                  const k = taskKey(stage.id,i);
+                  const checked = !!STATE.tasks[k];
+                  return `<li style="display:flex;gap:10px;align-items:flex-start;padding-left:0;">
+                    <span class="chk ${checked?'checked':''}" data-task="${k}">${checked?'✓':''}</span>
+                    <span style="padding-top:2px;">${t}</span>
+                  </li>`;
+                }).join('')}
+              </ul>
+            </div>
+          </div>
+
+          <div class="subblock">
+            <div class="subblock-label">Best AI tools for this stage</div>
+            ${stage.tools.map(t=>`
+              <div class="tool-card">
+                <div class="tool-card-top">
+                  <span class="tool-name">${t.name}</span>
+                  <span class="tool-alt">alt: ${t.alt.join(', ')}</span>
+                </div>
+                <div class="tool-why">${t.why}</div>
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="subblock">
+            <div class="subblock-label">Prompt examples</div>
+            ${stage.prompts.map(p=>`
+              <div class="prompt-box">
+                <span class="prompt-copy" data-copy>Copy</span>
+                ${p}
+              </div>
+            `).join('')}
+          </div>
+
+          <div class="grid2">
+            <div>
+              <div class="subblock-label">Best practices</div>
+              <ul class="list practices">${stage.bestPractices.map(b=>`<li>${b}</li>`).join('')}</ul>
+            </div>
+            <div>
+              <div class="subblock-label">Common mistakes</div>
+              <ul class="list mistakes">${stage.mistakes.map(m=>`<li>${m}</li>`).join('')}</ul>
+            </div>
+          </div>
+
+          <div class="output-time-row">
+            <div class="otr-item" style="flex:2;min-width:220px;">
+              <b>Expected outputs</b>
+              <div class="pill-row">${stage.outputs.map(o=>`<span class="pill">${o}</span>`).join('')}</div>
+            </div>
+            <div class="otr-item">
+              <b>Time estimate</b>
+              ${stage.time}
+            </div>
+          </div>
+
+          <div class="subblock">
+            <div class="subblock-label">Efficiency tips</div>
+            <ul class="list">${stage.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+          </div>
+
+          <div class="subblock">
+            <div class="subblock-label">Your notes</div>
+            <textarea class="notes-area" data-notes="${stage.id}" placeholder="Jot down decisions, blockers, or ideas for this stage...">${STATE.notes[stage.id]||''}</textarea>
+            <div class="notes-save">Autosaves locally as you type</div>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  attachStageEvents();
+}
+
+function attachStageEvents(){
+  document.querySelectorAll('[data-toggle]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const id = el.dataset.toggle;
+      openStage(id, !STATE.open[id]);
+    });
+  });
+  document.querySelectorAll('[data-star]').forEach(el=>{
+    el.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const id = el.dataset.star;
+      STATE.stars[id] = !STATE.stars[id];
+      saveState();
+      renderStages();
+      renderBookmarks();
+    });
+  });
+  document.querySelectorAll('[data-task]').forEach(el=>{
+    el.addEventListener('click',(e)=>{
+      e.stopPropagation();
+      const k = el.dataset.task;
+      STATE.tasks[k] = !STATE.tasks[k];
+      saveState();
+      renderAll(true);
+    });
+  });
+  document.querySelectorAll('[data-notes]').forEach(el=>{
+    el.addEventListener('input',()=>{
+      STATE.notes[el.dataset.notes] = el.value;
+      saveState();
+      renderBookmarks();
+    });
+  });
+  document.querySelectorAll('[data-copy]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const text = el.parentElement.textContent.replace('Copy','').trim();
+      navigator.clipboard && navigator.clipboard.writeText(text).catch(()=>{});
+      el.textContent = 'Copied';
+      setTimeout(()=>{el.textContent='Copy';},1200);
+    });
+  });
+}
+
+function openStage(id, shouldOpen){
+  STATE.open[id] = shouldOpen;
+  saveState();
+  const el = document.getElementById('stage-'+id);
+  if(el) el.classList.toggle('open', shouldOpen);
+}
+
+/* ================= RENDER: DECISION TREE ================= */
+function renderDecisionTree(){
+  const wrap = document.getElementById('dtreeContainer');
+  wrap.innerHTML = DECISION_TREE.map((d,idx)=>`
+    <div class="dnode">
+      <div class="dq">${idx+1}. ${d.q}</div>
+      <div class="dopts">
+        ${d.opts.map(o=>`<div class="dopt"><span>${o.label}</span><span class="result">${o.result}</span></div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+/* ================= RENDER: COMPARISON ================= */
+function renderComparison(){
+  const table = document.getElementById('compTable');
+  table.innerHTML = `
+    <thead><tr><th>Tool</th><th>Best at</th><th>Best for</th><th>Pricing</th></tr></thead>
+    <tbody>
+      ${COMPARISON.map(c=>`
+        <tr>
+          <td class="tname">${c.name}</td>
+          <td>${c.best}</td>
+          <td>${c.bestFor}</td>
+          <td><span class="tag ${c.pricing}">${c.pricingLabel}</span></td>
+        </tr>
+      `).join('')}
+    </tbody>
+  `;
+}
+
+/* ================= RENDER: STACK / RESOURCES / KEYWORDS / PROMPTS / FUTURE ================= */
+function renderStack(){
+  document.getElementById('stackGrid').innerHTML = AI_STACK.map(s=>`
+    <div class="stack-card">
+      <div class="role">${s.role}</div>
+      <div class="name">${s.name}</div>
+      <div class="desc">${s.desc}</div>
+    </div>
+  `).join('');
+}
+function renderResources(){
+  document.getElementById('resourceList').innerHTML = RESOURCES.map(r=>`
+    <div class="res-item"><span>${r.name}</span><span class="rtype">${r.type}</span></div>
+  `).join('');
+}
+function renderKeywords(){
+  document.getElementById('kwRow').innerHTML = KEYWORDS.map(k=>`<span class="kw">${k}</span>`).join('');
+}
+function renderExtraPrompts(){
+  document.getElementById('extraPrompts').innerHTML = EXTRA_PROMPTS.map(p=>`
+    <div class="tool-card" style="margin-bottom:12px;">
+      <div class="tool-name" style="margin-bottom:6px;">${p.title}</div>
+      <div class="prompt-box" style="margin:0;"><span class="prompt-copy" data-copy>Copy</span>${p.body}</div>
+    </div>
+  `).join('');
+  document.querySelectorAll('#extraPrompts [data-copy]').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const text = el.parentElement.textContent.replace('Copy','').trim();
+      navigator.clipboard && navigator.clipboard.writeText(text).catch(()=>{});
+      el.textContent='Copied';
+      setTimeout(()=>{el.textContent='Copy';},1200);
+    });
+  });
+}
+function renderFuture(){
+  document.getElementById('futureList').innerHTML = FUTURE_AUTOMATION.map(f=>`<li>${f}</li>`).join('');
+}
+
+/* ================= RENDER: BOOKMARKS OVERVIEW ================= */
+function renderBookmarks(){
+  const starred = STAGES.filter(s=>STATE.stars[s.id]);
+  const noted = STAGES.filter(s=>STATE.notes[s.id] && STATE.notes[s.id].trim().length>0);
+  const el = document.getElementById('bookmarksOverview');
+  if(starred.length===0 && noted.length===0){
+    el.innerHTML = 'No bookmarks yet — click the star on any stage above.';
+    return;
+  }
+  let html = '';
+  if(starred.length){
+    html += `<div class="subblock-label" style="margin-top:0;">Starred stages</div><div class="pill-row" style="margin-bottom:18px;">${starred.map(s=>`<span class="pill">★ ${s.title}</span>`).join('')}</div>`;
+  }
+  if(noted.length){
+    html += `<div class="subblock-label">Stages with notes</div>` + noted.map(s=>`
+      <div class="tool-card" style="margin-bottom:10px;">
+        <div class="tool-name" style="margin-bottom:6px;">${s.title}</div>
+        <div class="tool-why">${STATE.notes[s.id]}</div>
+      </div>
+    `).join('');
+  }
+  el.innerHTML = html;
+}
+
+/* ================= PROGRESS TRACKING ================= */
+function updateProgressUI(){
+  let total=0, done=0;
+  STAGES.forEach(s=>{ total += s.tasks.length; done += s.tasks.filter((_,i)=>STATE.tasks[taskKey(s.id,i)]).length; });
+  const pct = total? Math.round((done/total)*100) : 0;
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('chipText').textContent = done+' / '+total+' tasks';
+  document.getElementById('chipPct').textContent = pct+'%';
+  document.getElementById('runwayFill').style.width = pct+'%';
+  document.getElementById('rail').style.width = pct+'%';
+}
+
+/* ================= RESET ================= */
+function resetProgress(){
+  if(!confirm('Reset all checked tasks, stars, notes, and open sections? This cannot be undone.')) return;
+  STATE = {tasks:{}, stars:{}, notes:{}, open:{}};
+  saveState();
+  renderAll();
+}
+
+/* ================= INIT ================= */
+function renderAll(skipRunwayStops){
+  renderStages();
+  renderBookmarks();
+  updateProgressUI();
+  if(!skipRunwayStops) renderRunway();
+  else {
+    document.querySelectorAll('.stop').forEach((el,idx)=>{
+      const stage = STAGES[idx];
+      el.classList.toggle('done', isStageDone(stage));
+    });
+  }
+}
+
+renderDiagram();
+renderDecisionTree();
+renderComparison();
+renderStack();
+renderResources();
+renderKeywords();
+renderExtraPrompts();
+renderFuture();
+renderAll();
+
+/* scroll progress rail also reflects page scroll subtly combined with task progress on load is fine as task-based only per spec above */
+</script>
+</body>
+</html>
