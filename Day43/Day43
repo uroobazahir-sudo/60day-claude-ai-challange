@@ -1,0 +1,27 @@
+AI Workflow Architect
+Day 42/60 — #60DaysOfClaudeAI
+A single-file HTML app that generates a complete, execution-ready AI workflow for any business process — instead of generic advice or a checklist.
+What it does
+Answer a few guided questions (industry → specific role/process → structure preference), and the app maps out a full end-to-end workflow broken into logical stages, each with:
+Objectives & tasks
+Best AI tools for that stage (with reasoning + alternatives)
+Ready-to-use prompt examples
+Best practices & common mistakes
+Expected outputs & time estimates
+Efficiency tips
+Demo build: Product Brand Launch
+This instance maps Marketing → Brand Strategy → Product Brand Launch (Physical/Consumer Product) across 8 stages — from market validation to post-launch scaling — with 30+ AI tools mapped, a decision tree, tool comparison table, interactive diagram, and a recommended AI stack.
+Features
+8-stage interactive workflow with expandable sections
+Task checklists with progress tracking (saved locally)
+Bookmarking / starring key stages
+Per-stage notes (autosaved)
+Decision tree for path-specific recommendations
+Tool comparison table
+Printable/exportable view
+Fully responsive, dark-mode UI
+Tech
+Pure HTML, CSS, and vanilla JavaScript. Zero external libraries or frameworks. Zero dependencies, zero CDN calls — fully self-contained in one file.
+Built with
+Claude (Sonnet)
+#60DaysOfClaudeAI #BuildInPublic #WomenInTech #PakistaniDevs
