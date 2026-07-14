@@ -1,0 +1,20 @@
+The Red Pen — LinkedIn Roast & Rebuild
+Day 44/60 — #60DaysOfClaudeAI
+An AI-powered LinkedIn profile reviewer that roasts your profile like a brutally honest ex-recruiter, rewrites every section, and hands you a 7-day activation plan to make it actually work.
+What it does
+Collects your profile — headline, About section, most recent experience, top skills, and target goal (job, clients, thought leadership, or network growth). If you don't have a LinkedIn yet, it asks 5 alternate questions to build one from scratch.
+The Roast — scores every section out of 10 (Headline, About hook, full About, Experience, Skills/Keywords), explains the recruiter's real 3-second reaction, why it hurts, and the invisible cost of leaving it as-is. Overall score out of 100.
+The Rebuild — 3 headline options (keyword-optimized, value-proposition, authority), a fully rewritten About section with embedded SEO keywords, before/after experience bullets, and a skills add/remove/pin list.
+Before vs After Scorecard — every section scored side by side with the delta.
+7-Day Activation Plan — day-by-day actions including two ready-to-post LinkedIn drafts, a connection request template, and the "Value Comment" formula (Agree + Add Insight + Ask a Question).
+Shareable Summary Card — a screenshot-ready before/after card for your own LinkedIn post.
+How it works
+Single-file HTML app with zero dependencies. On submit, it makes a live call to the Claude API (Sonnet 4.6), which generates the entire roast, rebuild, and plan as structured JSON based only on the information provided — nothing is hardcoded or fabricated.
+Tech
+Vanilla HTML/CSS/JavaScript, no build step, no libraries
+Anthropic Messages API (claude-sonnet-4-6)
+Fully responsive, works on mobile
+Try it
+Open linkedin-roast.html in any browser. Toggle between "I have a LinkedIn" / "I don't have one yet," fill in your details (or hit "Fill demo data" to see it in action), and submit.
+Built as part of the #60DaysOfClaudeAI challenge — one polished single-file web app, every day.
+#BuildInPublic #WomenInTech #PakistaniDevs
