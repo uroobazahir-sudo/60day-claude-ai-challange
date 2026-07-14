@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Red Pen — LinkedIn Roast & Rebuild</title>
+<style>
+  :root{
+    --paper:#EDE7D6;
+    --paper-dark:#E2DAC4;
+    --ink:#20242B;
+    --ink-soft:#4A4E57;
+    --red:#B23A2E;
+    --red-dark:#8C2C22;
+    --sage:#5E7A4E;
+    --gold:#A9822F;
+    --line:#C9C0A6;
+    --white:#FBF9F3;
+    --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+    --mono:'Courier New',Courier,monospace;
+    --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(178,58,46,0.03), transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(94,122,78,0.04), transparent 40%);
+    color:var(--ink);
+    font-family:var(--sans);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:760px;margin:0 auto;padding:28px 20px 100px;}
+
+  /* ---------- HERO ---------- */
+  .hero{padding:36px 0 24px;border-bottom:3px double var(--ink);margin-bottom:32px;position:relative;}
+  .stamp{
+    position:absolute; top:6px; right:0;
+    font-family:var(--mono); font-size:11px; letter-spacing:2px;
+    color:var(--red); border:2px solid var(--red); border-radius:3px;
+    padding:4px 8px; transform:rotate(6deg); opacity:0.85;
+  }
+  .eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--red-dark);margin-bottom:10px;}
+  h1{font-family:var(--serif);font-size:42px;line-height:1.05;margin:0 0 12px;font-weight:700;}
+  h1 em{font-style:italic;color:var(--red);}
+  .sub{font-size:16px;color:var(--ink-soft);max-width:56ch;}
+
+  /* ---------- CARD / SECTION GENERIC ---------- */
+  .card{background:var(--white);border:1px solid var(--line);border-radius:2px;padding:24px;margin-bottom:20px;box-shadow:0 1px 0 var(--line);}
+  .section-label{font-family:var(--mono);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink-soft);display:flex;align-items:center;gap:8px;margin-bottom:16px;}
+  .section-label::before{content:'';width:18px;height:2px;background:var(--red);display:inline-block;}
+  h2.title{font-family:var(--serif);font-size:26px;margin:0 0 6px;}
+
+  /* ---------- FORM ---------- */
+  .toggle-row{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+  .toggle-btn{
+    font-family:var(--mono);font-size:12px;letter-spacing:1px;
+    background:transparent;border:1.5px solid var(--ink);color:var(--ink);
+    padding:9px 14px;border-radius:2px;cursor:pointer;transition:.15s;
+  }
+  .toggle-btn.active{background:var(--ink);color:var(--white);}
+  .demo-btn{
+    font-family:var(--mono);font-size:12px;background:var(--paper-dark);border:1px dashed var(--ink-soft);
+    color:var(--ink-soft);padding:9px 14px;border-radius:2px;cursor:pointer;margin-left:auto;
+  }
+  .demo-btn:hover{border-color:var(--red);color:var(--red-dark);}
+  label{display:block;font-family:var(--mono);font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--ink-soft);margin:18px 0 6px;}
+  label .hint{text-transform:none;letter-spacing:0;font-family:var(--sans);font-style:italic;color:#8a8578;font-size:12px;}
+  input[type=text],textarea{
+    width:100%;background:var(--paper);border:1px solid var(--line);border-radius:2px;
+    padding:11px 12px;font-family:var(--sans);font-size:14.5px;color:var(--ink);resize:vertical;
+  }
+  input:focus,textarea:focus{outline:2px solid var(--red);outline-offset:1px;border-color:var(--red);}
+  .goal-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;}
+  .goal-opt{
+    font-size:13.5px;border:1px solid var(--line);padding:10px;border-radius:2px;cursor:pointer;
+    background:var(--paper);text-align:center;
+  }
+  .goal-opt.active{background:var(--red);border-color:var(--red);color:var(--white);}
+  .submit-btn{
+    margin-top:26px;width:100%;background:var(--red);color:var(--white);border:none;
+    padding:16px;font-family:var(--mono);font-size:14px;letter-spacing:2px;text-transform:uppercase;
+    border-radius:2px;cursor:pointer;transition:.15s;
+  }
+  .submit-btn:hover{background:var(--red-dark);}
+  .submit-btn:disabled{background:#b8b2a0;cursor:not-allowed;}
+  .err{color:var(--red-dark);font-size:13px;margin-top:10px;font-family:var(--mono);}
+
+  /* ---------- LOADING ---------- */
+  .loading{text-align:center;padding:60px 20px;}
+  .pen{font-size:34px;display:inline-block;animation:scribble 1.1s ease-in-out infinite;}
+  @keyframes scribble{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}
+  .loading p{font-family:var(--mono);font-size:13px;color:var(--ink-soft);margin-top:14px;letter-spacing:1px;}
+
+  /* ---------- SCORE GRADE ---------- */
+  .grade-row{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:6px;}
+  .grade-name{font-weight:600;font-size:15px;flex:1;}
+  .grade-circle{
+    font-family:var(--mono);font-weight:700;font-size:18px;color:var(--red);
+    width:52px;height:52px;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+    border:2.5px solid var(--red);border-radius:50% 48% 52% 46%/54% 50% 46% 52%;
+    transform:rotate(-3deg);
+  }
+  .reaction{font-size:13.5px;color:var(--ink-soft);font-style:italic;margin:4px 0 14px;padding-left:2px;}
+  .breakdown{border-left:2px solid var(--line);padding-left:12px;margin:10px 0 18px;font-size:13.5px;}
+  .breakdown p{margin:6px 0;}
+  .breakdown b{color:var(--red-dark);}
+  .overall-score{
+    text-align:center;margin-top:10px;padding:18px;border:2px dashed var(--red);border-radius:3px;
+  }
+  .overall-score .num{font-family:var(--mono);font-size:40px;font-weight:700;color:var(--red);}
+  .overall-score .label{font-family:var(--mono);font-size:11px;letter-spacing:2px;color:var(--ink-soft);text-transform:uppercase;}
+
+  /* ---------- REBUILD ---------- */
+  .opt-card{border:1px solid var(--line);border-radius:2px;padding:14px 16px;margin-bottom:12px;background:var(--paper);}
+  .opt-tag{font-family:var(--mono);font-size:10.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--sage);margin-bottom:6px;}
+  .opt-text{font-size:15px;font-weight:600;margin-bottom:6px;}
+  .opt-when{font-size:12.5px;color:var(--ink-soft);}
+  .about-block{margin-bottom:14px;}
+  .about-block .k{font-family:var(--mono);font-size:10.5px;letter-spacing:1.5px;color:var(--sage);text-transform:uppercase;margin-bottom:4px;}
+  .about-block .v{font-size:14.5px;white-space:pre-wrap;}
+  .keywords{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;}
+  .kw{font-family:var(--mono);font-size:11px;background:var(--paper-dark);border:1px solid var(--line);padding:3px 8px;border-radius:10px;}
+
+  .ba-pair{border-top:1px dashed var(--line);padding:12px 0;}
+  .ba-pair:first-child{border-top:none;}
+  .ba-label{font-family:var(--mono);font-size:10px;letter-spacing:1px;text-transform:uppercase;}
+  .before-txt{color:#8a8578;text-decoration:line-through;font-size:13.5px;margin:3px 0 8px;}
+  .after-txt{color:var(--sage);font-weight:600;font-size:14px;}
+  .after-txt::before{content:'→ ';color:var(--red);font-weight:700;}
+
+  .skill-cols{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:8px;}
+  .skill-list{list-style:none;padding:0;margin:0;font-size:13.5px;}
+  .skill-list li{padding:5px 0;border-bottom:1px dotted var(--line);}
+  .add-tag{color:var(--sage);font-weight:700;}
+  .rm-tag{color:var(--red);font-weight:700;}
+  .pin-row{margin-top:12px;font-size:13.5px;}
+  .pin-chip{display:inline-block;background:var(--gold);color:var(--white);font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:10px;margin-right:6px;}
+
+  /* ---------- SCORECARD TABLE ---------- */
+  table.scoretable{width:100%;border-collapse:collapse;font-size:14px;margin-top:8px;}
+  table.scoretable td,table.scoretable th{padding:9px 6px;border-bottom:1px solid var(--line);}
+  table.scoretable th{font-family:var(--mono);font-size:10.5px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-soft);text-align:left;}
+  .num-before{color:#8a8578;}
+  .num-after{color:var(--sage);font-weight:700;}
+  .num-delta{font-family:var(--mono);font-size:12px;color:var(--red-dark);}
+
+  /* ---------- PLAN ---------- */
+  .day-card{border:1px solid var(--line);border-radius:2px;padding:16px;margin-bottom:12px;position:relative;background:var(--paper);}
+  .day-num{font-family:var(--mono);font-size:11px;color:var(--red);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+  .day-title{font-weight:700;font-size:15.5px;margin-bottom:8px;}
+  .day-body{font-size:13.5px;color:var(--ink);}
+  .day-body ul{margin:6px 0;padding-left:18px;}
+  .post-draft{background:var(--white);border-left:3px solid var(--sage);padding:10px 12px;font-size:13.5px;margin-top:8px;white-space:pre-wrap;font-family:var(--serif);}
+  .copy-btn{font-family:var(--mono);font-size:10.5px;letter-spacing:1px;background:transparent;border:1px solid var(--ink-soft);color:var(--ink-soft);padding:4px 9px;border-radius:2px;cursor:pointer;margin-top:8px;}
+  .copy-btn:hover{border-color:var(--red);color:var(--red-dark);}
+
+  /* ---------- SUMMARY CARD ---------- */
+  .summary-card{
+    background:var(--ink);color:var(--white);border-radius:4px;padding:26px 24px;position:relative;overflow:hidden;
+  }
+  .summary-card::before{content:'';position:absolute;top:-40px;right:-40px;width:140px;height:140px;background:var(--red);border-radius:50%;opacity:0.15;}
+  .summary-card h3{font-family:var(--serif);font-size:20px;margin:0 0 14px;}
+  .summary-scores{display:flex;gap:24px;margin:14px 0;}
+  .summary-scores div{font-family:var(--mono);}
+  .summary-scores .n{font-size:28px;font-weight:700;}
+  .summary-scores .after .n{color:#8FBF74;}
+  .summary-scores .before .n{color:#d99a94;}
+  .summary-card ol{padding-left:18px;font-size:13.5px;margin:10px 0;}
+  .summary-card .fix{margin-top:12px;font-size:13.5px;background:rgba(255,255,255,0.08);padding:10px 12px;border-radius:3px;}
+
+  .restart-row{text-align:center;margin-top:32px;}
+  .restart-btn{font-family:var(--mono);font-size:12px;letter-spacing:1px;background:transparent;border:1px solid var(--ink-soft);color:var(--ink-soft);padding:10px 18px;border-radius:2px;cursor:pointer;}
+
+  @media(max-width:520px){
+    h1{font-size:32px;}
+    .skill-cols{grid-template-columns:1fr;}
+    .summary-scores{gap:14px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="stamp">REVIEWED IN RED</div>
+    <div class="eyebrow">Profile Review Desk</div>
+    <h1>The Red Pen<br><em>roasts</em> your LinkedIn.</h1>
+    <p class="sub">Fifty thousand profiles reviewed, and most say the same thing wrong. Send yours in — get back an honest grade, a full rebuild, and a 7‑day plan to make it actually work.</p>
+  </div>
+
+  <!-- FORM SCREEN -->
+  <div id="formScreen">
+    <div class="card">
+      <div class="toggle-row">
+        <button class="toggle-btn active" id="hasBtn" onclick="setMode('has')">I have a LinkedIn</button>
+        <button class="toggle-btn" id="noneBtn" onclick="setMode('none')">I don't have one yet</button>
+        <button class="demo-btn" onclick="fillDemo()">Fill demo data</button>
+      </div>
+
+      <div id="hasFields">
+        <label>Current headline</label>
+        <input type="text" id="f_headline" placeholder="e.g. Software Engineer at XYZ">
+
+        <label>About section <span class="hint">paste the full thing, even if it's rough</span></label>
+        <textarea id="f_about" rows="5" placeholder="Paste your About section here..."></textarea>
+
+        <label>Most recent experience <span class="hint">title, company, and your bullet points</span></label>
+        <textarea id="f_experience" rows="5" placeholder="Title, company, bullets..."></textarea>
+
+        <label>Top skills <span class="hint">5–10, comma separated</span></label>
+        <input type="text" id="f_skills" placeholder="e.g. Python, React, Communication...">
+      </div>
+
+      <div id="noneFields" style="display:none;">
+        <label>Name and current role / student status</label>
+        <input type="text" id="n_name" placeholder="e.g. Ayesha Khan, 3rd year CS student">
+
+        <label>Top 3 skills</label>
+        <input type="text" id="n_skills" placeholder="e.g. Python, UI Design, Public Speaking">
+
+        <label>1–2 achievements or projects you're proud of</label>
+        <textarea id="n_achieve" rows="3" placeholder="What have you built or done?"></textarea>
+
+        <label>What makes you different <span class="hint">one sentence</span></label>
+        <input type="text" id="n_diff" placeholder="e.g. I ship things fast and document everything">
+      </div>
+
+      <label>Target goal</label>
+      <div class="goal-grid" id="goalGrid">
+        <div class="goal-opt" data-g="Job">Land a job</div>
+        <div class="goal-opt" data-g="Clients">Attract clients</div>
+        <div class="goal-opt" data-g="Thought Leadership">Thought leadership</div>
+        <div class="goal-opt" data-g="Network Growth">Grow network</div>
+      </div>
+
+      <div id="noneAudience" style="display:none;">
+        <label>Who do you want to attract? <span class="hint">recruiters, clients, collaborators</span></label>
+        <input type="text" id="n_audience" placeholder="e.g. recruiters at tech startups">
+      </div>
+
+      <button class="submit-btn" id="submitBtn" onclick="runRoast()">Roast my profile</button>
+      <div class="err" id="errMsg"></div>
+    </div>
+  </div>
+
+  <!-- LOADING -->
+  <div id="loadingScreen" style="display:none;">
+    <div class="loading">
+      <span class="pen">🖊️</span>
+      <p>READING BETWEEN THE BULLET POINTS...</p>
+    </div>
+  </div>
+
+  <!-- RESULTS -->
+  <div id="resultsScreen" style="display:none;"></div>
+
+</div>
+
+<script>
+let mode = 'has';
+let goal = 'Job';
+
+function setMode(m){
+  mode = m;
+  document.getElementById('hasBtn').classList.toggle('active', m==='has');
+  document.getElementById('noneBtn').classList.toggle('active', m==='none');
+  document.getElementById('hasFields').style.display = m==='has' ? 'block' : 'none';
+  document.getElementById('noneFields').style.display = m==='none' ? 'block' : 'none';
+  document.getElementById('noneAudience').style.display = m==='none' ? 'block' : 'none';
+}
+
+document.querySelectorAll('.goal-opt').forEach(el=>{
+  el.addEventListener('click', ()=>{
+    document.querySelectorAll('.goal-opt').forEach(x=>x.classList.remove('active'));
+    el.classList.add('active');
+    goal = el.dataset.g;
+  });
+});
+document.querySelector('.goal-opt').classList.add('active');
+
+function fillDemo(){
+  if(mode==='has'){
+    document.getElementById('f_headline').value = "Frontend Developer | React | Open to opportunities";
+    document.getElementById('f_about').value = "I am a passionate frontend developer with experience in HTML, CSS, JavaScript and React. I love building web applications and learning new technologies. I am a hardworking and dedicated team player looking for new opportunities. Feel free to connect!";
+    document.getElementById('f_experience').value = "Frontend Development Intern, Developer Hub Cooperation\n- Responsible for building UI components\n- Worked with the team on various projects\n- Assisted in fixing bugs\n- Attended daily standup meetings";
+    document.getElementById('f_skills').value = "HTML, CSS, JavaScript, React, Teamwork, Communication, Problem Solving";
+  } else {
+    document.getElementById('n_name').value = "Urooba Zahir, BSCS student at Northern University Nowshera";
+    document.getElementById('n_skills').value = "Frontend development (React), Java programming, Prompt engineering";
+    document.getElementById('n_achieve').value = "Shipped 42+ single-file AI-powered web apps in a public #60DaysOfClaudeAI build challenge; built a Rice Classification CNN model in Python/TensorFlow";
+    document.getElementById('n_diff').value = "I build and ship in public every single day instead of just talking about learning to code";
+    document.getElementById('n_audience').value = "recruiters at tech companies and startups hiring junior developers";
+  }
+}
+
+function esc(s){ return (s||'').toString(); }
+
+async function runRoast(){
+  const errEl = document.getElementById('errMsg');
+  errEl.textContent = '';
+
+  let profileBlock = '';
+  if(mode==='has'){
+    const headline = document.getElementById('f_headline').value.trim();
+    const about = document.getElementById('f_about').value.trim();
+    const experience = document.getElementById('f_experience').value.trim();
+    const skills = document.getElementById('f_skills').value.trim();
+    if(!headline || !about || !experience || !skills){
+      errEl.textContent = 'Fill in all four fields — even rough answers work.';
+      return;
+    }
+    profileBlock = `MODE: existing profile\nHeadline: ${headline}\nAbout section: ${about}\nMost recent experience: ${experience}\nTop skills: ${skills}\nTarget goal: ${goal}`;
+  } else {
+    const name = document.getElementById('n_name').value.trim();
+    const skills = document.getElementById('n_skills').value.trim();
+    const achieve = document.getElementById('n_achieve').value.trim();
+    const diff = document.getElementById('n_diff').value.trim();
+    const audience = document.getElementById('n_audience').value.trim();
+    if(!name || !skills || !achieve || !diff || !audience){
+      errEl.textContent = 'Fill in all five fields — even rough answers work.';
+      return;
+    }
+    profileBlock = `MODE: no profile yet, building from scratch\nName / role: ${name}\nTop 3 skills: ${skills}\nAchievements/projects: ${achieve}\nWho to attract: ${audience}\nWhat makes them different: ${diff}\nTarget goal: ${goal}`;
+  }
+
+  document.getElementById('formScreen').style.display = 'none';
+  document.getElementById('loadingScreen').style.display = 'block';
+  document.getElementById('resultsScreen').style.display = 'none';
+  document.getElementById('submitBtn').disabled = true;
+
+  const systemPrompt = `You are a LinkedIn Optimization Expert and ex-recruiter who has reviewed 50,000+ profiles. You roast a profile honestly and specifically, then rebuild it, then give a 7-day action plan. Use ONLY the information given to you. Never invent achievements, roles, companies or metrics — if something is thin, say so in the copy but don't fabricate numbers.
+
+Respond with ONLY valid JSON, no markdown fences, no preamble, matching EXACTLY this schema:
+{
+  "scores_before": {"headline": 0, "hook": 0, "about": 0, "experience": 0, "skills": 0, "overall": 0},
+  "roast": {
+    "headline": {"reaction": "", "problem": "", "why": "", "cost": ""},
+    "hook": {"reaction": "", "problem": "", "why": "", "cost": ""},
+    "about": {"reaction": "", "problem": "", "why": "", "cost": ""},
+    "experience": {"reaction": "", "problem": "", "why": "", "cost": ""},
+    "skills": {"reaction": "", "problem": "", "why": "", "cost": ""}
+  },
+  "rebuild": {
+    "headlines": [
+      {"label": "Keyword-optimized", "text": "", "when": ""},
+      {"label": "Value-proposition", "text": "", "when": ""},
+      {"label": "Authority", "text": "", "when": ""}
+    ],
+    "about": {"hook": "", "story": "", "proof": "", "cta": "", "full_text": "", "keywords": ["","",""]},
+    "experience_bullets": [{"before": "", "after": ""}, {"before": "", "after": ""}, {"before": "", "after": ""}],
+    "skills": {"add": ["(10 items in priority order)"], "remove": ["item1","item2"], "pin": ["item1","item2","item3"]}
+  },
+  "scores_after": {"headline": 0, "hook": 0, "about": 0, "experience": 0, "skills": 0, "overall": 0},
+  "plan": {
+    "day1_checklist": ["item1","item2","item3","item4"],
+    "day2_post": "full post text under 1300 characters",
+    "day3_targets": "who exactly to target, 1-2 sentences",
+    "day3_message": "connection message under 300 characters",
+    "day4_formula": "explanation of Agree + Add Insight + Ask a Question applied to their niche",
+    "day5_post": "full post text under 1300 characters, lessons-learned or hot take",
+    "day6_actions": "what to do engaging with comments + 5 more connection requests, specific to their situation",
+    "day7_review": "what profile views / acceptance rate numbers mean and what to adjust"
+  },
+  "summary_card": {"before": 0, "after": 0, "mistakes": ["","",""], "top_fix": ""}
+}
+All scores are integers out of 10, except "overall" which is out of 100. scores_after must be meaningfully higher than scores_before, and internally consistent (overall roughly = sum of the other 5 scaled, since 5 categories x max 10 = 50, so scale accordingly to feel like a 100-point overall). Keep every roast "reaction" as a short punchy 3-second-glance line. Ground everything in the user's actual input.`;
+
+  const userPrompt = `Here is the profile information:\n\n${profileBlock}\n\nProduce the full JSON now.`;
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 4000,
+        system: systemPrompt,
+        messages: [{ role: "user", content: userPrompt }]
+      })
+    });
+
+    if(!response.ok){
+      throw new Error("API request failed: " + response.status);
+    }
+    const data = await response.json();
+    let text = data.content.map(b => b.text || '').join('\n').trim();
+    text = text.replace(/^```json\s*/i,'').replace(/^```\s*/,'').replace(/```\s*$/,'').trim();
+    const result = JSON.parse(text);
+    renderResults(result);
+  } catch(e){
+    document.getElementById('loadingScreen').style.display = 'none';
+    document.getElementById('formScreen').style.display = 'block';
+    document.getElementById('submitBtn').disabled = false;
+    errEl.textContent = 'Something went wrong reading your profile back. Try again in a moment.';
+    console.error(e);
+  }
+}
+
+function copyText(id, btn){
+  const el = document.getElementById(id);
+  navigator.clipboard.writeText(el.textContent).then(()=>{
+    const orig = btn.textContent;
+    btn.textContent = 'Copied';
+    setTimeout(()=>{ btn.textContent = orig; }, 1400);
+  });
+}
+
+function renderResults(r){
+  document.getElementById('loadingScreen').style.display = 'none';
+  const el = document.getElementById('resultsScreen');
+  el.style.display = 'block';
+
+  const sb = r.scores_before, sa = r.scores_after;
+  const roastKeys = [['headline','Headline'],['hook','About — First 2 Lines'],['about','About — Full Section'],['experience','Experience'],['skills','Skills & Keywords']];
+
+  let html = '';
+
+  // PART 1 — ROAST
+  html += `<div class="card"><div class="section-label">Part 1 — The Roast</div><h2 class="title">Profile Report Card (Before)</h2>`;
+  roastKeys.forEach(([k,label])=>{
+    const roast = r.roast[k]; const score = sb[k];
+    html += `
+      <div class="grade-row">
+        <div class="grade-name">${label}</div>
+        <div class="grade-circle">${score}</div>
+      </div>
+      <div class="reaction">"${esc(roast.reaction)}"</div>
+      <div class="breakdown">
+        <p><b>❌ Problem —</b> ${esc(roast.problem)}</p>
+        <p><b>🧠 Why it hurts —</b> ${esc(roast.why)}</p>
+        <p><b>🔍 Invisible cost —</b> ${esc(roast.cost)}</p>
+      </div>`;
+  });
+  html += `<div class="overall-score"><div class="num">${sb.overall}/100</div><div class="label">Overall Profile Strength</div></div></div>`;
+
+  // PART 2 — REBUILD
+  html += `<div class="card"><div class="section-label">Part 2 — The Rebuild</div><h2 class="title">Headline options</h2>`;
+  r.rebuild.headlines.forEach(h=>{
+    html += `<div class="opt-card"><div class="opt-tag">${esc(h.label)}</div><div class="opt-text">${esc(h.text)}</div><div class="opt-when">${esc(h.when)}</div></div>`;
+  });
+  html += `</div>`;
+
+  const ab = r.rebuild.about;
+  html += `<div class="card"><h2 class="title">About section — rewritten</h2>
+    <div class="about-block"><div class="k">The hook</div><div class="v">${esc(ab.hook)}</div></div>
+    <div class="about-block"><div class="k">The story</div><div class="v">${esc(ab.story)}</div></div>
+    <div class="about-block"><div class="k">Proof</div><div class="v">${esc(ab.proof)}</div></div>
+    <div class="about-block"><div class="k">Call to action</div><div class="v">${esc(ab.cta)}</div></div>
+    <div class="post-draft" id="aboutFull">${esc(ab.full_text)}</div>
+    <button class="copy-btn" onclick="copyText('aboutFull', this)">Copy full About text</button>
+    <div class="keywords">${(ab.keywords||[]).map(k=>`<span class="kw">${esc(k)}</span>`).join('')}</div>
+  </div>`;
+
+  html += `<div class="card"><h2 class="title">Experience — top entry rewritten</h2>`;
+  (r.rebuild.experience_bullets||[]).forEach(b=>{
+    html += `<div class="ba-pair"><div class="before-txt">${esc(b.before)}</div><div class="after-txt">${esc(b.after)}</div></div>`;
+  });
+  html += `</div>`;
+
+  const sk = r.rebuild.skills;
+  html += `<div class="card"><h2 class="title">Skills recommendations</h2>
+    <div class="skill-cols">
+      <div><div class="k" style="font-family:var(--mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--sage);margin-bottom:6px;">Add</div>
+      <ul class="skill-list">${(sk.add||[]).map(s=>`<li><span class="add-tag">+</span> ${esc(s)}</li>`).join('')}</ul></div>
+      <div><div class="k" style="font-family:var(--mono);font-size:10.5px;letter-spacing:1px;text-transform:uppercase;color:var(--red);margin-bottom:6px;">Remove</div>
+      <ul class="skill-list">${(sk.remove||[]).map(s=>`<li><span class="rm-tag">−</span> ${esc(s)}</li>`).join('')}</ul></div>
+    </div>
+    <div class="pin-row">Pin to top: ${(sk.pin||[]).map(s=>`<span class="pin-chip">${esc(s)}</span>`).join('')}</div>
+  </div>`;
+
+  // PART 3 — SCORECARD
+  html += `<div class="card"><div class="section-label">Part 3 — Before vs After</div><h2 class="title">Scorecard</h2>
+    <table class="scoretable"><tr><th>Section</th><th>Before</th><th>After</th><th>Change</th></tr>`;
+  roastKeys.forEach(([k,label])=>{
+    html += `<tr><td>${label}</td><td class="num-before">${sb[k]}/10</td><td class="num-after">${sa[k]}/10</td><td class="num-delta">+${sa[k]-sb[k]}</td></tr>`;
+  });
+  html += `</table>
+    <div class="overall-score" style="border-color:var(--sage);margin-top:16px;">
+      <div class="num" style="color:var(--sage);">${sb.overall} → ${sa.overall}</div>
+      <div class="label">Overall (+${sa.overall - sb.overall})</div>
+    </div>
+  </div>`;
+
+  // PART 4 — PLAN
+  const p = r.plan;
+  html += `<div class="card"><div class="section-label">Part 4 — 7-Day Activation Plan</div>`;
+  html += `<div class="day-card"><div class="day-num">Day 1</div><div class="day-title">Make all profile changes</div>
+    <div class="day-body"><ul>${(p.day1_checklist||[]).map(i=>`<li>${esc(i)}</li>`).join('')}</ul></div></div>`;
+  html += `<div class="day-card"><div class="day-num">Day 2</div><div class="day-title">Publish Post #1 — the rebuild announcement</div>
+    <div class="post-draft" id="post2">${esc(p.day2_post)}</div>
+    <button class="copy-btn" onclick="copyText('post2', this)">Copy post</button></div>`;
+  html += `<div class="day-card"><div class="day-num">Day 3</div><div class="day-title">Send 10 strategic connection requests</div>
+    <div class="day-body">${esc(p.day3_targets)}</div>
+    <div class="post-draft" id="msg3">${esc(p.day3_message)}</div>
+    <button class="copy-btn" onclick="copyText('msg3', this)">Copy message</button></div>`;
+  html += `<div class="day-card"><div class="day-num">Day 4</div><div class="day-title">Comment on 5 posts — the Value Comment formula</div>
+    <div class="day-body">${esc(p.day4_formula)}</div></div>`;
+  html += `<div class="day-card"><div class="day-num">Day 5</div><div class="day-title">Publish Post #2 — lessons learned / hot take</div>
+    <div class="post-draft" id="post5">${esc(p.day5_post)}</div>
+    <button class="copy-btn" onclick="copyText('post5', this)">Copy post</button></div>`;
+  html += `<div class="day-card"><div class="day-num">Day 6</div><div class="day-title">Engage + send 5 more requests</div>
+    <div class="day-body">${esc(p.day6_actions)}</div></div>`;
+  html += `<div class="day-card"><div class="day-num">Day 7</div><div class="day-title">Review the numbers</div>
+    <div class="day-body">${esc(p.day7_review)}</div></div>`;
+  html += `</div>`;
+
+  // PART 5 — SUMMARY CARD
+  const sc = r.summary_card;
+  html += `<div class="card"><div class="section-label">Part 5 — Shareable Summary</div>
+    <div class="summary-card">
+      <h3>I let AI roast my LinkedIn profile today.</h3>
+      <div class="summary-scores">
+        <div class="before"><div class="n">${sc.before}</div><div>before</div></div>
+        <div class="after"><div class="n">${sc.after}</div><div>after</div></div>
+      </div>
+      <div style="font-family:var(--mono);font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#ccc;margin-top:10px;">Top 3 mistakes I was making</div>
+      <ol>${(sc.mistakes||[]).map(m=>`<li>${esc(m)}</li>`).join('')}</ol>
+      <div class="fix"><b>The #1 thing that made the biggest difference:</b> ${esc(sc.top_fix)}</div>
+    </div>
+  </div>`;
+
+  html += `<div class="restart-row"><button class="restart-btn" onclick="location.reload()">Roast another profile</button></div>`;
+
+  el.innerHTML = html;
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+</script>
+</body>
+</html>
