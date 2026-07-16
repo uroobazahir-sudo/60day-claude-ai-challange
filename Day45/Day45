@@ -1,0 +1,17 @@
+Decision Report — AI Decision Strategist
+Day 45/60 — #60DaysOfClaudeAI
+An interactive decision report built with Claude, breaking down a real tough call: accept a full-time job offer now, or finish the degree full-time first. Includes an option-by-option breakdown, a cognitive bias check, a 7-dimension animated scoring matrix, a premortem on both options, a 7-day test plan, and a decisive verdict — plus 3 shareable cards for social.
+Features
+Option-by-option case breakdown (strengths, hidden upside, weaknesses)
+Assumption Buster — surfaces biases like loss aversion and sunk cost
+Animated 7-dimension scoring matrix with a clear winner
+Premortem on both options with early warning signs
+7-day test plan to validate the decision before committing
+Decisive verdict with a hard-truth takeaway
+3 shareable mini-cards for LinkedIn screenshots
+Zero dependencies — single HTML file, fully responsive, no API calls needed
+Tech
+Vanilla HTML/CSS/JS. No frameworks, no CDN dependencies.
+Usage
+Open decision-report.html in any browser. Scroll through the full report — matrix bars animate on load.
+Built with Claude AI | ABTalks 60-Day Challenge
