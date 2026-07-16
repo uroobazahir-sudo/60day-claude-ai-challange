@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Decision Report — Job Offer vs Finishing Degree</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-main:#0f0f14; --bg-card:#1a1a24; --bg-card-alt:#1e1e2e;
+    --text-primary:#f0f0f5; --text-secondary:#8888a0;
+    --accent-green:#34d399; --accent-red:#f87171; --accent-blue:#60a5fa;
+    --accent-gold:#fbbf24; --accent-purple:#a78bfa; --border-subtle:rgba(255,255,255,0.06);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--bg-main);color:var(--text-primary);font-family:'Inter','Segoe UI',system-ui,sans-serif;padding:32px 16px 60px;}
+  .wrap{max-width:720px;margin:0 auto;}
+
+  .header-banner{padding:16px 4px 24px;}
+  .header-banner h1{font-size:28px;font-weight:800;}
+  .header-banner .sub{color:var(--text-secondary);font-size:16px;margin-top:8px;line-height:1.6;}
+  .header-banner .date{color:var(--text-secondary);font-size:12px;margin-top:10px;}
+  .gradient-line{height:2px;margin-top:20px;background:linear-gradient(90deg,var(--accent-blue),var(--accent-purple),var(--accent-gold));border-radius:2px;}
+
+  .card{background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:16px;padding:28px;margin-top:28px;box-shadow:0 4px 24px rgba(0,0,0,.3);transition:transform .2s ease;}
+  .card:hover{transform:translateY(-2px);}
+  .card h2{font-size:20px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:16px;}
+  .card p{font-size:15px;line-height:1.7;}
+  .card p + p{margin-top:10px;}
+
+  .c-blue{border-left:4px solid var(--accent-blue);} .c-blue h2{color:var(--accent-blue);}
+  .c-green{border-left:4px solid var(--accent-green);} .c-green h2{color:var(--accent-green);}
+  .c-purple{border-left:4px solid var(--accent-purple);} .c-purple h2{color:var(--accent-purple);}
+  .c-red{border-left:4px solid var(--accent-red);} .c-red h2{color:var(--accent-red);}
+  .c-gold{border-left:4px solid var(--accent-gold);background:var(--bg-card-alt);} .c-gold h2{color:var(--accent-gold);}
+
+  .option-card{background:var(--bg-card-alt);border:1px solid var(--border-subtle);border-radius:12px;padding:20px;margin-top:16px;}
+  .option-card:first-child{margin-top:0;}
+  .option-card h3{font-size:16px;font-weight:700;margin-bottom:12px;}
+  .option-row{margin-top:10px;}
+  .option-row .lbl{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary);margin-bottom:4px;}
+  .tag-strength{color:var(--accent-green);} .tag-weak{color:var(--accent-red);} .tag-hidden{color:var(--accent-blue);}
+  .value-tag{display:inline-block;margin-top:10px;background:rgba(251,191,36,.1);color:var(--accent-gold);font-size:12px;font-weight:600;padding:6px 12px;border-radius:20px;}
+
+  .bust-list{list-style:none;margin-top:6px;}
+  .bust-list li{padding:8px 0;font-size:15px;line-height:1.6;padding-left:20px;position:relative;}
+  .bust-list li::before{content:"—";position:absolute;left:0;color:var(--accent-purple);}
+  .bias-pill{display:inline-block;background:rgba(167,139,250,.12);color:var(--accent-purple);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin:4px 6px 4px 0;}
+  .ignoring-box{margin-top:14px;padding:14px;background:rgba(248,113,113,.08);border-radius:10px;border:1px solid rgba(248,113,113,.2);}
+  .ignoring-box .lbl{color:var(--accent-red);font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+
+  .matrix-row{display:flex;align-items:center;gap:14px;margin-top:14px;}
+  .matrix-row .m-label{width:40%;font-size:13px;color:var(--text-secondary);font-weight:500;}
+  .matrix-row .m-bars{width:60%;display:flex;flex-direction:column;gap:6px;}
+  .bar-track{height:26px;background:rgba(255,255,255,.05);border-radius:8px;overflow:hidden;}
+  .bar-fill{height:100%;border-radius:8px;display:flex;align-items:center;justify-content:flex-end;padding-right:8px;font-size:12px;font-weight:700;color:#fff;width:0;animation:growBar .8s ease-out forwards;}
+  @keyframes growBar{from{width:0;}to{width:var(--target);}}
+  .barA{background:linear-gradient(90deg,#60a5fa,#3b82f6);}
+  .barB{background:linear-gradient(90deg,#34d399,#10b981);}
+  .legend{display:flex;gap:18px;margin-bottom:6px;flex-wrap:wrap;}
+  .legend span{font-size:12px;color:var(--text-secondary);display:flex;align-items:center;gap:6px;}
+  .dot{width:9px;height:9px;border-radius:50%;display:inline-block;}
+  .total-row{margin-top:20px;padding:14px 16px;background:rgba(255,255,255,.03);border-radius:10px;display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:15px;}
+  .total-row.winner{background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);color:var(--accent-gold);}
+
+  .premortem-block{margin-top:16px;}
+  .premortem-block h3{font-size:15px;font-weight:700;color:var(--accent-red);margin-bottom:8px;}
+  .premortem-block ul{list-style:none;margin-bottom:8px;}
+  .premortem-block li{font-size:14px;line-height:1.6;padding:4px 0 4px 16px;position:relative;}
+  .premortem-block li::before{content:"•";position:absolute;left:0;color:var(--accent-red);}
+  .premortem-meta{font-size:13px;margin-top:8px;color:var(--text-secondary);}
+  .premortem-meta b{color:var(--text-primary);}
+
+  .day-row{display:flex;gap:14px;padding:10px 0;border-bottom:1px solid var(--border-subtle);}
+  .day-row:last-child{border-bottom:none;}
+  .day-num{font-size:12px;font-weight:700;color:var(--accent-green);min-width:60px;}
+  .day-txt{font-size:14px;line-height:1.6;}
+
+  .verdict-card{padding:36px;box-shadow:0 4px 24px rgba(0,0,0,.3), 0 0 20px rgba(251,191,36,.15);}
+  .verdict-winner{font-size:30px;font-weight:800;color:var(--accent-gold);margin-bottom:12px;}
+  .verdict-flip{margin-top:14px;font-size:14px;color:var(--text-secondary);}
+  .verdict-truth{margin-top:16px;font-style:italic;color:var(--text-secondary);font-size:14px;border-top:1px solid var(--border-subtle);padding-top:14px;}
+
+  .share-row{display:flex;gap:16px;flex-wrap:wrap;margin-top:16px;}
+  .mini-card{flex:1 1 200px;background:var(--bg-card-alt);border:1px solid var(--border-subtle);border-radius:12px;padding:18px;min-height:180px;display:flex;flex-direction:column;justify-content:space-between;}
+  .mini-card .mc-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:var(--text-secondary);margin-bottom:10px;}
+  .mini-card .mc-body{font-size:14px;line-height:1.6;flex-grow:1;}
+  .mini-card .mc-score{font-size:22px;font-weight:800;color:var(--accent-gold);}
+  .mini-card .mc-watermark{font-size:10px;color:var(--text-secondary);margin-top:10px;opacity:.7;}
+
+  footer{text-align:center;color:var(--text-secondary);font-size:12px;margin-top:40px;}
+
+  @media(max-width:600px){
+    .card{padding:20px;border-radius:14px;}
+    .matrix-row{flex-direction:column;align-items:flex-start;}
+    .matrix-row .m-label,.matrix-row .m-bars{width:100%;}
+    .share-row{flex-direction:column;}
+    .header-banner h1{font-size:24px;}
+    .verdict-winner{font-size:24px;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="header-banner">
+    <h1>DECISION REPORT</h1>
+    <div class="sub">Accept the job offer now, or finish the degree full-time first?</div>
+    <div class="date" id="dateNow"></div>
+    <div class="gradient-line"></div>
+  </div>
+
+  <div class="card c-blue">
+    <h2>The Real Decision</h2>
+    <p>A full-time frontend developer offer has landed mid-degree, with a 2-week response deadline. The real trade-off is real income and momentum now, versus protecting CGPA and a clean, uninterrupted graduation.</p>
+    <p>It's hard because it isn't just logistics — it's the fear of disappointing family and the fear of an opportunity like this never coming back.</p>
+  </div>
+
+  <div class="card c-green">
+    <h2>The Case For Each Option</h2>
+    <div class="option-card">
+      <h3>Accept the Job Now</h3>
+      <div class="option-row"><div class="lbl tag-strength">Strongest case for it</div>Real income, real production experience, and a live job history that outweighs a completion date on most hiring managers' radar.</div>
+      <div class="option-row"><div class="lbl tag-hidden">Hidden upside</div>Companies increasingly value proven shipped work over a finished-on-time degree — this could compound faster than another semester of theory.</div>
+      <div class="option-row"><div class="lbl tag-weak">Biggest weakness</div>Overload risk: job + part-time coursework + the 60-day build challenge at once is a lot to sustain without burning out or dropping CGPA.</div>
+      <div class="value-tag">Best if you value: momentum and income now</div>
+    </div>
+    <div class="option-card">
+      <h3>Finish Degree Full-Time First</h3>
+      <div class="option-row"><div class="lbl tag-strength">Strongest case for it</div>Protects CGPA and keeps graduation on a clean, uninterrupted timeline with full bandwidth to focus.</div>
+      <div class="option-row"><div class="lbl tag-hidden">Hidden upside</div>Full-time student status may still qualify for scholarships, competitions, or campus opportunities that disappear the moment you're employed.</div>
+      <div class="option-row"><div class="lbl tag-weak">Biggest weakness</div>This specific offer may not wait — losing it means starting the job search over later, possibly in a colder market.</div>
+      <div class="value-tag">Best if you value: stability and a guaranteed finish</div>
+    </div>
+  </div>
+
+  <div class="card c-purple">
+    <h2>Assumption Buster</h2>
+    <div style="font-size:12px;color:var(--text-secondary);text-transform:uppercase;font-weight:600;margin-bottom:6px;">Assumptions you may be making</div>
+    <ul class="bust-list">
+      <li>That this offer is a strict take-it-or-leave-it, with zero room to negotiate a later start or reduced hours.</li>
+      <li>That part-time enrollment will automatically hurt your CGPA — this hasn't actually been tested.</li>
+      <li>That an opportunity this good won't come again after graduation.</li>
+    </ul>
+    <div style="font-size:12px;color:var(--text-secondary);text-transform:uppercase;font-weight:600;margin:16px 0 8px;">Biases at play</div>
+    <div>
+      <span class="bias-pill">Loss Aversion</span>
+      <span class="bias-pill">Sunk Cost Fallacy</span>
+    </div>
+    <div class="ignoring-box">
+      <div class="lbl">What you're definitely ignoring</div>
+      <p>Whether the company would actually agree to a deferred start date or reduced hours — that conversation hasn't happened yet, and it changes the whole calculation.</p>
+    </div>
+  </div>
+
+  <div class="card c-blue">
+    <h2>Decision Matrix</h2>
+    <div class="legend">
+      <span><span class="dot" style="background:#60a5fa"></span>Accept Job Now</span>
+      <span><span class="dot" style="background:#34d399"></span>Finish Degree First</span>
+    </div>
+
+    <div class="matrix-row"><div class="m-label">Life/Career Upside</div><div class="m-bars">
+      <div class="bar-track"><div class="bar-fill barA" style="--target:80%;animation-delay:0.05s">8/10</div></div>
+      <div class="bar-track"><div class="bar-fill barB" style="--target:60%;animation-delay:0.1s">6/10</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="m-label">Financial Safety</div><div class="m-bars">
+      <div class="bar-track"><div class="bar-fill barA" style="--target:70%;animation-delay:0.15s">7/10</div></div>
+      <div class="bar-track"><div class="bar-fill barB" style="--target:50%;animation-delay:0.2s">5/10</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="m-label">Growth & Learning</div><div class="m-bars">
+      <div class="bar-track"><div class="bar-fill barA" style="--target:70%;animation-delay:0.25s">7/10</div></div>
+      <div class="bar-track"><div class="bar-fill barB" style="--target:60%;animation-delay:0.3s">6/10</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="m-label">Stress Level (10=low)</div><div class="m-bars">
+      <div class="bar-track"><div class="bar-fill barA" style="--target:40%;animation-delay:0.35s">4/10</div></div>
+      <div class="bar-track"><div class="bar-fill barB" style="--target:80%;animation-delay:0.4s">8/10</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="m-label">Reversibility</div><div class="m-bars">
+      <div class="bar-track"><div class="bar-fill barA" style="--target:50%;animation-delay:0.45s">5/10</div></div>
+      <div class="bar-track"><div class="bar-fill barB" style="--target:80%;animation-delay:0.5s">8/10</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="m-label">Long-term Alignment</div><div class="m-bars">
+      <div class="bar-track"><div class="bar-fill barA" style="--target:60%;animation-delay:0.55s">6/10</div></div>
+      <div class="bar-track"><div class="bar-fill barB" style="--target:70%;animation-delay:0.6s">7/10</div></div>
+    </div></div>
+
+    <div class="matrix-row"><div class="m-label">Regret Risk (10=low)</div><div class="m-bars">
+      <div class="bar-track"><div class="bar-fill barA" style="--target:50%;animation-delay:0.65s">5/10</div></div>
+      <div class="bar-track"><div class="bar-fill barB" style="--target:60%;animation-delay:0.7s">6/10</div></div>
+    </div></div>
+
+    <div class="total-row"><span>Accept Job Now</span><span>42 / 70</span></div>
+    <div class="total-row winner"><span>Finish Degree First</span><span>46 / 70</span></div>
+  </div>
+
+  <div class="card c-red">
+    <h2>Premortem</h2>
+    <div class="premortem-block">
+      <h3>Accept Job Now — failed after 12 months</h3>
+      <ul>
+        <li>CGPA dropped from juggling job + part-time coursework</li>
+        <li>Burnout from job + degree + the 60-day challenge simultaneously</li>
+        <li>Job culture didn't match expectations, leaving neither strong degree progress nor a good experience</li>
+      </ul>
+      <div class="premortem-meta"><b>Early warning sign:</b> Missing challenge days or falling behind coursework by month 2.</div>
+      <div class="premortem-meta"><b>Prevention action:</b> Negotiate reduced hours upfront and set a hard 3-month review checkpoint.</div>
+    </div>
+    <div class="premortem-block">
+      <h3>Finish Degree First — failed after 12 months</h3>
+      <ul>
+        <li>The offer window closed and no similar opportunity reappeared</li>
+        <li>Regret watching peers gain a year of real experience and income</li>
+        <li>Degree still took longer than planned due to unrelated life events</li>
+      </ul>
+      <div class="premortem-meta"><b>Early warning sign:</b> Feeling stagnant with no interviews lined up as graduation nears.</div>
+      <div class="premortem-meta"><b>Prevention action:</b> Keep applying and networking actively while finishing — don't go passive just because you're "safe."</div>
+    </div>
+  </div>
+
+  <div class="card c-green">
+    <h2>7-Day Test Plan</h2>
+    <div class="day-row"><div class="day-num">Day 1-2</div><div class="day-txt">Research the university's part-time enrollment policy and talk to alumni who worked a full-time job while studying.</div></div>
+    <div class="day-row"><div class="day-num">Day 3-4</div><div class="day-txt">Ask the company directly if they'd allow a delayed start date or reduced hours for a trial month.</div></div>
+    <div class="day-row"><div class="day-num">Day 5-6</div><div class="day-txt">Have an honest conversation with your academic advisor and parents about a realistic part-time load.</div></div>
+    <div class="day-row"><div class="day-num">Day 7</div><div class="day-txt">Decision day: if the company agrees to flexibility AND the advisor confirms CGPA risk is manageable — take the job. Otherwise, finish the degree first.</div></div>
+  </div>
+
+  <div class="card c-gold verdict-card">
+    <h2>The Verdict</h2>
+    <div class="verdict-winner">Finish Degree First</div>
+    <p>It wins narrowly (46 vs 42) on the dimensions that matter most once the excitement fades: stress, reversibility, and regret risk. It closes the burnout door without closing the growth door.</p>
+    <div class="verdict-flip"><b style="color:var(--text-primary)">What could flip it:</b> If the company confirms genuinely flexible, reduced hours in writing — Option A's stress and reversibility scores rise enough to overtake.</div>
+    <div class="verdict-truth">The "once in a lifetime offer" feeling is loss aversion talking, not the market — strong roles come again for people who finish strong.</div>
+  </div>
+
+  <div class="card c-gold">
+    <h2>Shareable Cards</h2>
+    <div class="share-row">
+      <div class="mini-card">
+        <div class="mc-title">Matrix Summary</div>
+        <div class="mc-body">Accept Job Now: 42/70<br>Finish Degree First: 46/70</div>
+        <div class="mc-watermark">Built with Claude AI</div>
+      </div>
+      <div class="mini-card">
+        <div class="mc-title">Verdict</div>
+        <div class="mc-score">Finish Degree First</div>
+        <div class="mc-body">Protects long-term stability without closing the growth door.</div>
+        <div class="mc-watermark">Built with Claude AI</div>
+      </div>
+      <div class="mini-card">
+        <div class="mc-title">LinkedIn Post</div>
+        <div class="mc-body"><b>The offer that felt "once in a lifetime" wasn't the real decision.</b><br><br>Used Claude to build a full decision matrix, premortem, and 7-day test plan — turns out the safest move was also the smartest one.<br><br><i>Follow along on #60DaysOfClaudeAI 👇</i></div>
+        <div class="mc-watermark">Built with Claude AI</div>
+      </div>
+    </div>
+  </div>
+
+  <footer>Built with Claude AI | ABTalks 60-Day Challenge</footer>
+</div>
+<script>
+document.getElementById('dateNow').textContent = new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+</script>
+</body>
+</html>
