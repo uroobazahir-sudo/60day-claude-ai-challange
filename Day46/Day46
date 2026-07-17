@@ -1,0 +1,18 @@
+Autonomous Agent Studio — Multi-Agent Java Bug-Fix Pipeline
+Day 46/60 — #60DaysOfClaudeAI
+A real autonomous multi-agent orchestration system. Eight agents — Planner, Executor, Evaluator, Critic, Improver, Memory Manager, Safety Monitor, and Final Reviewer — collaborate through a live, self-terminating loop to diagnose and fix a Java bug, re-evaluating and improving the code round over round until a stop condition is actually met at runtime.
+Features
+Real orchestration loop: Evaluator → Critic → Improver → Memory Manager, re-running with a live Claude API call every round — no hardcoded sequence, no pre-set round count
+Runtime stop-check, evaluated in order every round: plateau detection → target score threshold (9/10) → hard iteration cap (safety fallback only)
+State threads forward: each round's Improver gets the prior evaluation + critique; each Evaluator gets the current draft + full round history
+Live workflow diagram with an animated return-arrow cycle and a branch to Final Reviewer once the loop exits
+Full dashboard: iteration history table, round-by-round detail (expandable), activity log, score progression chart, memory notes panel, live evaluation report
+Robust error handling — automatic retries with backoff, manual retry fallback, graceful recovery (no pipeline crash)
+Final summary: exact stop reason, agent performance stats, execution stats, downloadable fixed code
+Pre-filled demo bug (Java NullPointerException + unvalidated input) — zero typing needed to test
+Zero dependencies — single HTML file, vanilla JS, fully responsive, dark mode
+Tech
+Vanilla HTML/CSS/JS. Calls the Anthropic Messages API directly from the browser — runs live inside the Claude app/artifact preview (API access is proxied there; a downloaded file opened in a plain browser won't authenticate).
+Usage
+Open in the Claude app preview. Buggy code and bug description are pre-filled — click Run Autonomous Pipeline and watch the agents work in real time.
+Built with Claude AI | ABTalks 60-Day Challenge
