@@ -1,0 +1,20 @@
+Best Laptop for Devs & CS Students — Compare & Decide
+Day 48 of #60DaysOfClaudeAI 🚀
+A single-file HTML app that ranks MacBook Air (M4) vs Dell XPS 13 vs ThinkPad X1 Carbon vs ASUS Zenbook 14 OLED for developers and CS students choosing a daily-driver laptop for coding, compiling, and multitasking.
+Live Demo
+Open laptop-compare-decide.html in any browser — zero dependencies, zero setup.
+What it does
+Ranks 4 laptops on Performance, RAM/Storage, Battery Life, and Build/Portability
+Fixed, transparent weighting tuned for developer workloads (Performance 35%, RAM/Storage 25%, Battery 25%, Portability 15%)
+Every data point is either a sourced fact or clearly flagged as an estimate
+Built-in "How this was researched" panel — shows exactly where each number came from and how source conflicts were resolved
+Full sources panel with 14 citations (Apple, Dell, ASUS, Notebookcheck, NanoReview, Consumer Reports, XDA Developers, and more)
+Responsive, dark-mode UI with graceful loading/error states
+Why it's different
+Most spec-comparison content just copies vendor marketing claims. This app explicitly separates vendor claims from independent test results — and flags it every time they disagree (e.g. Apple claims 18h battery, Consumer Reports measured 15h; Lenovo claims up to 19h, real-world testing showed 5–8h).
+Tech
+Pure HTML/CSS/JavaScript — no frameworks, no CDNs, no build step
+Single file, works offline, works anywhere
+Built with
+Claude Sonnet 5 — research, data verification, and full app generation in one conversation.
+#60DaysOfClaudeAI #BuildInPublic #WomenInTech #PakistaniDevs
