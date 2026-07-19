@@ -1,0 +1,17 @@
+Personal AI Playbook
+A self-contained system for turning your best AI prompts into reusable workflows — instead of rewriting them from scratch every time.
+Features
+Workflows library — ready-made, editable prompt templates organized by category (daily build pipeline, debugging, consistency, prompt-engineering practice), each with fillable variables and a live preview
+Prompt Builder — assemble custom prompts from labeled building blocks (role, objective, context, constraints, reasoning strategy, output format, tone, examples, quality checks) with a real-time preview
+Loop Builder — convert any normal prompt into a self-evaluating autonomous loop by defining goals, evaluation criteria, improvement strategy, stop conditions, and safety rules
+Learn — a plain-language glossary explaining every prompt-engineering concept used in the app, with weak vs. strong examples
+Full CRUD on workflows: create, edit, duplicate, favorite, search, and filter
+Dark/light mode, onboarding walkthrough, keyboard shortcuts, and JSON import/export
+100% offline — all data saved to local storage, nothing leaves the browser
+Tech Stack
+HTML, CSS, vanilla JavaScript — zero external libraries, zero dependencies.
+How to Run
+Just open personal-ai-playbook.html in any browser. No server, no install.
+What I Learned
+Designing "building blocks" that are generic enough to combine into thousands of prompt variations — but still specific enough to teach why each piece matters — was harder than writing the prompts themselves.
+Part of the #60DaysOfClaudeAI build-in-public challenge — Day 49.
