@@ -1,0 +1,23 @@
+Defend Your Experience
+#60DaysOfClaudeAI — Day 50/60
+An AI cross-examiner that reads your resume, LinkedIn bio, project write-up, research summary, or performance review — extracts every claim you make about yourself — and interviews you until your answers hold up in the real room.
+This isn't a resume reviewer. It doesn't polish your bullet points. It questions them, the way a skeptical interviewer, investor, or panel would — and helps you build the evidence and confidence to defend what you claim.
+How it works
+1. Upload — Drop a .txt/.md/.csv file or paste your resume, bio, or write-up directly.
+2. Set the context — Pick why you're preparing (job interview, performance review, funding pitch, academic defense, client pitch) and who's in the room (technical experts, HR, executives, mixed panel).
+3. Case file — The app extracts 5–8 real claims from your material, ranks them by risk (vague/unquantified claims surface first), and stages them as "exhibits."
+4. Cross-examination — One question at a time, in a live deposition-style transcript. Every answer shapes the next question — vague answers get pushed harder, strong answers get closed out and stamped Weak / Solid / Iron-clad.
+5. Defense report — An overall defense score, a claim-by-claim confidence breakdown, and specific notes on what held up and what still needs sharpening — exportable as a text file.
+Session history is saved locally so you can revisit past cases.
+Tech stack
+Single self-contained HTML file — zero external dependencies, fully offline UI
+Vanilla JavaScript (no frameworks, no build step)
+Claude (Sonnet) via the Anthropic Messages API for claim extraction and adaptive questioning
+localStorage for session persistence
+Hand-built SVG charts for score visualization — no charting libraries
+Note on running it
+The live interview (claim extraction, cross-examination, evaluation) calls the Anthropic API directly from the page and only works inside Claude's artifact preview, where authentication is handled automatically. Opening the downloaded HTML file in a plain browser will render the full interface, but API-dependent steps won't respond.
+Why I built this
+Fifty days into this challenge, most of what I've built has been about presenting experience — resumes, pitches, profiles. This one flips that: it assumes the presenting is done, and prepares you for the part that actually decides outcomes — being questioned on it, live, with no time to edit your answer.
+Built as part of the #60DaysOfClaudeAI challenge by ABTalks.
+GitHub · LinkedIn
