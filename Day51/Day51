@@ -1,0 +1,26 @@
+MockMic — Capstone Kickoff (Day 1 of 10)
+#60DaysOfClaudeAI — Day 51/60
+Today marks the start of my 10-day capstone: going from no idea to a deployed v1.0 product, following a real software development lifecycle — Requirements → Design → Setup → Implementation → Testing → Deployment → Maintenance.
+The product: MockMic
+Practice out loud. Walk in ready.
+A voice-first mock interview practice app. Users pick an interview category, answer AI-generated questions out loud (or typed), get instant structured AI feedback, and build confidence through tracked, repeated practice.
+Why this project
+Interview anxiety rarely comes from not knowing the answer — it comes from never having said it out loud under pressure before. Most prep tools stop at writing better answers on paper. MockMic is built for the part that actually decides outcomes: rehearsing the answer live, and getting honest feedback on how it landed.
+Today's process
+Instead of jumping straight to building, today was spent as a structured product discovery and sprint-planning session:
+Interview-style discovery — one question at a time, narrowing from a broad interest area (career/education) down to a specific, scoped product
+Scope protection — actively pushing back on feature creep given a real constraint: ~1–2 hours of build time per day
+Explicit v1.0 boundaries — a clear list of what ships and what's intentionally deferred to Future Scope
+Deliverables produced today
+Product Requirements Document (PRD) — problem statement, target users, goals, in/out-of-scope features, risks, and a Day-10 definition of done
+Implementation Blueprint (Days 2–10) — a day-by-day build plan with objectives, step-by-step instructions, files to create, testing tasks, and handoff notes, so each remaining day can start from a fresh AI conversation and continue without re-planning
+Pitch Deck — problem, users, solution, key features, technical approach, future scope, and vision
+Recommended tech stack (locking on Day 2)
+Frontend: HTML/CSS/JavaScript
+Voice: Browser-native Web Speech API — free, no install
+Auth + database: Firebase free tier
+AI: Claude API, called through a serverless proxy
+Hosting: Vercel/Netlify free tier
+All free-tier, chosen specifically to fit a solo build with limited daily hours.
+Built as part of the #60DaysOfClaudeAI challenge by ABTalks.
+GitHub · LinkedIn
