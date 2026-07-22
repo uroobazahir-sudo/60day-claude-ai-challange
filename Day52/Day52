@@ -1,0 +1,62 @@
+MockMic
+Practice out loud. Walk in ready.
+MockMic is a voice-first mock interview practice app. Pick a category, speak or type your answer to an AI-generated question, and get structured, specific feedback on clarity, structure, and one concrete improvement — instantly, no human interviewer required.
+Built as a 10-day capstone for the #60DaysOfClaudeAI Challenge by AB Talks.
+🚧 Status: Capstone Day 2 of 10 (Challenge Day 52 of 60) — System Design Complete
+Production code has not started yet. Day 1 locked the product plan; Day 2 turned that plan into a complete technical blueprint — architecture, database schema, API contracts, screens, and folder structure — so implementation (starting Day 3) can move fast with no redesign mid-build.
+Problem
+Interview prep tools review resumes and give generic tips, but they rarely make you actually say your answers out loud — which is where most people freeze up in the real thing.
+Solution
+MockMic simulates the real moment: an AI asks a question, you answer by voice (or typing, if you prefer), and you get feedback built specifically from what you said — not a template.
+Tech Stack
+Layer
+Choice
+Frontend
+Vanilla HTML / CSS / JavaScript
+Voice
+Browser-native Web Speech API
+Auth
+Firebase Authentication
+Database
+Firebase Firestore
+AI
+Claude API (Anthropic)
+Serverless proxy
+Vercel Functions
+Hosting
+Vercel
+100% free-tier stack — no paid services, no card required.
+Architecture (high level)
+Code
+Full diagrams and contracts: see /docs/ARCHITECTURE.md.
+Project Docs
+File
+What it covers
+docs/ARCHITECTURE.md
+Stack, component diagram, data flow, request lifecycle, AI prompt contracts
+docs/SCHEMA.md
+Firestore collections, fields, relationships, constraints
+docs/API.md
+Full spec for both serverless endpoints
+docs/UI-WIREFRAMES.md
+User flow, 6 screens, low-fi wireframes, navigation
+docs/PROJECT-STRUCTURE.md
+Full folder tree and rationale
+docs/BLUEPRINT-AMENDMENT.md
+Day 2 stack change: Firebase Functions → Vercel Functions (free-tier fix)
+Roadmap
+(Capstone day → #60DaysOfClaudeAI challenge day)
+[x] Capstone Day 1 (Challenge Day 51) — Product discovery, PRD, 10-day implementation blueprint
+[x] Capstone Day 2 (Challenge Day 52) — System design: architecture, schema, API, wireframes, folder structure
+[ ] Capstone Day 3 (Challenge Day 53) — Project scaffolding: repo structure, Firebase config, base HTML shell
+[ ] Capstone Day 4 (Challenge Day 54) — Core UI build: landing, auth, category selection
+[ ] Capstone Day 5 (Challenge Day 55) — AI question generation live (/api/generateQuestion)
+[ ] Capstone Day 6 (Challenge Day 56) — Voice capture integration (Web Speech API)
+[ ] Capstone Day 7 (Challenge Day 57) — AI feedback generation live (/api/generateFeedback)
+[ ] Capstone Day 8 (Challenge Day 58) — Session history & dashboard
+[ ] Capstone Day 9 (Challenge Day 59) — Testing, error handling, Firestore security rules locked
+[ ] Capstone Day 10 (Challenge Day 60) — Deploy, polish, final README + demo
+Author
+Urooba Zahir — BSCS, Northern University Nowshera
+GitHub · LinkedIn
+Built as part of the #60DaysOfClaudeAI challenge, organized by AB Talks.
