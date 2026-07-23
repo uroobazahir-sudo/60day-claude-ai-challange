@@ -1,0 +1,35 @@
+MockMic — Day 3: Project Setup & Foundation
+#60DaysOfClaudeAI — Day 53 · MockMic Capstone, Day 3 of 10
+Practice out loud. Walk in ready.
+What is MockMic?
+MockMic is a voice-first mock interview practice app. Users answer AI-generated interview questions out loud (or by typing as a fallback), get instant structured feedback, and build confidence through tracked, repeated practice sessions.
+Day 3 Objective
+Build the project's foundation before any feature development begins — a fully working, empty shell that Day 4 can build directly on top of.
+What Was Completed Today
+Development environment configured — Node.js, Git, VS Code, Vercel CLI, and Firebase CLI installed and verified
+Project folder structure created — matches the architecture locked on Day 2 (public/ for frontend, api/ for Vercel serverless functions)
+Git repository initialized — connected to GitHub with a defined branching strategy (main for stable code, dev for active work)
+Firebase project connected — Authentication and Firestore reachable from the app
+Configuration files completed — .env.local, .gitignore, package.json, vercel.json
+"Hello World" version running locally — confirms the full chain (frontend → Vercel function → Firebase) is wired correctly
+Tech Stack
+Layer
+Choice
+Frontend
+Vanilla HTML / CSS / JS
+Backend
+Vercel Serverless Functions (Node.js)
+Auth & Database
+Firebase (Auth + Firestore)
+AI
+Claude API
+Hosting
+Vercel (free tier)
+Project Structure
+Code
+Not Done Yet (by design)
+Core interview features (question generation, voice capture, feedback, session history) are not implemented today — Day 3 is foundation only. Feature development begins Day 4.
+Next Up — Day 4
+First real user-facing feature: the interview question flow.
+Built by Urooba Zahir · AB Talks Capstone
+#60DaysOfClaudeAI #BuildInPublic #WomenInTech #PakistaniDevs
