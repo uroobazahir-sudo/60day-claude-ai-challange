@@ -1,0 +1,32 @@
+MockMic — Blueprint Day 04: App Shell & Authentication
+#60DaysOfClaudeAI — Day 45 of 60
+Part of a 10-day capstone build for MockMic, a voice-first mock interview practice app. This is Day 4 of MockMic's own 10-day blueprint, kicking off the 5-day "Build" phase — turning the locked architecture and wireframes from Blueprint Days 1–3 into a real, running app shell with working authentication.
+What shipped today
+1. App Shell
+Three core screens built and wired together, matching the wireframes locked on Day 2:
+Landing screen
+Login / Sign-up screen
+Dashboard (protected)
+2. Firebase Authentication
+Email sign-up and login connected to Firebase Auth
+Inline error handling for invalid credentials / existing accounts
+Auth state persists across page refresh
+3. Session Handling
+Dashboard route protected — logged-out users are redirected to login
+Working logout flow that clears the session and returns to landing
+Stack
+Layer
+Choice
+Frontend
+Vanilla HTML / CSS / JS
+Auth & DB
+Firebase Auth + Firestore
+Hosting
+Vercel (planned, Day 10)
+Files
+Code
+Why this matters
+Interview anxiety comes from never having said an answer out loud under pressure. Before MockMic can generate questions or capture voice, it needs a real account system — every practice session has to belong to someone, and persist across logins. Day 4 makes that possible.
+Next up — Days 5–8
+AI-generated interview questions, voice capture via the Web Speech API, structured feedback per answer, and session history saved to Firestore.
+Urooba Zahir · AB Talks Capstone · GitHub · LinkedIn
