@@ -1,0 +1,38 @@
+# Day 55 — Waypoint: Career Path & Skill Gap Analyzer
+
+Part of the **#60DaysOfClaudeAI** challenge by [ABTalks](https://www.linkedin.com/in/abtalksonai).
+
+## What it does
+
+Waypoint takes your **current role/skills** and your **target role**, then plots the route between them:
+
+1. **Skill Gaps** — the specific skills missing for the target role, ranked by priority (high / med / low), each with a one-line "why it matters."
+2. **Learning Roadmap** — a phased plan (e.g. Weeks 1–4, Weeks 5–8...) scaled to your chosen timeline and weekly hours.
+3. **Resources & Next Steps** — concrete, free next actions.
+
+The signature visual is a **route map**: your current role and target role sit at the two ends of a path, with skill waypoints plotted in between — click any point to see what it means.
+
+## How it runs (100% free, no cost to you)
+
+- **Inside the Claude artifact preview**: the app calls Claude directly for a live, tailored analysis of your exact input. Free — no API key needed from the user.
+- **Downloaded and opened in a normal browser**: live API calls aren't available outside the Claude preview, so the app automatically falls back to a **built-in offline analyzer** — a rule-based skill-gap engine covering common tech/CS career transitions (frontend → full-stack, → AI/ML, → backend, etc.). It still works fully, with zero setup and zero cost.
+
+A small notice inside the app makes this clear upfront so there's no confusion about why results differ between the two modes.
+
+## Tech
+
+- Single self-contained HTML file — vanilla JS, vanilla CSS, zero external JS dependencies
+- Google Fonts (Fraunces, IBM Plex Mono, Inter) loaded via CDN for typography
+- No build step, no backend, no database — just open the file
+- Form is pre-filled with a sample profile so it's demo-ready for screen recording with zero typing
+
+## Try it
+
+Open `day55-career-path-analyzer.html` in any browser, or run it inside a Claude artifact for the live AI mode.
+
+## Design notes
+
+Visual direction: a navigation/trail map metaphor — deep navy background, teal route line, amber/coral markers for gap severity — built around the idea that a career transition is a route with waypoints, not a single leap.
+
+---
+Built as part of Day 55 of the #60DaysOfClaudeAI challenge.
