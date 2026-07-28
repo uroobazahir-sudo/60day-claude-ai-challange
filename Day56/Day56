@@ -1,0 +1,41 @@
+MockMic — Day 6/10
+Practice out loud. Walk in ready.
+A voice-first mock interview practice app. Users pick an interview category, answer AI-generated questions, and get instant structured feedback — built as a 10-day capstone for the AB Talks #60DaysOfClaudeAI challenge.
+Status as of Day 6
+⚠️ This README reflects the plan for Day 6, not a finished build. Days 1–5 produced the product requirements, system design, and planning artifacts below. The working application (code, hosting, live demo) has not been implemented yet — that is today's and the remaining days' work.
+What exists so far (Days 1–5)
+Product Requirements Document (PRD)
+System architecture, database schema, and API design docs
+UI wireframes and project structure plan
+Planning/progress posters for Days 1–5 (LinkedIn)
+What Day 6 is building
+[ ] Firebase project (Auth + Firestore) connected
+[ ] Email/password signup & login
+[ ] Interview category selection screen
+[ ] Live AI-generated interview questions (Gemini API, free tier)
+[ ] Answer submission + AI-generated structured feedback
+[ ] Session history screen
+[ ] Deployed live on Vercel (free tier)
+[ ] Footer: "Built with Claude as part of the AB Talks 60-Day Claude AI Challenge"
+Planned Tech Stack
+Layer
+Choice
+Frontend
+Vanilla HTML / CSS / JS
+Auth & Database
+Firebase (Auth + Firestore, free Spark plan)
+Backend/Proxy
+Vercel Serverless Functions
+AI Model
+Google Gemini API (free tier)
+Hosting
+Vercel (free tier)
+Out of Scope for v1.0
+Resume-based personalization
+Gamification (streaks, levels)
+Social / multi-user features
+Native mobile apps
+Author
+Urooba Zahir — BSCS Student, Northern University Nowshera
+AB Talks Capstone · #60DaysOfClaudeAI
+This README will be updated once Day 6 implementation is verified working end-to-end.
